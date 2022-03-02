@@ -35,6 +35,8 @@ public class AppData {
      */
     private static Long frames = 0L;
 
+
+    //TODO: replace these all with an ID hashmap in future to increase lookup speeds
     /**
      * All objects currently in the application being used
      */
