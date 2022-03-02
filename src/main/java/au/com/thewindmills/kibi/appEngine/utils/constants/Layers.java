@@ -13,4 +13,6 @@ public class Layers {
     public static final String ABOVE_MAIN = "LAYER_ABOVE_MAIN";
     public static final String UI = "LAYER_UI";
     public static final String ABOVE_UI = "LAYER_ABOVE_UI";
+
+    public static final String[] LAYERS = new String[]{Layers.BACKGROUND, Layers.BELOW_MAIN, Layers.MAIN, Layers.ABOVE_MAIN, Layers.UI, Layers.ABOVE_UI};
 }

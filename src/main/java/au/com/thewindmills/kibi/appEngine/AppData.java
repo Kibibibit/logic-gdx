@@ -100,7 +100,7 @@ public class AppData {
         entities = new HashMap<String, ArrayList<AppEntity>>();
         entityBuffer = new ArrayList<AppEntity>();
 
-        layers = new String[]{Layers.BACKGROUND, Layers.BELOW_MAIN, Layers.MAIN, Layers.ABOVE_MAIN, Layers.UI, Layers.ABOVE_UI};
+        layers = Layers.LAYERS;
 
         for (String layer : layers) {
             entities.put(layer, new ArrayList<AppEntity>());
