@@ -49,6 +49,7 @@ public abstract class UiEntity extends ShapeEntity {
     protected void preStep(float delta) {
         for (UiEntity child : children) {
             child.getPos().set(this.getPos().add(child.getRelativePos()));
+            child.getShape().setPos(this.getPos().add(child.getRelativePos()));
         }
     }
 
