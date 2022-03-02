@@ -16,8 +16,8 @@ public abstract class ShapeEntity extends AppEntity {
 
     private final AbstractShape shape;
 
-    public ShapeEntity(AppData data, Vector2 pos, AbstractShape shape) {
-        super(data, pos);
+    public ShapeEntity(AppData data, String layer, Vector2 pos, AbstractShape shape) {
+        super(data, layer, pos);
         this.shape = shape;
     }
 

@@ -18,7 +18,12 @@ public abstract class AppEntity extends AppObject {
      */
     private boolean visible = false;
 
-    public AppEntity(AppData data, Vector2 pos) {
+    /**
+     * Sets what layer the object is drawn on
+     */
+    private String layer;
+
+    public AppEntity(AppData data, String layer, Vector2 pos) {
         super(data, pos);
     }
 
@@ -64,6 +69,10 @@ public abstract class AppEntity extends AppObject {
         this.preDraw(batches);
         this.draw(batches);
         this.postDraw(batches);
+    }
+
+    public final String getLayer() {
+        return this.layer;
     }
 
 }

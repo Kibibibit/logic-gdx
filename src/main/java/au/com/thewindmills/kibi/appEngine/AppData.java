@@ -1,7 +1,9 @@
 package au.com.thewindmills.kibi.appEngine;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
@@ -10,6 +12,7 @@ import au.com.thewindmills.kibi.appEngine.objects.AppObject;
 import au.com.thewindmills.kibi.appEngine.objects.MouseObject;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
 import au.com.thewindmills.kibi.appEngine.utils.constants.AppConstants;
+import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 import au.com.thewindmills.kibi.models.components.Gate;
 
@@ -42,9 +45,14 @@ public class AppData {
     private final List<AppObject> objectBuffer;
 
     /**
+     * Defines the layers that objects can be rendered on. Lower indexes mean theyll be rendered earlier
+     */
+    private final String[] layers;
+
+    /**
      * All entities that need rendering
      */
-    private final List<AppEntity> entities;
+    private final Map<String, ArrayList<AppEntity>> entities;
 
     /**
      * Entities that need to be added into {@link AppData#entities} next frame
@@ -89,8 +97,14 @@ public class AppData {
     public AppData(LogicApp application) {
         objects = new ArrayList<AppObject>();
         objectBuffer = new ArrayList<AppObject>();
-        entities = new ArrayList<AppEntity>();
+        entities = new HashMap<String, ArrayList<AppEntity>>();
         entityBuffer = new ArrayList<AppEntity>();
+
+        layers = new String[]{Layers.BACKGROUND, Layers.BELOW_MAIN, Layers.MAIN, Layers.ABOVE_MAIN, Layers.UI, Layers.ABOVE_UI};
+
+        for (String layer : layers) {
+            entities.put(layer, new ArrayList<AppEntity>());
+        }
 
         mouse = new MouseObject(this, new Vector2(0,0));
 
@@ -136,10 +150,12 @@ public class AppData {
         });
 
         //Then any entities
-
-        entities.removeIf((AppEntity entity) -> {
-            return entity.willDispose();
-        });
+        for (String layer : layers) {
+            entities.get(layer).removeIf((AppEntity entity) -> {
+                return entity.willDispose();
+            });
+        }
+        
 
         this.cleanup();
     }
@@ -163,17 +179,22 @@ public class AppData {
         frames++;
 
         if (this.entityBuffer.size() > 0) {
-            this.entities.addAll(this.entityBuffer);
+            for (AppEntity entity : this.entityBuffer) {
+                entities.get(entity.getLayer()).add(entity);
+            }
             this.entityBuffer.clear();
         }
 
         batches.begin();
 
-        for (AppEntity entity : entities) {
-            if (entity.isVisible()) {
-                entity.render(batches);
+        for (String layer : layers) {
+            for (AppEntity entity : entities.get(layer)) {
+                if (entity.isVisible()) {
+                    entity.render(batches);
+                }
             }
         }
+        
 
         this.draw(batches);
 

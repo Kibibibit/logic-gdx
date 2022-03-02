@@ -5,12 +5,13 @@ import com.badlogic.gdx.math.Vector2;
 import au.com.thewindmills.kibi.appEngine.AppData;
 import au.com.thewindmills.kibi.appEngine.gfx.shapes.RectShape;
 import au.com.thewindmills.kibi.appEngine.objects.entities.ShapeEntity;
+import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 
 public class Gate extends ShapeEntity {
 
     public Gate(AppData data, Vector2 pos) {
-        super(data, pos, new RectShape(pos.x, pos.y, 20, 20));
+        super(data, Layers.MAIN, pos, new RectShape(pos.x, pos.y, 20, 20));
     }
 
     public Gate(AppData data, float x, float y) {
