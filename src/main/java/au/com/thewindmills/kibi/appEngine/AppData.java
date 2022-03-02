@@ -9,7 +9,6 @@ import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector3;
 
 import au.com.thewindmills.kibi.appEngine.gfx.ui.UiEntity;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.UiPanel;
