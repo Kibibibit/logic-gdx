@@ -133,7 +133,7 @@ public class AppData {
         lastTick = System.currentTimeMillis();
 
         // TODO: clear this out - just some testing
-        new Gate(this, 20, 20);
+        new Gate(this, 20, Gdx.graphics.getHeight() - 35);
 
         createUi();
 
@@ -145,7 +145,7 @@ public class AppData {
     private void createUi() {
 
         //Set the constants for this somewhere
-        UiEntity appBar = new UiPanel(this, Layers.UI, 0, 0, Gdx.graphics.getHeight()-50, Gdx.graphics.getWidth(), 50);
+        UiEntity appBar = new UiPanel(this, Layers.UI, 0, 0, Gdx.graphics.getHeight()-25, Gdx.graphics.getWidth(), 25);
         appBar.setFillColor(new Color(0.3f, 0.3f, 0.3f, 1));
         appBar.setStrokeColor(new Color(0.3f, 0.3f, 0.3f, 1));
 
@@ -282,8 +282,6 @@ public class AppData {
             this.step(delta);
 
         lastTick = System.currentTimeMillis();
-
-        this.getCamera().position.x -= delta*0.01f;
 
     }
 

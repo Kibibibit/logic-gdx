@@ -16,6 +16,6 @@ public class DrawConstants {
     /**
      * The default fill color of an {@link AbstractShape}
      */
-    public static final Color FILL_COLOR = new Color(0,0,0,0);
+    public static final Color FILL_COLOR = new Color(0f,0f,0f,1f);
     
 }

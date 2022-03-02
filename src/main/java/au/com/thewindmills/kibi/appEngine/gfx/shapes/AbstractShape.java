@@ -91,11 +91,13 @@ public abstract class AbstractShape {
         batches.shapeRenderer.set(ShapeType.Filled);
         batches.shapeRenderer.setColor(fillColor);
         drawShape(batches);
+        
 
+        //TODO: Fix this using rotated rectangles;
         //Then draw the outline
-        batches.shapeRenderer.setColor(strokeColor);
-        batches.shapeRenderer.set(ShapeType.Line);
-        drawShape(batches);
+        // batches.shapeRenderer.setColor(strokeColor);
+        // batches.shapeRenderer.set(ShapeType.Line);
+        // drawShape(batches);
     }
 
 }

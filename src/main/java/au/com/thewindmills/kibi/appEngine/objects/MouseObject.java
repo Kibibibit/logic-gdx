@@ -53,11 +53,12 @@ public class MouseObject extends AppObject {
 
     @Override
     public void step(float delta) {
-        this.updateContextEntityCurrent();
+        
         if (!this.getDeltaPos().isZero()) {
             this.setCameraPos();
             this.deltaCameraPos = this.lastCameraPos.sub(this.cameraPos);
             this.updateContextEntity();
+            this.updateContextEntityCurrent();
         }
 
         
@@ -70,7 +71,10 @@ public class MouseObject extends AppObject {
         }
     }
 
-
+    /**
+     * Checks to see if the current context entitiy is still under the mouse
+     * Probably could put back into updateContextEntity
+     */
     private void updateContextEntityCurrent() {
         if (this.contextEntity != null) {
             Vector2 posToCheck = this.getGlobalPos();
@@ -128,6 +132,7 @@ public class MouseObject extends AppObject {
 
     public Vector2 getGlobalPos() {
         Vector2 globalPos = this.getPos().cpy();
+        //We want origin to be bottom left, but input is weirdly calculated from top left
         globalPos.y = Gdx.graphics.getHeight() - globalPos.y;
         return globalPos;
     }
