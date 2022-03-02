@@ -3,6 +3,7 @@ package au.com.thewindmills.kibi.appEngine;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.utils.ScreenUtils;
 
 import au.com.thewindmills.kibi.appEngine.utils.AppConstants;
 
@@ -23,6 +24,9 @@ public class LogicApp extends ApplicationAdapter {
      */
     public final String title;
 
+
+    private boolean running = false;
+
     /**
      * The camera of the app;
      */
@@ -32,6 +36,8 @@ public class LogicApp extends ApplicationAdapter {
      * The main data object storing objects and such
      */
     private AppData data;
+
+    private Thread updateThread;
 
     public LogicApp() {
         this(AppConstants.TITLE, AppConstants.FRAME_WIDTH, AppConstants.FRAME_HEIGHT);
@@ -64,6 +70,19 @@ public class LogicApp extends ApplicationAdapter {
 
     private void start() {
         this.getCamera().setToOrtho(false, frameWidth, frameHeight);
+        this.setRunning(true);
+
+        /**
+         * Run the update loop
+         */
+        updateThread = new Thread(new Runnable() {
+           @Override
+           public void run() {
+               while (isRunning()) {
+                getData().update(AppData.deltaTime());
+               }
+           } 
+        });
     }
     
     @Override
@@ -74,12 +93,26 @@ public class LogicApp extends ApplicationAdapter {
         this.start();
     }
 
+    @Override
+    public void render() {
+        ScreenUtils.clear(AppConstants.CLEAR_COLOR);
+        this.getData().render();
+    }
+
     public OrthographicCamera getCamera() {
         return this.camera;
     }
 
     public AppData getData() {
         return this.data;
+    }
+
+    public boolean isRunning() {
+        return this.running;
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
     }
 
 }

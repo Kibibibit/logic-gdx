@@ -17,6 +17,11 @@ public class AppData {
     private static Long ticks = 0L;
 
     /**
+     * The time the last frame took place
+     */
+    private static long lastFrame;
+
+    /**
      * All objects currently in the application being used
      */
     private final List<AppObject> objects;
@@ -48,7 +53,13 @@ public class AppData {
      * Gets called in {@link LogicApp#create()}
      */
     public void init() {
+        lastFrame = System.currentTimeMillis();
+    }
 
+    public static float deltaTime() {
+        long deltaTimeInMillis = System.currentTimeMillis() - lastFrame;
+        float deltaTimeInSeconds = ((float) deltaTimeInMillis)/1000f;
+        return deltaTimeInSeconds;
     }
 
     /**
@@ -75,6 +86,16 @@ public class AppData {
      * Dispose of any excess stuff here
      */
     private void dispose() {
+
+    }
+
+    public void render() {
+
+
+        float deltaTime = deltaTime();
+
+
+        lastFrame = System.currentTimeMillis();
 
     }
 
