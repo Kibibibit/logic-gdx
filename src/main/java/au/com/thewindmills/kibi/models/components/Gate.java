@@ -14,7 +14,7 @@ import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 public class Gate extends ShapeEntity {
 
     public Gate(AppData data, Vector2 pos) {
-        super(data, Layers.UI, 5, pos, new RectShape(pos.x, pos.y, 20, 20));
+        super(data, Layers.MAIN, 5, pos, new RectShape(pos.x, pos.y, 20, 20));
     }
 
     public Gate(AppData data, float x, float y) {
@@ -22,20 +22,18 @@ public class Gate extends ShapeEntity {
     }
 
     @Override
-    protected void draw(Batches batches) {
-        
-        
-    }
+    protected void draw(Batches batches) {}
 
     @Override
     public void step(float delta) {
-        Vector2 mousePos = this.getData().getMouse().getCameraPos();
-
-        if (this.getShape().inBounds(mousePos)) {
-            this.setVisible(false);
-        } else {
-            this.setVisible(true);
+        
+        if (this.getData().getMouse().getContextEntity() != null) {
+            if (this.getData().getMouse().getContextEntity().id == this.id) {
+                this.setVisible(false);
+                return;
+            }
         }
+        this.setVisible(true);
     }
 
     @Override

@@ -6,8 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector3;
 
+import au.com.thewindmills.kibi.appEngine.gfx.ui.UiEntity;
+import au.com.thewindmills.kibi.appEngine.gfx.ui.UiPanel;
 import au.com.thewindmills.kibi.appEngine.objects.AppObject;
 import au.com.thewindmills.kibi.appEngine.objects.MouseObject;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
@@ -128,8 +133,24 @@ public class AppData {
         lastTick = System.currentTimeMillis();
 
         // TODO: clear this out - just some testing
-        Gate gate = new Gate(this, 20, 20);
-        gate.setVisible(true);
+        new Gate(this, 20, 20);
+
+        createUi();
+
+    }
+
+    /**
+     * Gets called at the end of {@link AppData#init()}
+     */
+    private void createUi() {
+
+        //Set the constants for this somewhere
+        UiEntity appBar = new UiPanel(this, Layers.UI, 0, 0, Gdx.graphics.getHeight()-50, Gdx.graphics.getWidth(), 50);
+        appBar.setFillColor(new Color(0.3f, 0.3f, 0.3f, 1));
+        appBar.setStrokeColor(new Color(0.3f, 0.3f, 0.3f, 1));
+
+        //this.getCamera().translate(new Vector3(20f,20f, 0f));
+        
 
     }
 
@@ -191,7 +212,13 @@ public class AppData {
             this.entityBuffer.clear();
         }
 
+        this.getCamera().update();
+
         batches.begin();
+
+        //We only do this for batches, as static batches are based on the window and not the camera
+        batches.setProjectionMatrix(this.getCamera().combined);
+
         staticBatches.begin();
 
         for (String layer : layers) {
@@ -255,6 +282,8 @@ public class AppData {
             this.step(delta);
 
         lastTick = System.currentTimeMillis();
+
+        this.getCamera().position.x -= delta*0.01f;
 
     }
 

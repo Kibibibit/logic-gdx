@@ -28,7 +28,7 @@ public abstract class UiEntity extends ShapeEntity {
     public UiEntity(AppData data, String layer, int depth, Vector2 pos, AbstractShape shape) {
         super(data, layer, depth, pos, shape);
 
-        if (ArrayUtils.arrayContains(Layers.STATIC_LAYERS, this.getLayer())) {
+        if (!ArrayUtils.arrayContains(Layers.STATIC_LAYERS, this.getLayer())) {
             LOGGER.warning("UI entity with id " + this.id + " has not been assinged to a static layer (Assigned to layer: " + this.getLayer()+")");
         }
 

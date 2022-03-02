@@ -20,6 +20,7 @@ public abstract class ShapeEntity extends AppEntity {
     public ShapeEntity(AppData data, String layer, int depth, Vector2 pos, AbstractShape shape) {
         super(data, layer, depth, pos);
         this.shape = shape;
+        this.shape.setPos(this.getPos());
     }
 
     public void setStrokeColor(Color color) {

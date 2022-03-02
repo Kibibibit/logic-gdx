@@ -58,6 +58,14 @@ public abstract class AbstractShape {
         return this.shape;
     }
 
+    public void setPos(float x, float y) {
+        this.pos.set(x, y);
+    }
+
+    public void setPos(Vector2 point) {
+        this.setPos(point.x, point.y);
+    }
+
     /**
      * Returns true if the given point is within the bounds of this shape
      * @param x

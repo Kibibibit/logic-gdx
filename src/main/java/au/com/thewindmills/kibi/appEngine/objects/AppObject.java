@@ -93,12 +93,13 @@ public abstract class AppObject {
      */
     public void update(float delta) {
 
-        if (!this.lastPos.equals(this.pos)) {
-            this.deltaPos = this.pos.sub(this.lastPos);
-        }
+        
 
         this.preStep(delta);
-        this.update(delta);
+
+        this.deltaPos = this.lastPos.sub(this.pos);
+
+        this.step(delta);
         this.postStep(delta);
 
         this.lastPos = this.pos.cpy();

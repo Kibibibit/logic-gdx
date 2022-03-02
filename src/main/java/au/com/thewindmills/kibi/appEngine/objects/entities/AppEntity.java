@@ -16,7 +16,7 @@ public abstract class AppEntity extends AppObject {
     /**
      * Controls if the object can be seen or not
      */
-    private boolean visible = false;
+    private boolean visible = true;
 
     /**
      * Sets what layer the object is drawn on

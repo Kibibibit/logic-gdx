@@ -17,6 +17,7 @@ public class App
 
     public static void main( String[] args )
     {
+
         // Create the actual application object
         LogicApp app = new LogicApp(new AppInterface() {
             // Make sure to call System.exit once the app is closed
