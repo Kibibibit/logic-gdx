@@ -4,6 +4,11 @@ import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.utils.Batches;
 
+/**
+ * Represents a rectange, can be drawn with a pos and size
+ * 
+ * @author Kibi
+ */
 public class RectShape extends AbstractShape {
 
     private Vector2 size;
@@ -17,18 +22,6 @@ public class RectShape extends AbstractShape {
         this(new Vector2(x, y), new Vector2(width, height));
     }
 
-    public static RectShape fromCenter(Vector2 centerPos, Vector2 size) {
-        Vector2 origin = new Vector2(
-                centerPos.x - (size.x / 2),
-                centerPos.y - (size.y / 2));
-
-        return new RectShape(origin, size);
-    }
-
-    public static RectShape fromCenter(float x, float y, float width, float height) {
-        return RectShape.fromCenter(new Vector2(x, y), new Vector2(width, height));
-    }
-
     @Override
     protected void drawShape(Batches batches) {
         batches.shapeRenderer.rect(this.pos.x, this.pos.y, this.size.x, this.size.y);
@@ -36,6 +29,12 @@ public class RectShape extends AbstractShape {
 
     public Vector2 getSize() {
         return this.size;
+    }
+
+    @Override
+    public boolean inBounds(float x, float y) {
+
+        return x > pos.x && x < pos.x + size.x && y > pos.y && y < pos.y + size.y;
     }
 
 }

@@ -103,6 +103,7 @@ public class AppData {
         Gate gate = new Gate(this, 20, 20);
         gate.setVisible(true);
 
+
     }
 
 
