@@ -71,6 +71,11 @@ public class AppData {
     private int tps = AppConstants.TPS;
 
     /**
+     * The number of milliseconds between each tick
+     */
+    private int mspt;
+
+    /**
      * Primary constructor, use this one!
      * @param application - The application to link to this data object
      */    
@@ -81,6 +86,10 @@ public class AppData {
         entityBuffer = new ArrayList<AppEntity>();
 
         this.application = application;
+
+        mspt = (int) (1f / (float) tps)*1000;
+
+        System.out.println(mspt);
     }
 
     /**
@@ -176,15 +185,11 @@ public class AppData {
         // need to make sure that it's been long enough for another tick
         long tickTimeMillis = System.currentTimeMillis();
 
-        float delta =  (float) LAST_TICK-tickTimeMillis;
+        float delta = tickTimeMillis-LAST_TICK;
 
-        float secondsPerTick = 1/(float) this.tps;
-        long millisPerTick = ((long) secondsPerTick) * 1000;
-
-        if (delta < millisPerTick) {
+        if (delta < mspt) {
             return;
         }
-
 
         TICKS++;
 
