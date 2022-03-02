@@ -8,6 +8,9 @@ import au.com.thewindmills.kibi.appEngine.objects.entities.ShapeEntity;
 import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 
+/**
+ * THIS IS A TEST CLASS
+ */
 public class Gate extends ShapeEntity {
 
     public Gate(AppData data, Vector2 pos) {
