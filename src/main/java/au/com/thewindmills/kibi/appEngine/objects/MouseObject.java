@@ -27,19 +27,9 @@ public class MouseObject extends AppObject {
     private Vector2 lastCameraPos;
 
     /**
-     * The last global position of the mouse
-     */
-    private Vector2 lastPos;
-
-    /**
      * The change in position from last tick, relative to the camera
      */
     private Vector2 deltaCameraPos;
-
-    /**
-     * The change in global position from last tick
-     */
-    private Vector2 deltaPos;
 
     /**
      * The id of the object currently being highlighted by the mouse
@@ -48,8 +38,6 @@ public class MouseObject extends AppObject {
 
     public MouseObject(AppData data) {
         super(data, new Vector2(0,0));
-        this.lastPos = this.getPos().cpy();
-        this.deltaPos = new Vector2(0, 0);
         this.cameraPos = new Vector2(0, 0);
         this.lastCameraPos = cameraPos.cpy();
         this.deltaCameraPos = new Vector2(0, 0);
@@ -61,22 +49,24 @@ public class MouseObject extends AppObject {
         this.setPos((float) Gdx.input.getX(), (float) Gdx.input.getY());
 
 
-        //Only worth updating if there is actually a change
-        if (!this.getPos().equals(this.lastPos)) {
+        if (!this.getDeltaPos().isZero()) {
             this.setCameraPos();
-
-            this.deltaPos = this.getPos().cpy().sub(this.lastPos);
-            this.deltaCameraPos = this.getCameraPos().sub(this.lastCameraPos);
-
-            this.updateContextId();
-
-            this.lastPos.set(this.getPos().cpy());
-            this.lastCameraPos.set(this.cameraPos.cpy());
+            this.deltaCameraPos = this.cameraPos.sub(this.lastCameraPos);
+            this.updateContextEntity();
         }
     }
 
+    @Override
+    public void postStep(float delta) {
+        if (!this.getDeltaPos().isZero()) {
+            this.lastCameraPos = this.getCameraPos();
+        }
+    }
 
-    private void updateContextId() {
+    /**
+     * Updates the current object that is under the mouse
+     */
+    private void updateContextEntity() {
         for (String layer : Layers.LAYERS) {
             Vector2 posToCheck = this.getGlobalPos();
             
@@ -129,10 +119,6 @@ public class MouseObject extends AppObject {
 
     public Vector2 getCameraPos() {
         return this.cameraPos.cpy();
-    }
-
-    public Vector2 getDeltaPos() {
-        return this.deltaPos.cpy();
     }
 
     public Vector2 getDeltaCameraPos() {

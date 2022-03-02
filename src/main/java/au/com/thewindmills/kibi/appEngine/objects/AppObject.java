@@ -36,6 +36,16 @@ public abstract class AppObject {
     private Vector2 pos;
 
     /**
+     * The position of the object last tick
+     */
+    private Vector2 lastPos;
+
+    /**
+     * The change in position each tick
+     */
+    private Vector2 deltaPos;
+
+    /**
      * The app data object
      */
     private final AppData data;
@@ -50,6 +60,8 @@ public abstract class AppObject {
         this.id = idNext;
         idNext++;
         this.pos = pos;
+        this.lastPos = pos.cpy();
+        this.deltaPos = new Vector2(0,0);
         this.data = data;
 
         data.addObject(this);
@@ -80,9 +92,16 @@ public abstract class AppObject {
      * @param delta - time in milliseconds since the last tick
      */
     public void update(float delta) {
+
+        if (!this.lastPos.equals(this.pos)) {
+            this.deltaPos = this.pos.sub(this.lastPos);
+        }
+
         this.preStep(delta);
         this.update(delta);
         this.postStep(delta);
+
+        this.lastPos = this.pos.cpy();
     }
 
     /**
@@ -121,6 +140,14 @@ public abstract class AppObject {
 
     public AppData getData() {
         return this.data;
+    }
+
+    public Vector2 getLastPos() {
+        return this.lastPos.cpy();
+    }
+
+    public Vector2 getDeltaPos() {
+        return this.deltaPos.cpy();
     }
 
 }
