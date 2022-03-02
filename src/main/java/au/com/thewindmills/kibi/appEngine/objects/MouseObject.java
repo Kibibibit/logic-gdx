@@ -5,6 +5,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
+import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
+import au.com.thewindmills.kibi.appEngine.utils.ArrayUtils;
+import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
 /**
  * Represents the mouse within the game, stores methods for firing events
  * and such.
@@ -38,6 +41,11 @@ public class MouseObject extends AppObject {
      */
     private Vector2 deltaPos;
 
+    /**
+     * The id of the object currently being highlighted by the mouse
+     */
+    private AppEntity contextEntity = null;
+
     public MouseObject(AppData data) {
         super(data, new Vector2(0,0));
         this.lastPos = this.getPos().cpy();
@@ -49,21 +57,64 @@ public class MouseObject extends AppObject {
     }
 
     @Override
-    public void update(float delta) {
+    public void step(float delta) {
         this.setPos((float) Gdx.input.getX(), (float) Gdx.input.getY());
 
 
-        //Only worht updating if there is actually a change
+        //Only worth updating if there is actually a change
         if (!this.getPos().equals(this.lastPos)) {
             this.setCameraPos();
 
             this.deltaPos = this.getPos().cpy().sub(this.lastPos);
             this.deltaCameraPos = this.getCameraPos().sub(this.lastCameraPos);
 
+            this.updateContextId();
+
             this.lastPos.set(this.getPos().cpy());
             this.lastCameraPos.set(this.cameraPos.cpy());
         }
     }
+
+
+    private void updateContextId() {
+        for (String layer : Layers.LAYERS) {
+            Vector2 posToCheck = this.getGlobalPos();
+            
+            if (!ArrayUtils.arrayContains(Layers.STATIC_LAYERS, layer)) {
+                posToCheck = this.getCameraPos();
+            }
+
+            for (AppEntity entity : this.getData().getEntities().get(layer)) {
+                if (entity.inBounds(posToCheck)) {
+                    if (this.contextEntity == null) {
+                        this.contextEntity = entity;
+                        break;
+                    } else {
+                        if (layer.equals(entity.getLayer())) {
+                            if (entity.getDepth() >= contextEntity.getDepth()) {
+                                this.contextEntity = entity;
+                                break;
+                            }
+                        }
+
+                        int layerIndex = ArrayUtils.firstIndexOf(Layers.LAYERS, layer);
+                        int contextEntityLayerIndex = ArrayUtils.firstIndexOf(Layers.LAYERS, contextEntity.getLayer());
+
+                        if (layerIndex > contextEntityLayerIndex) {
+                            this.contextEntity = entity;
+                        }
+                        break;
+
+                    }
+                }
+                
+            }
+            
+
+        }
+
+    }
+
 
     public Vector2 getGlobalPos() {
         return this.getPos().cpy();

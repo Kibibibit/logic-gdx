@@ -23,9 +23,15 @@ public abstract class AppEntity extends AppObject {
      */
     private final String layer;
 
-    public AppEntity(AppData data, String layer, Vector2 pos) {
+    /**
+     * This depth controls the draw order of the entities, lower depths are drawn first
+     */
+    private final int depth;
+
+    public AppEntity(AppData data, String layer, int depth, Vector2 pos) {
         super(data, pos);
         this.layer = layer;
+        this.depth = depth;
     }
 
     public boolean isVisible() {
@@ -38,7 +44,7 @@ public abstract class AppEntity extends AppObject {
 
     @Override
     public void markForDisposal() {
-        //Set visible to flase so the object disappears
+        //Set visible to false so the object disappears
         this.setVisible(false);
         super.markForDisposal();
     }
@@ -72,8 +78,20 @@ public abstract class AppEntity extends AppObject {
         this.postDraw(batches);
     }
 
+    public abstract boolean inBounds(float x, float y);
+
+    public boolean inBounds(Vector2 point) {
+        return this.inBounds(point.x, point.y);
+    }
+
     public final String getLayer() {
         return this.layer;
     }
+
+    public final int getDepth() {
+        return this.depth;
+    }
+
+    
 
 }

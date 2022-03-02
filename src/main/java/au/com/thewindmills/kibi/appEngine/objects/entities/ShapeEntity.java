@@ -1,5 +1,6 @@
 package au.com.thewindmills.kibi.appEngine.objects.entities;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
@@ -16,15 +17,27 @@ public abstract class ShapeEntity extends AppEntity {
 
     private final AbstractShape shape;
 
-    public ShapeEntity(AppData data, String layer, Vector2 pos, AbstractShape shape) {
-        super(data, layer, pos);
+    public ShapeEntity(AppData data, String layer, int depth, Vector2 pos, AbstractShape shape) {
+        super(data, layer, depth, pos);
         this.shape = shape;
+    }
+
+    public void setStrokeColor(Color color) {
+        this.shape.setStrokeColor(color);
+    }
+
+    public void setFillColor(Color color) {
+        this.shape.setFillColor(color);
     }
 
     public AbstractShape getShape() {
         return this.shape;
     }
 
+    @Override
+    public final boolean inBounds(float x, float y) {
+        return this.shape.inBounds(x, y);
+    }
 
     @Override
     public void preDraw(Batches batches) {

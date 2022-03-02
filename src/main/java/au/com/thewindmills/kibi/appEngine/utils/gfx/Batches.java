@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 
 /**
- * Stores the all the renderers needed, so we can avoid having to pass multiple in
+ * Stores all the renderers needed, so we can avoid having to pass multiple in
  * to every render call.
  * 
  * @author Kibi

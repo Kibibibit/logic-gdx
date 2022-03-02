@@ -46,6 +46,14 @@ public abstract class AbstractShape {
         this.shape = shape;
     }
 
+    public void setStrokeColor(Color color) {
+        this.strokeColor = color;
+    }
+
+    public void setFillColor(Color color) {
+        this.fillColor = color;
+    }
+ 
     public EShape geShape() {
         return this.shape;
     }

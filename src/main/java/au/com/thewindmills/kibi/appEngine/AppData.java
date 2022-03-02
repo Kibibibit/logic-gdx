@@ -1,6 +1,7 @@
 package au.com.thewindmills.kibi.appEngine;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,14 +11,14 @@ import com.badlogic.gdx.graphics.Camera;
 import au.com.thewindmills.kibi.appEngine.objects.AppObject;
 import au.com.thewindmills.kibi.appEngine.objects.MouseObject;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
-import au.com.thewindmills.kibi.appEngine.utils.UtilFunctions;
+import au.com.thewindmills.kibi.appEngine.utils.ArrayUtils;
 import au.com.thewindmills.kibi.appEngine.utils.constants.AppConstants;
 import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 import au.com.thewindmills.kibi.models.components.Gate;
 
 /**
- * Stores a list of all {@link AppObject}s, controls their 
+ * Stores a list of all {@link AppObject}s, controls their
  * update loops, render loops, and things like controlling the camera
  * 
  * @author Kibi
@@ -45,14 +46,16 @@ public class AppData {
     private final List<AppObject> objectBuffer;
 
     /**
-     * Defines the layers that objects can be rendered on. Lower indexes mean theyll be rendered earlier
+     * Defines the layers that objects can be rendered on. Lower indexes mean theyll
+     * be rendered earlier
      */
     private final String[] layers;
 
     /**
-     * All entities that need rendering. The Key of each entry is the Layer that the objects will be rendered on
+     * All entities that need rendering. The Key of each entry is the Layer that the
+     * objects will be rendered on
      */
-    private final Map<String, ArrayList<AppEntity>> entities;
+    private final Map<String, List<AppEntity>> entities;
 
     /**
      * Entities that need to be added into {@link AppData#entities} next frame
@@ -68,7 +71,6 @@ public class AppData {
      * Reference to the main application
      */
     private LogicApp application;
-
 
     /**
      * the system time of the last tick
@@ -92,12 +94,13 @@ public class AppData {
 
     /**
      * Primary constructor, use this one!
+     * 
      * @param application - The application to link to this data object
-     */    
+     */
     public AppData(LogicApp application) {
         objects = new ArrayList<AppObject>();
         objectBuffer = new ArrayList<AppObject>();
-        entities = new HashMap<String, ArrayList<AppEntity>>();
+        entities = new HashMap<String, List<AppEntity>>();
         entityBuffer = new ArrayList<AppEntity>();
 
         layers = Layers.LAYERS;
@@ -106,12 +109,12 @@ public class AppData {
             entities.put(layer, new ArrayList<AppEntity>());
         }
 
-
-        //The mouse object is essential and so is created here
+        // The mouse object is essential and so is created here
         mouse = new MouseObject(this);
 
         this.application = application;
-        //Milliseconds per tick is equal to 1/ticks per second, multiplied by 1000, or just 1000 over tps
+        // Milliseconds per tick is equal to 1/ticks per second, multiplied by 1000, or
+        // just 1000 over tps
         mspt = (int) (1000f / (float) tps);
     }
 
@@ -122,19 +125,19 @@ public class AppData {
 
         lastTick = System.currentTimeMillis();
 
-        //TODO: clear this out - just some testing
+        // TODO: clear this out - just some testing
         Gate gate = new Gate(this, 20, 20);
         gate.setVisible(true);
 
-
     }
-
 
     /**
      * Gets called after {@link AppData#update())}, assuming the app isn't paused
+     * 
      * @param delta
      */
-    private void step(float delta) {}
+    private void step(float delta) {
+    }
 
     /**
      * Dispose any {@link AppObject}s or {@link AppEntity}s that need disposing,
@@ -142,19 +145,18 @@ public class AppData {
      */
     private void cleanupCore() {
 
-        //First remove all objects
+        // First remove all objects
 
         objects.removeIf((AppObject obj) -> {
             return obj.willDispose();
         });
 
-        //Then any entities
+        // Then any entities
         for (String layer : layers) {
             entities.get(layer).removeIf((AppEntity entity) -> {
                 return entity.willDispose();
             });
         }
-        
 
         this.cleanup();
     }
@@ -162,24 +164,27 @@ public class AppData {
     /**
      * Dispose of any excess stuff here, called before each update loop
      */
-    private void cleanup() {}
-
+    private void cleanup() {
+    }
 
     /**
-     * Called when {@link LogicApp#dispose()} is called 
+     * Called when {@link LogicApp#dispose()} is called
      */
-    public void dispose() {}
+    public void dispose() {
+    }
 
     /**
      * Renders all entities, and adds entitiys from the buffer into the main list
+     * 
      * @param batch - {@link Batches} used to render the objects
-     */ 
+     */
     public void render(Batches batches, Batches staticBatches) {
         frames++;
 
         if (this.entityBuffer.size() > 0) {
             for (AppEntity entity : this.entityBuffer) {
                 entities.get(entity.getLayer()).add(entity);
+                entities.get(entity.getLayer()).sort(Comparator.comparingInt(AppEntity::getDepth));
             }
             this.entityBuffer.clear();
         }
@@ -189,10 +194,10 @@ public class AppData {
 
         for (String layer : layers) {
 
-            //Change the batch taht is rendering based on if the layer is static or not
+            // Change the batch taht is rendering based on if the layer is static or not
             Batches batch = batches;
 
-            if (UtilFunctions.arrayContains(Layers.STATIC_LAYERS, layer)) {
+            if (ArrayUtils.arrayContains(Layers.STATIC_LAYERS, layer)) {
                 batch = staticBatches;
             }
 
@@ -202,7 +207,6 @@ public class AppData {
                 }
             }
         }
-        
 
         this.draw(batches);
 
@@ -212,19 +216,21 @@ public class AppData {
 
     /**
      * Any draw methods unrelated to entities should go here
+     * 
      * @param batch
      */
-    private void draw(Batches batches) {}
+    private void draw(Batches batches) {
+    }
 
     /**
      * The main update loop of the application
      */
     public void update() {
-        
+
         // need to make sure that it's been long enough for another tick
         long tickTimeMillis = System.currentTimeMillis();
 
-        float delta = tickTimeMillis-lastTick;
+        float delta = tickTimeMillis - lastTick;
 
         if (delta < mspt) {
             return;
@@ -239,22 +245,23 @@ public class AppData {
             this.objectBuffer.clear();
         }
 
-        for (AppObject obj : objects){
+        for (AppObject obj : objects) {
             obj.update(delta);
         }
 
-        if (!application.getPaused()) this.step(delta);
-
+        if (!application.getPaused())
+            this.step(delta);
 
         lastTick = System.currentTimeMillis();
-
 
     }
 
     /**
      * Adds a new object into the buffers.
+     * 
      * @param object
-     * @return - If the object was added successfully (false usually means null object)
+     * @return - If the object was added successfully (false usually means null
+     *         object)
      */
     public boolean addObject(AppObject object) {
         if (object == null) {
@@ -287,6 +294,19 @@ public class AppData {
 
     public MouseObject getMouse() {
         return this.mouse;
+    }
+
+    public AppObject getObjectById(long id) {
+        for (AppObject object : objects) {
+            if (object.id == id) {
+                return object;
+            }
+        }
+        return null;
+    }
+
+    public Map<String, List<AppEntity>> getEntities() {
+        return this.entities;
     }
 
 }

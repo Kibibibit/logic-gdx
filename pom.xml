@@ -45,7 +45,7 @@
 
         <configuration>
           <descriptorRefs>
-              <descriptorRef>jar-with-dependencies</descriptorRef>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
 
           <archive>
@@ -55,17 +55,17 @@
               <mainClass>au.com.thewindmills.kibi.App</mainClass>
             </manifest>
           </archive>
-      </configuration>
+        </configuration>
 
-      <executions>
-        <execution>
+        <executions>
+          <execution>
             <id>make-assembly</id>
             <phase>package</phase>
             <goals>
-                <goal>single</goal>
+              <goal>single</goal>
             </goals>
-        </execution>
-    </executions>
+          </execution>
+        </executions>
 
       </plugin>
     </plugins>
