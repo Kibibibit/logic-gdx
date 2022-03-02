@@ -17,7 +17,7 @@ public abstract class AppObject {
     /**
      * The next object will have this id;
      */
-    public static long ID_NEXT = 0;
+    public static long idNext = 0;
 
     /**
      * the id of this object
@@ -41,8 +41,8 @@ public abstract class AppObject {
     private boolean shouldDispose = false;
 
     public AppObject(AppData data, Vector2 pos) {
-        this.id = ID_NEXT;
-        ID_NEXT++;
+        this.id = idNext;
+        idNext++;
         this.pos = pos;
         this.data = data;
 

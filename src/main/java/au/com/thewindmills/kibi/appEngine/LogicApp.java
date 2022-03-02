@@ -61,6 +61,11 @@ public class LogicApp extends ApplicationAdapter{
     private Batches batches;
 
     /**
+     * The set of batches used for rendering static layers
+     */
+    private Batches staticBatches;
+
+    /**
      * Functional interface so that we can call System.exit when the app is closed
      */
     private AppInterface appInterface;
@@ -139,6 +144,7 @@ public class LogicApp extends ApplicationAdapter{
     @Override
     public void create() {
         this.batches = new Batches();
+        this.staticBatches = new Batches();
         this.getData().setCamera(camera);
         this.getData().init();
 
@@ -148,7 +154,7 @@ public class LogicApp extends ApplicationAdapter{
     @Override
     public void render() {
         ScreenUtils.clear(AppConstants.CLEAR_COLOR);
-        this.getData().render(this.batches);
+        this.getData().render(this.batches, this.staticBatches);
     }
 
     @Override

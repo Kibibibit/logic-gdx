@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import au.com.thewindmills.kibi.appEngine.objects.AppObject;
 import au.com.thewindmills.kibi.appEngine.objects.MouseObject;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
+import au.com.thewindmills.kibi.appEngine.utils.UtilFunctions;
 import au.com.thewindmills.kibi.appEngine.utils.constants.AppConstants;
 import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
@@ -175,7 +176,7 @@ public class AppData {
      * Renders all entities, and adds entitiys from the buffer into the main list
      * @param batch - {@link Batches} used to render the objects
      */ 
-    public void render(Batches batches) {
+    public void render(Batches batches, Batches staticBatches) {
         frames++;
 
         if (this.entityBuffer.size() > 0) {
@@ -186,11 +187,20 @@ public class AppData {
         }
 
         batches.begin();
+        staticBatches.begin();
 
         for (String layer : layers) {
+
+            //Change the batch taht is rendering based on if the layer is static or not
+            Batches batch = batches;
+
+            if (UtilFunctions.arrayContains(Layers.STATIC_LAYERS, layer)) {
+                batch = staticBatches;
+            }
+
             for (AppEntity entity : entities.get(layer)) {
                 if (entity.isVisible()) {
-                    entity.render(batches);
+                    entity.render(batch);
                 }
             }
         }
@@ -199,6 +209,7 @@ public class AppData {
         this.draw(batches);
 
         batches.end();
+        staticBatches.end();
     }
 
     /**

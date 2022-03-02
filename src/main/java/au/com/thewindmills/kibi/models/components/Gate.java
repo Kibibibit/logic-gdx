@@ -14,7 +14,7 @@ import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 public class Gate extends ShapeEntity {
 
     public Gate(AppData data, Vector2 pos) {
-        super(data, Layers.MAIN, pos, new RectShape(pos.x, pos.y, 20, 20));
+        super(data, Layers.UI, pos, new RectShape(pos.x, pos.y, 20, 20));
     }
 
     public Gate(AppData data, float x, float y) {
