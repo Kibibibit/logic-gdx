@@ -6,6 +6,12 @@ import au.com.thewindmills.kibi.appEngine.AppData;
 import au.com.thewindmills.kibi.appEngine.gfx.shapes.AbstractShape;
 import au.com.thewindmills.kibi.appEngine.utils.Batches;
 
+/**
+ * An entity that is visible due to the shape it draws, defined by <br>
+ * an {@link AbstractShape} object.
+ * 
+ * @author Kibi
+ */
 public abstract class ShapeEntity extends AppEntity {
 
     private final AbstractShape shape;
