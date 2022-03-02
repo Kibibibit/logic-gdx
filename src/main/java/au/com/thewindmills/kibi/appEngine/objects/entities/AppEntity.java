@@ -21,7 +21,7 @@ public abstract class AppEntity extends AppObject {
     /**
      * Sets what layer the object is drawn on
      */
-    private String layer;
+    private final String layer;
 
     public AppEntity(AppData data, String layer, Vector2 pos) {
         super(data, pos);
