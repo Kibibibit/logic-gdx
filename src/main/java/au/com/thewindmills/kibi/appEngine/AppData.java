@@ -22,12 +22,12 @@ public class AppData {
     /**
      * The amount of ticks since the application started
      */
-    private static Long TICKS = 0L;
+    private static Long ticks = 0L;
 
     /**
      * The amount of frames that have passed since the app started
      */
-    private static Long FRAMES = 0L;
+    private static Long frames = 0L;
 
     /**
      * All objects currently in the application being used
@@ -61,9 +61,9 @@ public class AppData {
 
 
     /**
-     * the epoch tim of the last tick
+     * the system time of the last tick
      */
-    private static long LAST_TICK;
+    private static long lastTick;
 
     /**
      * The ticks per second of the application
@@ -97,7 +97,7 @@ public class AppData {
      */
     public void init() {
 
-        LAST_TICK = System.currentTimeMillis();
+        lastTick = System.currentTimeMillis();
 
         //TODO: clear this out - just some testing
         Gate gate = new Gate(this, 20, 20);
@@ -151,7 +151,7 @@ public class AppData {
      * @param batch - {@link Batches} used to render the objects
      */ 
     public void render(Batches batches) {
-        FRAMES++;
+        frames++;
 
         if (this.entityBuffer.size() > 0) {
             this.entities.addAll(this.entityBuffer);
@@ -186,13 +186,13 @@ public class AppData {
         // need to make sure that it's been long enough for another tick
         long tickTimeMillis = System.currentTimeMillis();
 
-        float delta = tickTimeMillis-LAST_TICK;
+        float delta = tickTimeMillis-lastTick;
 
         if (delta < mspt) {
             return;
         }
 
-        TICKS++;
+        ticks++;
 
         this.cleanupCore();
 
@@ -208,7 +208,7 @@ public class AppData {
         if (!application.getPaused()) this.step(delta);
 
 
-        LAST_TICK = System.currentTimeMillis();
+        lastTick = System.currentTimeMillis();
 
 
     }
