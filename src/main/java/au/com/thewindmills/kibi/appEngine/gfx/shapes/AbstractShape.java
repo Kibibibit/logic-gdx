@@ -1,7 +1,6 @@
 package au.com.thewindmills.kibi.appEngine.gfx.shapes;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
@@ -35,7 +34,9 @@ public abstract class AbstractShape {
 
     public void draw(Batches batches) {
         batches.shapeRenderer.set(ShapeType.Filled);
+        batches.shapeRenderer.setColor(fillColor);
         drawShape(batches);
+        batches.shapeRenderer.setColor(strokeColor);
         batches.shapeRenderer.set(ShapeType.Line);
         drawShape(batches);
     }

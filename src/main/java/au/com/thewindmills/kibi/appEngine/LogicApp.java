@@ -2,7 +2,6 @@ package au.com.thewindmills.kibi.appEngine;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -62,6 +61,8 @@ public class LogicApp extends ApplicationAdapter{
         config = new Lwjgl3ApplicationConfiguration();
         config.setTitle(title);
         config.setWindowedMode(frameWidth, frameHeight);
+
+        //Need to disable audio to stop a crash when the app closes due to there being no AL lib
         config.disableAudio(true);
 
         this.appInterface = appInterface;

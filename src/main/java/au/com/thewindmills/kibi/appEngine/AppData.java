@@ -5,10 +5,10 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.Camera;
 
-import au.com.thewindmills.kibi.appEngine.gfx.shapes.RectShape;
 import au.com.thewindmills.kibi.appEngine.objects.AppObject;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
 import au.com.thewindmills.kibi.appEngine.utils.Batches;
+import au.com.thewindmills.kibi.models.components.Gate;
 
 public class AppData {
 
@@ -68,7 +68,8 @@ public class AppData {
     public void init() {
 
         //TODO: clear this out
-        new RectShape(50,50, 20,10);
+        Gate gate = new Gate(this, 20, 20);
+        gate.setVisible(true);
 
     }
 

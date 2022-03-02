@@ -18,6 +18,16 @@ public abstract class AppEntity extends AppObject {
         return this.visible;
     }
 
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    @Override
+    public void markForDisposal() {
+        this.setVisible(false);
+        super.markForDisposal();
+    }
+
 
     protected void preDraw(Batches batches) {}
     protected abstract void draw(Batches batches);
