@@ -6,6 +6,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import au.com.thewindmills.kibi.appEngine.utils.Batches;
 import au.com.thewindmills.kibi.appEngine.utils.constants.AppConstants;
 
 
@@ -38,7 +39,12 @@ public class LogicApp extends ApplicationAdapter {
      */
     private AppData data;
 
+    /**
+     * The thread running the main update loop
+     */
     private Thread updateThread;
+
+    private Batches batches;
 
     public LogicApp() {
         this(AppConstants.TITLE, AppConstants.FRAME_WIDTH, AppConstants.FRAME_HEIGHT);
@@ -65,12 +71,15 @@ public class LogicApp extends ApplicationAdapter {
          */
         this.camera = new OrthographicCamera();
 
+        this.batches = new Batches();
+
         data = new AppData(this);
 
     }
 
     private void start() {
         this.getCamera().setToOrtho(false, frameWidth, frameHeight);
+        this.batches.setProjectionMatrix(this.getCamera().combined);
         this.setRunning(true);
 
         /**
@@ -84,6 +93,7 @@ public class LogicApp extends ApplicationAdapter {
                }
            } 
         });
+        updateThread.start();
     }
     
     @Override
@@ -97,7 +107,13 @@ public class LogicApp extends ApplicationAdapter {
     @Override
     public void render() {
         ScreenUtils.clear(AppConstants.CLEAR_COLOR);
-        this.getData().render();
+        this.getData().render(this.batches);
+    }
+
+    @Override
+    public void dispose() {
+        this.getData().dispose();
+        this.batches.dispose();
     }
 
     public OrthographicCamera getCamera() {
