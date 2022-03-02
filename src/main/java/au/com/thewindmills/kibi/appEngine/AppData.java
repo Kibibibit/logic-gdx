@@ -9,7 +9,10 @@ import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 
+import au.com.thewindmills.kibi.appEngine.gfx.shapes.RectShape;
+import au.com.thewindmills.kibi.appEngine.gfx.ui.UiButton;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.UiEntity;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.UiPanel;
 import au.com.thewindmills.kibi.appEngine.objects.AppObject;
@@ -131,9 +134,6 @@ public class AppData {
 
         lastTick = System.currentTimeMillis();
 
-        // TODO: clear this out - just some testing
-        new Gate(this, 20, Gdx.graphics.getHeight() - 35);
-
         createUi();
 
     }
@@ -142,14 +142,15 @@ public class AppData {
      * Gets called at the end of {@link AppData#init()}
      */
     private void createUi() {
-
+        //TODO: Create a builder pattern for this
         //Set the constants for this somewhere
         UiEntity appBar = new UiPanel(this, Layers.UI, 0, 0, Gdx.graphics.getHeight()-25, Gdx.graphics.getWidth(), 25);
         appBar.setFillColor(new Color(0.3f, 0.3f, 0.3f, 1));
         appBar.setStrokeColor(new Color(0.3f, 0.3f, 0.3f, 1));
 
-        //this.getCamera().translate(new Vector3(20f,20f, 0f));
         
+        UiEntity button = new UiButton(new Vector2(2.5f, 2.5f), new RectShape(0, 0, 50, 20), appBar);
+        button.setFillColor(new Color(0.35f, 0.35f, 0.35f, 1));
 
     }
 

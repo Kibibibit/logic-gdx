@@ -17,5 +17,10 @@ public class DrawConstants {
      * The default fill color of an {@link AbstractShape}
      */
     public static final Color FILL_COLOR = new Color(0f,0f,0f,1f);
+
+    /**
+     * The default hover color of {@link UiButton}
+     */
+    public static final Color HOVER_COLOR = new Color(0.4f, 0.4f, 0.4f, 1f);
     
 }

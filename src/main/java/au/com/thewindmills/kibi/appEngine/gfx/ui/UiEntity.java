@@ -39,7 +39,7 @@ public abstract class UiEntity extends ShapeEntity {
     }
 
     public UiEntity(Vector2 relativePos, AbstractShape shape, UiEntity parent) {
-        this(parent.getData(), parent.getLayer(), parent.getDepth()+1, parent.getPos().add(relativePos), shape);
+        this(parent.getData(), parent.getLayer(), parent.getDepth()+1, parent.getPos().cpy().add(relativePos), shape);
         this.parent = parent;
         this.relativePos = relativePos;
         this.parent.addChild(this);
@@ -48,8 +48,8 @@ public abstract class UiEntity extends ShapeEntity {
     @Override
     protected void preStep(float delta) {
         for (UiEntity child : children) {
-            child.getPos().set(this.getPos().add(child.getRelativePos()));
-            child.getShape().setPos(this.getPos().add(child.getRelativePos()));
+            child.getPos().set(this.getPos().x + child.getRelativePos().x, this.getPos().y + child.getRelativePos().y);
+            child.getShape().setPos(this.getPos().x + child.getRelativePos().x, this.getPos().y + child.getRelativePos().y);
         }
     }
 
