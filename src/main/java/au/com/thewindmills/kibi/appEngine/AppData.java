@@ -172,12 +172,21 @@ public class AppData {
      * The main update loop of the application
      */
     public void update() {
-        TICKS++;
-
+        
+        // need to make sure that it's been long enough for another tick
         long tickTimeMillis = System.currentTimeMillis();
 
         float delta =  (float) LAST_TICK-tickTimeMillis;
-        
+
+        float secondsPerTick = 1/(float) this.tps;
+        long millisPerTick = ((long) secondsPerTick) * 1000;
+
+        if (delta < millisPerTick) {
+            return;
+        }
+
+
+        TICKS++;
 
         this.cleanupCore();
 
@@ -191,16 +200,6 @@ public class AppData {
         }
 
         if (!application.getPaused()) this.step(delta);
-
-        float secondsPerTick = 1/(float) this.tps;
-        long millisPerTick = ((long) secondsPerTick) * 1000;
-        try {
-            Thread.sleep(millisPerTick);
-        } catch (InterruptedException e) {
-            System.out.println("Interrupted exception in update thread!");
-            e.printStackTrace();
-        }
-
 
 
         LAST_TICK = System.currentTimeMillis();
