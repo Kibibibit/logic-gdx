@@ -5,8 +5,9 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.Camera;
 
-import au.com.thewindmills.kibi.appEngine.objects.AppEntity;
+import au.com.thewindmills.kibi.appEngine.gfx.shapes.RectShape;
 import au.com.thewindmills.kibi.appEngine.objects.AppObject;
+import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
 import au.com.thewindmills.kibi.appEngine.utils.Batches;
 
 public class AppData {
@@ -66,6 +67,9 @@ public class AppData {
      */
     public void init() {
 
+        //TODO: clear this out
+        new RectShape(50,50, 20,10);
+
     }
 
 
@@ -120,6 +124,8 @@ public class AppData {
             this.entityBuffer.clear();
         }
 
+        batches.begin();
+
         for (AppEntity entity : entities) {
             if (entity.isVisible()) {
                 entity.render(batches);
@@ -127,6 +133,8 @@ public class AppData {
         }
 
         this.draw(batches);
+
+        batches.end();
     }
 
     /**
@@ -168,6 +176,7 @@ public class AppData {
             return false;
         }
         if (object instanceof AppEntity) {
+            System.out.println("Adding a new entity!");
             this.entityBuffer.add((AppEntity) object);
         }
         this.objectBuffer.add(object);
@@ -177,6 +186,14 @@ public class AppData {
 
     public void setCamera(Camera camera) {
         this.camera = camera;
+    }
+
+    public LogicApp getApplication() {
+        return this.application;
+    }
+
+    public Camera getCamera() {
+        return this.camera;
     }
 
 }

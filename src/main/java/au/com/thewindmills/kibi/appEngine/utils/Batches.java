@@ -14,6 +14,7 @@ public class Batches {
 
     public Batches() {
         this.shapeRenderer = new ShapeRenderer();
+        this.shapeRenderer.setAutoShapeType(true);
         this.spriteBatch = new SpriteBatch();
     }
     

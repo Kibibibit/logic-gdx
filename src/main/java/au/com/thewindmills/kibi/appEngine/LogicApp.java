@@ -2,6 +2,7 @@ package au.com.thewindmills.kibi.appEngine;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -10,7 +11,7 @@ import au.com.thewindmills.kibi.appEngine.utils.Batches;
 import au.com.thewindmills.kibi.appEngine.utils.constants.AppConstants;
 
 
-public class LogicApp extends ApplicationAdapter {
+public class LogicApp extends ApplicationAdapter{
 
     /**
      * Configuration for the lwjgl backend, like height,
@@ -46,11 +47,14 @@ public class LogicApp extends ApplicationAdapter {
 
     private Batches batches;
 
-    public LogicApp() {
-        this(AppConstants.TITLE, AppConstants.FRAME_WIDTH, AppConstants.FRAME_HEIGHT);
+    private AppInterface appInterface;
+
+
+    public LogicApp(AppInterface appInterface) {
+        this(AppConstants.TITLE, AppConstants.FRAME_WIDTH, AppConstants.FRAME_HEIGHT, appInterface);
     }
 
-    public LogicApp(String title, int frameWidth, int frameHeight) {
+    public LogicApp(String title, int frameWidth, int frameHeight, AppInterface appInterface) {
 
         /**
          * Define the config settings
@@ -58,6 +62,9 @@ public class LogicApp extends ApplicationAdapter {
         config = new Lwjgl3ApplicationConfiguration();
         config.setTitle(title);
         config.setWindowedMode(frameWidth, frameHeight);
+        config.disableAudio(true);
+
+        this.appInterface = appInterface;
 
         /**
          * Set the public final vars
@@ -70,8 +77,9 @@ public class LogicApp extends ApplicationAdapter {
          * Create the camera
          */
         this.camera = new OrthographicCamera();
+        
 
-        this.batches = new Batches();
+        
 
         data = new AppData(this);
 
@@ -98,6 +106,7 @@ public class LogicApp extends ApplicationAdapter {
     
     @Override
     public void create() {
+        this.batches = new Batches();
         this.getData().setCamera(camera);
         this.getData().init();
 
@@ -114,7 +123,9 @@ public class LogicApp extends ApplicationAdapter {
     public void dispose() {
         this.getData().dispose();
         this.batches.dispose();
+        this.appInterface.onClose();
     }
+
 
     public OrthographicCamera getCamera() {
         return this.camera;
