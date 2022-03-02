@@ -122,6 +122,8 @@ public class LogicApp extends ApplicationAdapter{
      */
     private void start() {
         this.getCamera().setToOrtho(false, frameWidth, frameHeight);
+
+        //We only do this for batches, as static batches are based on the window and not the camera
         this.batches.setProjectionMatrix(this.getCamera().combined);
         this.setRunning(true);
         

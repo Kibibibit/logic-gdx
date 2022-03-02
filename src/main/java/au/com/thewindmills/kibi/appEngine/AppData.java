@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.objects.AppObject;
 import au.com.thewindmills.kibi.appEngine.objects.MouseObject;
@@ -51,7 +50,7 @@ public class AppData {
     private final String[] layers;
 
     /**
-     * All entities that need rendering
+     * All entities that need rendering. The Key of each entry is the Layer that the objects will be rendered on
      */
     private final Map<String, ArrayList<AppEntity>> entities;
 
@@ -107,13 +106,13 @@ public class AppData {
             entities.put(layer, new ArrayList<AppEntity>());
         }
 
-        mouse = new MouseObject(this, new Vector2(0,0));
+
+        //The mouse object is essential and so is created here
+        mouse = new MouseObject(this);
 
         this.application = application;
-
-        mspt = (int) (1f / (float) tps)*1000;
-
-        System.out.println(mspt);
+        //Milliseconds per tick is equal to 1/ticks per second, multiplied by 1000, or just 1000 over tps
+        mspt = (int) (1000f / (float) tps);
     }
 
     /**
@@ -132,11 +131,10 @@ public class AppData {
 
 
     /**
-     * Gets called after {@link LogicApp#update(float)}, assuming the app isn't paused
+     * Gets called after {@link AppData#update())}, assuming the app isn't paused
      * @param delta
      */
-    private void step(float delta) {
-    }
+    private void step(float delta) {}
 
     /**
      * Dispose any {@link AppObject}s or {@link AppEntity}s that need disposing,
@@ -216,8 +214,7 @@ public class AppData {
      * Any draw methods unrelated to entities should go here
      * @param batch
      */
-    private void draw(Batches batches) {
-    }
+    private void draw(Batches batches) {}
 
     /**
      * The main update loop of the application

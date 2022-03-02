@@ -8,7 +8,7 @@ package au.com.thewindmills.kibi.appEngine;
 public interface AppInterface {
 
     /**
-     * Should call System.exit(0)
+     * Should call {@link System#exit()}
      */
     public void onClose();
 }

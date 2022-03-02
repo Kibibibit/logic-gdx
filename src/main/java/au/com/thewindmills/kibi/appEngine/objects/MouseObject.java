@@ -38,9 +38,9 @@ public class MouseObject extends AppObject {
      */
     private Vector2 deltaPos;
 
-    public MouseObject(AppData data, Vector2 pos) {
-        super(data, pos);
-        this.lastPos = pos.cpy();
+    public MouseObject(AppData data) {
+        super(data, new Vector2(0,0));
+        this.lastPos = this.getPos().cpy();
         this.deltaPos = new Vector2(0, 0);
         this.cameraPos = new Vector2(0, 0);
         this.lastCameraPos = cameraPos.cpy();
