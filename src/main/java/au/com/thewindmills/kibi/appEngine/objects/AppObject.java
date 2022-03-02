@@ -4,6 +4,14 @@ import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
 
+
+/**
+ * A generic object class that anything that should interact with the app each tick should
+ * extend. These objects are not visible, for that extend {@link AppEntity}
+ * 
+ * @see AppEntity
+ * @author Kibi
+ */
 public abstract class AppObject {
 
     /**
@@ -26,6 +34,10 @@ public abstract class AppObject {
      */
     private final AppData data;
 
+    /**
+     * If this is true, this object will be disposed
+     * at the start of the next tick
+     */
     private boolean shouldDispose = false;
 
     public AppObject(AppData data, Vector2 pos) {
@@ -57,8 +69,16 @@ public abstract class AppObject {
         this.addPos(otherPos.x, otherPos.y);
     }
 
+    /**
+     * Called during {@link AppData#update(float)}
+     * @param delta - time in milliseconds since the last tick
+     */
     public abstract void update(float delta);
 
+
+    /**
+     * This will cause this object to be disposed next frame
+     */
     public void markForDisposal() {
         this.shouldDispose = true;
     }

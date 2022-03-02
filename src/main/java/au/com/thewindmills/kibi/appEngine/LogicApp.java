@@ -1,7 +1,6 @@
 package au.com.thewindmills.kibi.appEngine;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -9,7 +8,12 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import au.com.thewindmills.kibi.appEngine.utils.Batches;
 import au.com.thewindmills.kibi.appEngine.utils.constants.AppConstants;
 
-
+/**
+ * The main application object, containing cameras,
+ * window settings, controlling loops and startup code
+ * 
+ * @author Kibi
+ */
 public class LogicApp extends ApplicationAdapter{
 
     /**
@@ -51,15 +55,31 @@ public class LogicApp extends ApplicationAdapter{
      */
     private Thread updateThread;
 
+    /**
+     * The set of batches used for rendering
+     */
     private Batches batches;
 
+    /**
+     * Functional interface so that we can call System.exit when the app is closed
+     */
     private AppInterface appInterface;
 
-
+    /**
+     * Main constructor, Generally call this one
+     */
     public LogicApp(AppInterface appInterface) {
         this(AppConstants.TITLE, AppConstants.FRAME_WIDTH, AppConstants.FRAME_HEIGHT, appInterface);
     }
 
+
+    /**
+     * Constructor for more detailed controll over the app
+     * @param title - The title of the window
+     * @param frameWidth - The width of the window
+     * @param frameHeight - The height of the window
+     * @param appInterface - This should call {@link App#close()}
+     */
     public LogicApp(String title, int frameWidth, int frameHeight, AppInterface appInterface) {
 
         /**
@@ -86,15 +106,20 @@ public class LogicApp extends ApplicationAdapter{
          */
         this.camera = new OrthographicCamera();
         
-
+        //Create out data object
         data = new AppData(this);
 
     }
 
+    /**
+     * Set up the update loop, camera, and batches.
+     * Called at the end of {@link LogicApp#create()}
+     */
     private void start() {
         this.getCamera().setToOrtho(false, frameWidth, frameHeight);
         this.batches.setProjectionMatrix(this.getCamera().combined);
         this.setRunning(true);
+        
 
         /**
          * Run the update loop
@@ -103,10 +128,11 @@ public class LogicApp extends ApplicationAdapter{
            @Override
            public void run() {
                while (isRunning()) {
-                getData().update(Gdx.graphics.getDeltaTime());
+                getData().update();
                }
            } 
         });
+
         updateThread.start();
     }
     

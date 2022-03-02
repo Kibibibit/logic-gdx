@@ -5,13 +5,26 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 
 /**
- * Stores the all the renders needed each frame
+ * Stores the all the renderers needed, so we can avoid having to pass multiple in
+ * to every render call.
+ * 
+ * @author Kibi
  */
 public class Batches {
 
+    /**
+     * A shape renderer for drawing basic shapes. Used for drawing {@link AbstractShape}s
+     */
     public final ShapeRenderer shapeRenderer;
+
+    /**
+     * A renderer for drawing objects with set sprites.
+     */
     public final SpriteBatch spriteBatch;
 
+    /**
+     * Default (and only!) constructor
+     */
     public Batches() {
         this.shapeRenderer = new ShapeRenderer();
         this.shapeRenderer.setAutoShapeType(true);

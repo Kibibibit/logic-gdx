@@ -8,8 +8,15 @@ import com.badlogic.gdx.graphics.Camera;
 import au.com.thewindmills.kibi.appEngine.objects.AppObject;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
 import au.com.thewindmills.kibi.appEngine.utils.Batches;
+import au.com.thewindmills.kibi.appEngine.utils.constants.AppConstants;
 import au.com.thewindmills.kibi.models.components.Gate;
 
+/**
+ * Stores a list of all {@link AppObject}s, controls their 
+ * update loops, render loops, and things like controlling the camera
+ * 
+ * @author Kibi
+ */
 public class AppData {
 
     /**
@@ -52,7 +59,21 @@ public class AppData {
      */
     private LogicApp application;
 
-    
+
+    /**
+     * the epoch tim of the last tick
+     */
+    private static long LAST_TICK;
+
+    /**
+     * The ticks per second of the application
+     */
+    private int tps = AppConstants.TPS;
+
+    /**
+     * Primary constructor, use this one!
+     * @param application - The application to link to this data object
+     */    
     public AppData(LogicApp application) {
         objects = new ArrayList<AppObject>();
         objectBuffer = new ArrayList<AppObject>();
@@ -67,7 +88,9 @@ public class AppData {
      */
     public void init() {
 
-        //TODO: clear this out
+        LAST_TICK = System.currentTimeMillis();
+
+        //TODO: clear this out - just some testing
         Gate gate = new Gate(this, 20, 20);
         gate.setVisible(true);
 
@@ -75,25 +98,25 @@ public class AppData {
 
 
     /**
-     * Gets called after {@link LogicApp#update()}
+     * Gets called after {@link LogicApp#update(float)}, assuming the app isn't paused
      * @param delta
      */
     private void step(float delta) {
-
     }
-
-    /**
-     * 
-     */
 
     /**
      * Dispose any {@link AppObject}s or {@link AppEntity}s that need disposing,
      * then call {@link AppData#cleanup()}
      */
     private void cleanupCore() {
+
+        //First remove all objects
+
         objects.removeIf((AppObject obj) -> {
             return obj.willDispose();
         });
+
+        //Then any entities
 
         entities.removeIf((AppEntity entity) -> {
             return entity.willDispose();
@@ -103,24 +126,20 @@ public class AppData {
     }
 
     /**
-     * Dispose of any excess stuff here
+     * Dispose of any excess stuff here, called before each update loop
      */
-    private void cleanup() {
-
-    }
+    private void cleanup() {}
 
 
     /**
      * Called when {@link LogicApp#dispose()} is called 
      */
-    public void dispose() {
-
-    }
+    public void dispose() {}
 
     /**
      * Renders all entities, and adds entitiys from the buffer into the main list
-     * @param batch
-     */
+     * @param batch - {@link Batches} used to render the objects
+     */ 
     public void render(Batches batches) {
         FRAMES++;
 
@@ -143,18 +162,22 @@ public class AppData {
     }
 
     /**
-     * Any draw methods should go in here
+     * Any draw methods unrelated to entities should go here
      * @param batch
      */
     private void draw(Batches batches) {
-
     }
 
     /**
      * The main update loop of the application
      */
-    public void update(float delta) {
+    public void update() {
         TICKS++;
+
+        long tickTimeMillis = System.currentTimeMillis();
+
+        float delta =  (float) LAST_TICK-tickTimeMillis;
+        
 
         this.cleanupCore();
 
@@ -168,7 +191,20 @@ public class AppData {
         }
 
         if (!application.getPaused()) this.step(delta);
-        
+
+        float secondsPerTick = 1/(float) this.tps;
+        long millisPerTick = ((long) secondsPerTick) * 1000;
+        try {
+            Thread.sleep(millisPerTick);
+        } catch (InterruptedException e) {
+            System.out.println("Interrupted exception in update thread!");
+            e.printStackTrace();
+        }
+
+
+
+        LAST_TICK = System.currentTimeMillis();
+
 
     }
 
@@ -200,6 +236,10 @@ public class AppData {
 
     public Camera getCamera() {
         return this.camera;
+    }
+
+    public void setTPS(int tps) {
+        this.tps = tps;
     }
 
 }
