@@ -3,6 +3,7 @@ package au.com.thewindmills.kibi.appEngine;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 
 import org.lwjgl.system.CallbackI.P;
@@ -15,11 +16,6 @@ public class AppData {
      * The amount of ticks since the application started
      */
     private static Long ticks = 0L;
-
-    /**
-     * The time the last frame took place
-     */
-    private static long lastFrame;
 
     /**
      * All objects currently in the application being used
@@ -53,14 +49,9 @@ public class AppData {
      * Gets called in {@link LogicApp#create()}
      */
     public void init() {
-        lastFrame = System.currentTimeMillis();
+
     }
 
-    public static float deltaTime() {
-        long deltaTimeInMillis = System.currentTimeMillis() - lastFrame;
-        float deltaTimeInSeconds = ((float) deltaTimeInMillis)/1000f;
-        return deltaTimeInSeconds;
-    }
 
     /**
      * Gets called after {@link LogicApp#update()}
@@ -90,12 +81,9 @@ public class AppData {
     }
 
     public void render() {
+        float deltaTime = Gdx.graphics.getDeltaTime();
 
-
-        float deltaTime = deltaTime();
-
-
-        lastFrame = System.currentTimeMillis();
+        
 
     }
 
