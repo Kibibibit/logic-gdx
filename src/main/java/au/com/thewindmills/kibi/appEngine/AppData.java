@@ -83,6 +83,10 @@ public class AppData {
     }
 
     /**
+     * 
+     */
+
+    /**
      * Dispose any {@link AppObject}s or {@link AppEntity}s that need disposing,
      * then call {@link AppData#cleanup()}
      */
@@ -163,7 +167,8 @@ public class AppData {
             obj.update(delta);
         }
 
-        this.step(delta);
+        if (!application.getPaused()) this.step(delta);
+        
 
     }
 

@@ -26,8 +26,15 @@ public class LogicApp extends ApplicationAdapter{
      */
     public final String title;
 
-
+    /**
+     * Boolean that controls the update loop
+     */
     private boolean running = false;
+
+    /**
+     * Set to true when the app is paused
+     */
+    private boolean paused = false;
 
     /**
      * The camera of the app;
@@ -80,8 +87,6 @@ public class LogicApp extends ApplicationAdapter{
         this.camera = new OrthographicCamera();
         
 
-        
-
         data = new AppData(this);
 
     }
@@ -127,6 +132,21 @@ public class LogicApp extends ApplicationAdapter{
         this.appInterface.onClose();
     }
 
+    @Override
+    public void pause() {
+        super.pause();
+        this.paused = true;
+    }
+
+    @Override
+    public void resume() {
+        super.resume();
+        this.paused = false;
+    }
+
+    public boolean getPaused() {
+        return this.paused;
+    }
 
     public OrthographicCamera getCamera() {
         return this.camera;
