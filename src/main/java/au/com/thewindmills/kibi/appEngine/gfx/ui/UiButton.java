@@ -12,16 +12,19 @@ public class UiButton extends UiEntity {
 
     private Color hoverColor = DrawConstants.HOVER_COLOR;
     private Color color;
+    private ButtonPress buttonPress;
 
-    public UiButton(AppData data, String layer, int depth, Vector2 pos, AbstractShape shape) {
+    public UiButton(AppData data, String layer, int depth, Vector2 pos, AbstractShape shape, ButtonPress buttonPress) {
         super(data, layer, depth, pos, shape);
         this.color = shape.getFillColor();
+        this.buttonPress = buttonPress;
 
     }
 
-    public UiButton(Vector2 relativePos, AbstractShape shape, UiEntity parent) {
+    public UiButton(Vector2 relativePos, AbstractShape shape, UiEntity parent, ButtonPress buttonPress) {
         super(relativePos, shape, parent);
         this.color = shape.getFillColor();
+        this.buttonPress = buttonPress;
     }
 
     @Override
@@ -54,7 +57,22 @@ public class UiButton extends UiEntity {
     public void dispose() {
         
     }
+
+    @Override
+    public void onMousePressed() {
+        this.buttonPress.onPressed();
+    }
+
+    @Override
+    public void onMouseReleased() {
+        this.buttonPress.onReleased();
+    }
     
+
+    public interface ButtonPress {
+        public abstract void onPressed();
+        public abstract void onReleased();
+    }
     
 
 }

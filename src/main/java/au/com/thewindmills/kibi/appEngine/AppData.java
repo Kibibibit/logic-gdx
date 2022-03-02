@@ -15,6 +15,7 @@ import au.com.thewindmills.kibi.appEngine.gfx.shapes.RectShape;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.UiButton;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.UiEntity;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.UiPanel;
+import au.com.thewindmills.kibi.appEngine.gfx.ui.UiButton.ButtonPress;
 import au.com.thewindmills.kibi.appEngine.objects.AppObject;
 import au.com.thewindmills.kibi.appEngine.objects.MouseObject;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
@@ -22,7 +23,6 @@ import au.com.thewindmills.kibi.appEngine.utils.ArrayUtils;
 import au.com.thewindmills.kibi.appEngine.utils.constants.AppConstants;
 import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
-import au.com.thewindmills.kibi.models.components.Gate;
 
 /**
  * Stores a list of all {@link AppObject}s, controls their
@@ -149,7 +149,15 @@ public class AppData {
         appBar.setStrokeColor(new Color(0.3f, 0.3f, 0.3f, 1));
 
         
-        UiEntity button = new UiButton(new Vector2(2.5f, 2.5f), new RectShape(0, 0, 50, 20), appBar);
+        UiEntity button = new UiButton(new Vector2(2.5f, 2.5f), new RectShape(0, 0, 50, 20), appBar, new ButtonPress() {
+            public void onPressed() {
+                System.out.println("Hello!");
+            }
+
+            public void onReleased() {
+                System.out.println("Goodbye!");
+            }
+        });
         button.setFillColor(new Color(0.35f, 0.35f, 0.35f, 1));
 
     }

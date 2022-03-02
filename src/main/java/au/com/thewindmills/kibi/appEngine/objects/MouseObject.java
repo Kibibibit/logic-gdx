@@ -48,20 +48,16 @@ public class MouseObject extends AppObject {
     @Override
     public void preStep(float delta) {
         this.setPos((float) Gdx.input.getX(), (float) Gdx.input.getY());
-        
     }
 
     @Override
     public void step(float delta) {
-        
         if (!this.getDeltaPos().isZero()) {
             this.setCameraPos();
             this.deltaCameraPos = this.lastCameraPos.sub(this.cameraPos);
             this.updateContextEntity();
             this.updateContextEntityCurrent();
         }
-
-        
     }
 
     @Override
