@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import au.com.thewindmills.kibi.appEngine.AppData;
 import au.com.thewindmills.kibi.appEngine.gfx.shapes.RectShape;
 import au.com.thewindmills.kibi.appEngine.objects.entities.ShapeEntity;
-import au.com.thewindmills.kibi.appEngine.utils.Batches;
+import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 
 public class Gate extends ShapeEntity {
 
@@ -25,7 +25,13 @@ public class Gate extends ShapeEntity {
 
     @Override
     public void update(float delta) {
-        
+        Vector2 mousePos = this.getData().getMouse().getCameraPos();
+
+        if (this.getShape().inBounds(mousePos)) {
+            this.setVisible(false);
+        } else {
+            this.setVisible(true);
+        }
     }
 
     @Override

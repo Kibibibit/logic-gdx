@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.objects.AppObject;
+import au.com.thewindmills.kibi.appEngine.objects.MouseObject;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
-import au.com.thewindmills.kibi.appEngine.utils.Batches;
 import au.com.thewindmills.kibi.appEngine.utils.constants.AppConstants;
+import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 import au.com.thewindmills.kibi.models.components.Gate;
 
 /**
@@ -76,6 +78,11 @@ public class AppData {
     private int mspt;
 
     /**
+     * A mouse object that keeps track of various mouse details
+     */
+    private MouseObject mouse;
+
+    /**
      * Primary constructor, use this one!
      * @param application - The application to link to this data object
      */    
@@ -84,6 +91,8 @@ public class AppData {
         objectBuffer = new ArrayList<AppObject>();
         entities = new ArrayList<AppEntity>();
         entityBuffer = new ArrayList<AppEntity>();
+
+        mouse = new MouseObject(this, new Vector2(0,0));
 
         this.application = application;
 
@@ -245,6 +254,10 @@ public class AppData {
 
     public void setTPS(int tps) {
         this.tps = tps;
+    }
+
+    public MouseObject getMouse() {
+        return this.mouse;
     }
 
 }

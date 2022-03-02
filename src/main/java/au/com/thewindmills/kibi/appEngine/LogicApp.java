@@ -5,8 +5,8 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import au.com.thewindmills.kibi.appEngine.utils.Batches;
 import au.com.thewindmills.kibi.appEngine.utils.constants.AppConstants;
+import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 
 /**
  * The main application object, containing cameras,

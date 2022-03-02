@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
 import au.com.thewindmills.kibi.appEngine.gfx.shapes.AbstractShape;
-import au.com.thewindmills.kibi.appEngine.utils.Batches;
+import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 
 /**
  * An entity that is visible due to the shape it draws, defined by <br>
@@ -19,6 +19,10 @@ public abstract class ShapeEntity extends AppEntity {
     public ShapeEntity(AppData data, Vector2 pos, AbstractShape shape) {
         super(data, pos);
         this.shape = shape;
+    }
+
+    public AbstractShape getShape() {
+        return this.shape;
     }
 
 

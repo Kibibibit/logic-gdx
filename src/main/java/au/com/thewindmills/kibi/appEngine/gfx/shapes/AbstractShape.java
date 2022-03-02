@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
-import au.com.thewindmills.kibi.appEngine.utils.Batches;
 import au.com.thewindmills.kibi.appEngine.utils.constants.DrawConstants;
+import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 
 /**
  * Contains the drawing methods, color styles,

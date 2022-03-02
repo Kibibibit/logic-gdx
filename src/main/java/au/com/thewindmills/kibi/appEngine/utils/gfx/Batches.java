@@ -1,4 +1,4 @@
-package au.com.thewindmills.kibi.appEngine.utils;
+package au.com.thewindmills.kibi.appEngine.utils.gfx;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;

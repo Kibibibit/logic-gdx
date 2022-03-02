@@ -2,7 +2,7 @@ package au.com.thewindmills.kibi.appEngine.gfx.shapes;
 
 import com.badlogic.gdx.math.Vector2;
 
-import au.com.thewindmills.kibi.appEngine.utils.Batches;
+import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 
 /**
  * Represents a rectange, can be drawn with a pos and size
@@ -33,7 +33,6 @@ public class RectShape extends AbstractShape {
 
     @Override
     public boolean inBounds(float x, float y) {
-
         return x > pos.x && x < pos.x + size.x && y > pos.y && y < pos.y + size.y;
     }
 

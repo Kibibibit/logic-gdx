@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
 import au.com.thewindmills.kibi.appEngine.objects.AppObject;
-import au.com.thewindmills.kibi.appEngine.utils.Batches;
+import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 
 /**
  * An abstract class that any visible {@link AppObject} extends.
