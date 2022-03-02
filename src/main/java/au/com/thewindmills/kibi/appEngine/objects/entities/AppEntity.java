@@ -25,6 +25,7 @@ public abstract class AppEntity extends AppObject {
 
     public AppEntity(AppData data, String layer, Vector2 pos) {
         super(data, pos);
+        this.layer = layer;
     }
 
     public boolean isVisible() {
