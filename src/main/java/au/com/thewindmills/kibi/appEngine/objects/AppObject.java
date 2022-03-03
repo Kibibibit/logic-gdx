@@ -7,8 +7,6 @@ import com.badlogic.gdx.math.Vector2;
 import au.com.thewindmills.kibi.appEngine.AppData;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
 
-//TODO: Vector stuff - replace with floats
-
 /**
  * A generic object class that anything that should interact with the app each tick should
  * extend. These objects are not visible, for that extend {@link AppEntity}
