@@ -1,5 +1,8 @@
 package au.com.thewindmills.kibi.appEngine.objects;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -38,18 +41,26 @@ public class MouseObject extends AppObject {
      */
     private AppEntity contextEntity = null;
 
+    /**
+     * The state of each mouse button
+     */
+    private final Map<Integer, Boolean> buttonStates;
+
     public MouseObject(AppData data) {
         super(data, new Vector2(0, 0));
         this.cameraPos = new Vector2(0, 0);
         this.lastCameraPos = cameraPos.cpy();
         this.deltaCameraPos = new Vector2(0, 0);
+        this.buttonStates = new HashMap<Integer, Boolean>();
 
     }
 
     /**
-     * Event called whenever {@link AppInputProcessor#mouseMoved(int, int)} is called.
+     * Event called whenever {@link AppInputProcessor#mouseMoved(int, int)} is
+     * called.
      * Note that the origin is at the top left of the screen
-     * @param screenX - mouse's current x 
+     * 
+     * @param screenX - mouse's current x
      * @param screenY - mouse's current y
      */
     public void mouseMoved(int screenX, int screenY) {
@@ -62,14 +73,16 @@ public class MouseObject extends AppObject {
 
     /**
      * Called when button was down last tick, and up this tick
+     * 
      * @param button - The button that was pressed
      */
     public void buttonPressed(int button) {
-        
+
     }
 
     /**
      * Called when button was up last tick, and down this tick
+     * 
      * @param button - The button that was released
      */
     public void buttonReleased(int button) {
@@ -144,14 +157,15 @@ public class MouseObject extends AppObject {
 
     public Vector2 getGlobalPos() {
         Vector2 globalPos = this.getPos().cpy();
-        //We want origin to be bottom left, but input is weirdly calculated from top left
+        // We want origin to be bottom left, but input is weirdly calculated from top
+        // left
         globalPos.y = Gdx.graphics.getHeight() - globalPos.y;
         return globalPos;
     }
 
     private void setCameraPos() {
         if (this.getData().getCamera() != null) {
-            Vector3 v3 = new Vector3(this.getPos().x, this.getPos().y,0);
+            Vector3 v3 = new Vector3(this.getPos().x, this.getPos().y, 0);
             this.getData().getCamera().unproject(v3);
             this.cameraPos.set(v3.x, v3.y);
         }
@@ -175,6 +189,27 @@ public class MouseObject extends AppObject {
     }
 
     @Override
-    protected void step(float delta) {}
+    protected void step(float delta) {
+    }
+
+    private void addButton(int button) {
+        if (!this.buttonStates.containsKey(button)) {
+            this.buttonStates.put(button, false);
+        }
+    }
+
+    public boolean getButtonState(int button) {
+
+        addButton(button);
+
+        return this.buttonStates.get(button);
+
+    }
+
+    public void setButtonState(int button, boolean state) {
+        addButton(button);
+
+        this.buttonStates.replace(button, state);
+    }
 
 }

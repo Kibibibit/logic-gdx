@@ -56,6 +56,10 @@ public class AppInputProcessor implements InputProcessor {
         lastButtonState.replace(button, currentButtonState.get(button));
         currentButtonState.replace(button, true);
 
+        if (data.getMouse() != null) {
+            data.getMouse().setButtonState(button, true);
+        }
+
         if (lastButtonState.get(button) == false && currentButtonState.get(button) == true) {
             if (data.getMouse() != null) {
                 data.getMouse().buttonPressed(button);
@@ -71,6 +75,10 @@ public class AppInputProcessor implements InputProcessor {
         
         lastButtonState.replace(button, currentButtonState.get(button));
         currentButtonState.replace(button, false);
+
+        if (data.getMouse() != null) {
+            data.getMouse().setButtonState(button, false);
+        }
 
         if (lastButtonState.get(button) == true && currentButtonState.get(button) == false) {
             if (data.getMouse() != null) {
