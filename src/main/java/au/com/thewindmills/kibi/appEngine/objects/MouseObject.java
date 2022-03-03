@@ -65,7 +65,7 @@ public class MouseObject extends AppObject {
      * @param button - The button that was pressed
      */
     public void buttonPressed(int button) {
-        System.out.println(button + " pressed!");
+        
     }
 
     /**
@@ -73,7 +73,7 @@ public class MouseObject extends AppObject {
      * @param button - The button that was released
      */
     public void buttonReleased(int button) {
-        System.out.println(button + " released!");
+
     }
 
     @Override
