@@ -8,6 +8,7 @@ import au.com.thewindmills.kibi.appEngine.AppData;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
 import au.com.thewindmills.kibi.appEngine.utils.ArrayUtils;
 import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
+import au.com.thewindmills.kibi.appEngine.utils.processors.AppInputProcessor;
 
 /**
  * Represents the mouse within the game, stores methods for firing events
@@ -45,12 +46,34 @@ public class MouseObject extends AppObject {
 
     }
 
+    /**
+     * Event called whenever {@link AppInputProcessor#mouseMoved(int, int)} is called.
+     * Note that the origin is at the top left of the screen
+     * @param screenX - mouse's current x 
+     * @param screenY - mouse's current y
+     */
     public void mouseMoved(int screenX, int screenY) {
-        this.setPos((float) Gdx.input.getX(), (float) Gdx.input.getY());
+        this.setPos((float) screenX, (float) screenY);
         this.setCameraPos();
         this.deltaCameraPos = this.lastCameraPos.sub(this.cameraPos);
         this.updateContextEntity();
         this.updateContextEntityCurrent();
+    }
+
+    /**
+     * Called when button was down last tick, and up this tick
+     * @param button - The button that was pressed
+     */
+    public void buttonPressed(int button) {
+        System.out.println(button + " pressed!");
+    }
+
+    /**
+     * Called when button was up last tick, and down this tick
+     * @param button - The button that was released
+     */
+    public void buttonReleased(int button) {
+        System.out.println(button + " released!");
     }
 
     @Override
