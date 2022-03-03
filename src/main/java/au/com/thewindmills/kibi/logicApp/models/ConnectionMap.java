@@ -1,19 +1,20 @@
 package au.com.thewindmills.kibi.logicApp.models;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
+import java.util.Map.Entry;
+
+import au.com.thewindmills.kibi.logicApp.utils.Binary;
 
 public class ConnectionMap {
 
     private Map<Long, LogicModel> models;
 
-    private Map<Connection, HashSet<Connection>> connections;
+    private Map<Connection, Connection> connections;
 
     public ConnectionMap() {
         models = new HashMap<Long, LogicModel>();
-        connections = new HashMap<Connection, HashSet<Connection>>();
+        connections = new HashMap<Connection, Connection>();
     }
 
     public void addConnection(LogicModel inputModel, int inputNode, LogicModel outputModel, int outputNode) {
@@ -32,6 +33,40 @@ public class ConnectionMap {
     public void removeConnection(LogicModel inputModel, int inputNode, LogicModel outputModel, int outputNode) {
         connections.remove(new Connection(inputModel.id, inputNode), new Connection(outputModel.id, outputNode));
     }
+
+
+    public int getInputState(LogicModel model) {
+
+        if (!models.containsKey(model.id)) {
+            return -1;
+        }
+
+        int result = 0;
+
+        for (Entry<Connection, Connection> entry : connections.entrySet()) {
+            if (entry.getKey().modelId == model.id) {
+                result += models.get(entry.getValue().modelId).outputAtBit(entry.getKey().nodeId);
+            }
+        }
+
+        return result;
+    }
+
+    public void update(LogicModel outputModel, int outputNode, boolean state) {
+
+        for (Entry<Connection, Connection> entry : connections.entrySet()) {
+            
+            if (entry.getValue().modelId == outputModel.id && entry.getValue().nodeId == outputNode) {
+                models.get(entry.getKey().modelId).update(
+                    entry.getKey().nodeId,
+                    state
+                );
+            }
+
+        }
+ 
+    }
+
 
     private class Connection {
 

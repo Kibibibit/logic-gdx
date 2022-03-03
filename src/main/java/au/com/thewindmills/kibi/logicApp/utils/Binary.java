@@ -32,4 +32,42 @@ public class Binary {
         return inv;
     }
     
+    public static int getValueAtBit(int value, int pos) {
+        return ((value >> pos) % 2) << pos;
+    }
+
+    public static boolean bitActive(int value, int pos) {
+        return (value >> pos) % 2 == 1;
+    }
+
+    public static int getValueFromBits(boolean[] array) {
+        int result = 0;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i]) {
+                result += Math.pow(2,i);
+            }
+        }
+        return result;
+    }
+
+    public static boolean[] getBitsFromValue(int value) {
+        int power = 0;
+        while (Math.pow(2,power) < value) {
+            power++;
+        }
+        power--;
+        
+        boolean[] output = new boolean[power+1];
+
+        while (value > 0) {
+            if (value >= Math.pow(2,power)) {
+                output[power] = true;
+                value -= Math.pow(2,power);
+            }
+            power--;
+        }
+
+        return output;
+
+    }
 }

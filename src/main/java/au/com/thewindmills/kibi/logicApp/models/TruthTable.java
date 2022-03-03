@@ -8,10 +8,10 @@ import au.com.thewindmills.kibi.logicApp.utils.Binary;
 public class TruthTable extends LogicModel {
     private Map<Integer, Integer> table;
 
-    
+    //TODO: Change this to take int in -> list of bools out
 
-    public TruthTable(int inputCount, int outputCount) {
-        super(inputCount, outputCount);
+    public TruthTable(int inputCount, int outputCount, ConnectionMap connectionMap) {
+        super(inputCount, outputCount, connectionMap);
 
         table = new HashMap<Integer, Integer>((int) Math.pow(2, inputCount));
 
@@ -28,24 +28,24 @@ public class TruthTable extends LogicModel {
         setRow(Binary.parse(input), Binary.parse(output));
     }
 
+    @Override
     public int result(int input) {
         return table.get(input);
-    }
+    }  
 
-    public int result(String input) {
-        return table.get(Binary.parse(input));
+    @Override
+    public int result(int input, int pos) {
+        return ((table.get(input) >> pos) % 2) << pos;
     }
 
     public int size() {
         return table.size();
     }
 
-    public boolean result(int input, int pos) {
-        return (table.get(input) >> pos) % 2 == 1;
-    }
-
     @Override
-    protected int onUpdate(int input) {
-        return result(input);
+    public void onUpdate(int input) {
+        int result = result(input);
+        System.out.println("Getting input " + input + " in " + id + ", and returning " + result);
+        this.postUpdate(result);
     }
 }
