@@ -6,13 +6,25 @@ import java.util.Map;
 import com.badlogic.gdx.InputProcessor;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
-
+/**
+ * Implementation of {@link InputProcessor} to handle mouse and keyboard events.
+ * 
+ * @author Kibi
+ */
 public class AppInputProcessor implements InputProcessor {
 
-
+    /**
+     * A reference to the AppData so we can access our mouse object and other input objects
+     */
     private final AppData data;
 
+    /**
+     * Stores the state of each mouse button the last time {@link #touchUp()} or {@link #touchDown()} was called
+     */
     private final Map<Integer, Boolean> currentButtonState;
+    /**
+     * Stores the state of each mouse button this time {@link #touchUp()} or {@link #touchDown()} was called
+     */
     private final Map<Integer, Boolean> lastButtonState;
 
     public AppInputProcessor(AppData data) {
@@ -23,6 +35,10 @@ public class AppInputProcessor implements InputProcessor {
         
     }
 
+    /**
+     * Helper method to make sure the hashmaps store the buttons
+     * @param button - Button to add
+     */
     private void newButton(int button) {
         if (!lastButtonState.containsKey(button)) {
             lastButtonState.put(button, false);
