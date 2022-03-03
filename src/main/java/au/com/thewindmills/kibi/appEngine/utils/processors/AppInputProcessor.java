@@ -3,6 +3,7 @@ package au.com.thewindmills.kibi.appEngine.utils.processors;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
@@ -91,6 +92,17 @@ public class AppInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+
+        if (!this.currentButtonState.get(Input.Buttons.LEFT)) {
+            return this.mouseMoved(screenX, screenY);
+
+        }
+
+        if (data.getMouse() != null) {
+            data.getMouse().mouseDragged(screenX, screenY);
+        }
+
+
         return false;
     }
 

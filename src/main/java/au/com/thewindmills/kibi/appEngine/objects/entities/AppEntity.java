@@ -22,6 +22,11 @@ public abstract class AppEntity extends AppObject {
      * Sets what layer the object is drawn on
      */
     private final String layer;
+    
+    /**
+     * Determines if the mouse being dragged with this object should have different behaviour to normal mouse movement
+     */
+    protected boolean isDraggable = false;
 
     /**
      * This depth controls the draw order of the entities, lower depths are drawn first
@@ -118,6 +123,14 @@ public abstract class AppEntity extends AppObject {
      */
     public void onMouseLeave() {}
 
+    /**
+     * Event called when the mouse is dragged across the screen
+     */
+    public void mouseDragged() {}
     
+
+    public boolean isDraggable() {
+        return this.isDraggable;
+    }
 
 }

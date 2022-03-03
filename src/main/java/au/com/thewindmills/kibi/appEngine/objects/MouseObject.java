@@ -232,4 +232,16 @@ public class MouseObject extends AppObject {
         this.buttonStates.replace(button, state);
     }
 
+    public void mouseDragged(int screenX, int screenY) {
+
+        if (this.contextEntity != null) {
+            if (this.contextEntity.isDraggable()) {
+                this.contextEntity.mouseDragged();
+            }
+        }
+
+        this.mouseMoved(screenX, screenY);
+
+    }
+
 }
