@@ -1,12 +1,14 @@
 package au.com.thewindmills.kibi.appEngine;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import au.com.thewindmills.kibi.appEngine.utils.constants.AppConstants;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
+import au.com.thewindmills.kibi.appEngine.utils.processors.AppInputProcessor;
 
 /**
  * The main application object, containing cameras,
@@ -114,6 +116,8 @@ public class LogicApp extends ApplicationAdapter{
         //Create out data object
         data = new AppData(this);
 
+        
+
     }
 
     /**
@@ -148,6 +152,8 @@ public class LogicApp extends ApplicationAdapter{
         this.staticBatches = new Batches();
         this.getData().setCamera(camera);
         this.getData().init();
+
+        Gdx.input.setInputProcessor(new AppInputProcessor(this.getData()));
 
         this.start();
     }
