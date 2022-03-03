@@ -1,6 +1,6 @@
 package au.com.thewindmills.kibi.logicApp.utils;
 
-public class Binary {
+public class BinaryUtils {
 
     public static int parse(String s) {
         return Integer.parseInt(s.strip().replaceAll(" ", ""),2);
@@ -50,21 +50,20 @@ public class Binary {
         return result;
     }
 
-    public static boolean[] getBitsFromValue(int value) {
-        int power = 0;
-        while (Math.pow(2,power) < value) {
-            power++;
-        }
-        power--;
-        
-        boolean[] output = new boolean[power+1];
+    public static boolean[] getBitsFromString(String value) {
 
-        while (value > 0) {
-            if (value >= Math.pow(2,power)) {
-                output[power] = true;
-                value -= Math.pow(2,power);
+        
+        boolean[] output = new boolean[value.length()];
+
+        
+        for (int i = 0; i < value.length(); i++) {
+            if (value.substring(i,i+1).equals("1")) {
+                output[i] = true;
+            } else if (value.substring(i, i+1).equals("0")) {
+                output[i] = false;
+            } else {
+                System.err.println(value + " is not a valid binary strin!");
             }
-            power--;
         }
 
         return output;

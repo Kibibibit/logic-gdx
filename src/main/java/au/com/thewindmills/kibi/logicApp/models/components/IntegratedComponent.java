@@ -12,19 +12,10 @@ public class IntegratedComponent extends LogicModel {
     }
 
     @Override
-    public int result(int input) {
-        return 0;
-    }
-
-    @Override
-    public int result(int input, int pos) {
-        return 0;
-    }
-
-    @Override
-    protected void onUpdate(int input) {
+    public void result() {
         
     }
+
 
     
     

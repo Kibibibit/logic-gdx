@@ -1,7 +1,7 @@
 package au.com.thewindmills.kibi.logicApp.models;
 
 import au.com.thewindmills.kibi.appEngine.utils.maths.RandomUtils;
-import au.com.thewindmills.kibi.logicApp.utils.Binary;
+import au.com.thewindmills.kibi.logicApp.utils.BinaryUtils;
 
 public abstract class LogicModel extends AbstractModel {
 
@@ -10,17 +10,15 @@ public abstract class LogicModel extends AbstractModel {
 
     protected final int propagationDelay;
 
-    protected int outputState = 0;
-
-    protected int inputState = 0;
+    protected int previousOutputState = -1;
 
     protected int inputCount;
     protected int outputCount;
 
     protected ConnectionMap connectionMap;
 
-    private boolean[] inputBits;
-    private boolean[] outputBits;
+    protected boolean[] inputBits;
+    protected boolean[] outputBits;
 
     public LogicModel(int inputCount, int outputCount, ConnectionMap connectionMap) {
         this.propagationDelay = RandomUtils.randomIntInRange(MIN_DELAY, MAX_DELAY);
@@ -32,13 +30,6 @@ public abstract class LogicModel extends AbstractModel {
         inputBits = new boolean[inputCount];
         outputBits = new boolean[outputCount];
 
-        for (int i = 0; i < inputCount; i++) {
-            inputBits[i] = false;
-        }
-        for (int i = 0; i < outputCount; i++) {
-            outputBits[i] = false;
-        }
-
     }
 
     public void update(int pos, boolean value) {
@@ -46,11 +37,8 @@ public abstract class LogicModel extends AbstractModel {
         Thread timerThread = new Thread(new Runnable() {
             public void run() {
                 try {
-
-                    inputBits[pos] = value;
                     Thread.sleep(propagationDelay);
-
-                    
+                    inputBits[pos] = value;
 
                     postDelay();
                 } catch (InterruptedException e) {
@@ -65,7 +53,7 @@ public abstract class LogicModel extends AbstractModel {
 
     private void postDelay() {
         System.out.println("POST DELAY " + id);
-        this.onUpdate(Binary.getValueFromBits(inputBits));
+        this.result();
 
     }
 
@@ -75,28 +63,20 @@ public abstract class LogicModel extends AbstractModel {
         this.postDelay();
     }
 
-    protected abstract void onUpdate(int input);
+    protected void postUpdate() {
 
-    protected void postUpdate(int output) {
-        this.setOutputBits(output);
-        for (int i = 0; i < outputCount; i++) {
-            System.out.println(id + " - " + outputBits[i]);
-            this.connectionMap.update(this, i, outputBits[i]);
+        if (this.previousOutputState != BinaryUtils.getValueFromBits(outputBits)) {
+            System.out.println(id + " is changing output state to " + BinaryUtils.getValueFromBits(outputBits));
+            this.connectionMap.update(this, outputBits);
+
+        } else {
+            System.out.println(id + " got an input change but no output change!");
         }
 
+        this.previousOutputState = BinaryUtils.getValueFromBits(outputBits);
+
     }
 
-    protected int updateInputState() {
-        return connectionMap.getInputState(this);
-    }
-
-    public int getInputState() {
-        return this.inputState;
-    }
-
-    public int getOutputState() {
-        return this.outputState;
-    }
 
     public int getInputCount() {
         return this.inputCount;
@@ -106,28 +86,11 @@ public abstract class LogicModel extends AbstractModel {
         return this.outputCount;
     }
 
-    public abstract int result(int input);
+    /**
+     * Calculate output bits based on input bits
+     */
+    public abstract void result();
 
-    public int result(String input) {
-        return this.result(Binary.parse(input));
-    }
 
-    public int outputAtBit(int pos) {
-        return ((outputState >> pos) % 2) << pos;
-    }
-
-    private void setOutputBits(int value) {
-        int power = this.getOutputCount();
-
-        while (value > 0) {
-            if (value >= Math.pow(2, power)) {
-                outputBits[power] = true;
-                value -= Math.pow(2, power);
-            }
-            power--;
-        }
-    }
-
-    public abstract int result(int input, int pos);
 
 }

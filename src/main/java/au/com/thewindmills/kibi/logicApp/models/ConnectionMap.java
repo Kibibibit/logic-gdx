@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import au.com.thewindmills.kibi.logicApp.utils.Binary;
-
 public class ConnectionMap {
 
     private Map<Long, LogicModel> models;
@@ -25,41 +23,32 @@ public class ConnectionMap {
         Connection inputConnection = new Connection(inputModel.id, inputNode);
         Connection outputConnection = new Connection(outputModel.id, outputNode);
 
-        //DO something here with the set, go output to set of inputs
         connections.put(inputConnection, outputConnection);
+        outputModel.result();
+        inputModel.result();
+        
+
+
 
     }
 
     public void removeConnection(LogicModel inputModel, int inputNode, LogicModel outputModel, int outputNode) {
         connections.remove(new Connection(inputModel.id, inputNode), new Connection(outputModel.id, outputNode));
+        outputModel.result();
+        inputModel.result();
+        
     }
 
 
-    public int getInputState(LogicModel model) {
-
-        if (!models.containsKey(model.id)) {
-            return -1;
-        }
-
-        int result = 0;
-
-        for (Entry<Connection, Connection> entry : connections.entrySet()) {
-            if (entry.getKey().modelId == model.id) {
-                result += models.get(entry.getValue().modelId).outputAtBit(entry.getKey().nodeId);
-            }
-        }
-
-        return result;
-    }
-
-    public void update(LogicModel outputModel, int outputNode, boolean state) {
+    public void update(LogicModel outputModel, boolean[] state) {
 
         for (Entry<Connection, Connection> entry : connections.entrySet()) {
             
-            if (entry.getValue().modelId == outputModel.id && entry.getValue().nodeId == outputNode) {
+            if (entry.getValue().modelId == outputModel.id) {
+                System.out.println(outputModel.id + " is updating " + entry.getKey().modelId);
                 models.get(entry.getKey().modelId).update(
                     entry.getKey().nodeId,
-                    state
+                    state[entry.getKey().nodeId]
                 );
             }
 

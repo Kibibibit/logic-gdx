@@ -5,7 +5,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import au.com.thewindmills.kibi.appEngine.LogicApp;
 import au.com.thewindmills.kibi.logicApp.models.ConnectionMap;
 import au.com.thewindmills.kibi.logicApp.models.TruthTable;
-import au.com.thewindmills.kibi.logicApp.utils.Binary;
+import au.com.thewindmills.kibi.logicApp.utils.BinaryUtils;
 
 /**
  * Main entry point for the application
@@ -20,9 +20,7 @@ public class App
     public static void main( String[] args )
     {
 
-        int testNum = 69;
-
-        System.out.println(Binary.getValueFromBits(Binary.getBitsFromValue(testNum)));
+        System.out.println("--- MAKING TRUTH TABLES ---");
 
         ConnectionMap testMap = new ConnectionMap();
 
@@ -36,12 +34,46 @@ public class App
         not.setRow("0", "1");
         not.setRow("1", "0");
 
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         TruthTable not2 = new TruthTable(1, 1, testMap);
-        not.setRow(0, 1);
-        not.setRow(1, 0);
+        not2.setRow("0", "1");
+        not2.setRow("1", "0");
+
+        System.out.println("----------");
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("--- CONNECTING AND TO NOT ---");
+
 
         testMap.addConnection(not, 0, and, 0);
-        testMap.addConnection(not2 , 0, not, 0);
+
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("--- CONNECTING NOT TO NOT2 ---");
+
+        testMap.addConnection(not2, 0, not, 0);
+
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("--- UPDATING AND ---");
 
         and.trigger(0, true);
         and.trigger(1, true);
@@ -51,6 +83,11 @@ public class App
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        System.out.println("--- UPDATING AND AGAIN ---");
+
+
+        and.trigger(1, false);
 
         /*
         // Create the actual application object

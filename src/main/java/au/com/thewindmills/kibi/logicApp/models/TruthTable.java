@@ -3,49 +3,63 @@ package au.com.thewindmills.kibi.logicApp.models;
 import java.util.HashMap;
 import java.util.Map;
 
-import au.com.thewindmills.kibi.logicApp.utils.Binary;
+import au.com.thewindmills.kibi.logicApp.utils.BinaryUtils;
 
 public class TruthTable extends LogicModel {
-    private Map<Integer, Integer> table;
+    private Map<Integer, boolean[]> table;
 
     //TODO: Change this to take int in -> list of bools out
 
     public TruthTable(int inputCount, int outputCount, ConnectionMap connectionMap) {
         super(inputCount, outputCount, connectionMap);
 
-        table = new HashMap<Integer, Integer>((int) Math.pow(2, inputCount));
+        table = new HashMap<Integer, boolean[]>((int) Math.pow(2, inputCount));
 
         for (int i = 0; i < Math.pow(2, inputCount); i++) {
-            table.put(i, 0);
+            table.put(i,  new boolean[outputCount]);
         }
+
+        System.out.println(id + " truth table just created!");
+        this.result();
     }
 
-    public void setRow(int input, int output) {
-        table.replace(input, output);
+    public void setRow(int input, boolean[] output) {
+        if (output.length == outputCount) {
+            table.replace(input, output);
+        } else {
+            System.err.println("BAD OUTPUT BITS");
+        }
+        
     }
 
     public void setRow(String input, String output) {
-        setRow(Binary.parse(input), Binary.parse(output));
+        setRow(BinaryUtils.parse(input), BinaryUtils.getBitsFromString(output));
     }
 
-    @Override
-    public int result(int input) {
+    public boolean[] getRow(int input) {
         return table.get(input);
-    }  
-
-    @Override
-    public int result(int input, int pos) {
-        return ((table.get(input) >> pos) % 2) << pos;
     }
+
+    public boolean[] getRow(boolean[] input) {
+        if (input.length == this.getInputCount()) {
+            return table.get(BinaryUtils.getValueFromBits(input));
+        } else {
+
+            System.err.println("BAD BOOLEAN STRING");
+
+            return new boolean[input.length];
+        }
+    }
+
 
     public int size() {
         return table.size();
     }
 
+
     @Override
-    public void onUpdate(int input) {
-        int result = result(input);
-        System.out.println("Getting input " + input + " in " + id + ", and returning " + result);
-        this.postUpdate(result);
+    public void result() {
+        this.outputBits = this.getRow(this.inputBits);
+        this.postUpdate();      
     }
 }
