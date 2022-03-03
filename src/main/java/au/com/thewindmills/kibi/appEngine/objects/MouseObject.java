@@ -78,6 +78,10 @@ public class MouseObject extends AppObject {
      */
     public void buttonPressed(int button) {
 
+        if (this.contextEntity != null) {
+            this.contextEntity.onMousePressed(button);
+        }
+
     }
 
     /**
@@ -86,6 +90,10 @@ public class MouseObject extends AppObject {
      * @param button - The button that was released
      */
     public void buttonReleased(int button) {
+
+        if (this.contextEntity != null) {
+            this.contextEntity.onMouseReleased(button);
+        }
 
     }
 

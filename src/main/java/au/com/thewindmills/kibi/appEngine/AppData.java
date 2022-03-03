@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
@@ -150,12 +151,17 @@ public class AppData {
 
         
         UiEntity button = new UiButton(new Vector2(2.5f, 2.5f), new RectShape(0, 0, 50, 20), appBar, new ButtonPress() {
-            public void onPressed() {
-                System.out.println("Hello!");
+            public void onPressed(int button) {
+                if (button == Input.Buttons.LEFT) {
+                    System.out.println("Hello!");
+                }
+                
             }
 
-            public void onReleased() {
-                System.out.println("Goodbye!");
+            public void onReleased(int button) {
+                if (button == Input.Buttons.LEFT) {
+                    System.out.println("Goodbye!");
+                }
             }
         });
         button.setFillColor(new Color(0.35f, 0.35f, 0.35f, 1));

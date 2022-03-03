@@ -59,19 +59,19 @@ public class UiButton extends UiEntity {
     }
 
     @Override
-    public void onMousePressed() {
-        this.buttonPress.onPressed();
+    public void onMousePressed(int button) {
+        this.buttonPress.onPressed(button);
     }
 
     @Override
-    public void onMouseReleased() {
-        this.buttonPress.onReleased();
+    public void onMouseReleased(int button) {
+        this.buttonPress.onReleased(button);
     }
     
 
     public interface ButtonPress {
-        public abstract void onPressed();
-        public abstract void onReleased();
+        public abstract void onPressed(int button);
+        public abstract void onReleased(int button);
     }
     
 

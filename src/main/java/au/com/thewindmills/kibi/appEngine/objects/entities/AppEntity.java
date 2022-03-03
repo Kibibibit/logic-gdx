@@ -92,8 +92,8 @@ public abstract class AppEntity extends AppObject {
         return this.depth;
     }
 
-    public void onMousePressed() {}
-    public void onMouseReleased() {}
+    public void onMousePressed(int button) {}
+    public void onMouseReleased(int button) {}
 
 
     
