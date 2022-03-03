@@ -41,16 +41,6 @@ public class UiButton extends UiEntity {
 
     @Override
     protected void step(float delta) {
-        boolean hovered = false;
-        if (this.getData().getMouse().getContextEntity() != null) {
-            hovered = this.getData().getMouse().getContextEntity().id == this.id;
-        }
-
-        if (hovered) {
-            this.getShape().setFillColor(hoverColor);
-        } else {
-            this.getShape().setFillColor(color);
-        }
     }
 
     @Override
@@ -66,6 +56,16 @@ public class UiButton extends UiEntity {
     @Override
     public void onMouseReleased(int button) {
         this.buttonPress.onReleased(button);
+    }
+
+    @Override
+    public void onMouseEnter() {
+        this.getShape().setFillColor(hoverColor);
+    }
+
+    @Override
+    public void onMouseLeave() {
+        this.getShape().setFillColor(color);
     }
     
 

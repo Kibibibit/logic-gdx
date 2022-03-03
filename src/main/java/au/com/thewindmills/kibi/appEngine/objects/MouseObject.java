@@ -37,9 +37,14 @@ public class MouseObject extends AppObject {
     private Vector2 deltaCameraPos;
 
     /**
-     * The id of the object currently being highlighted by the mouse
+     * The object currently being highlighted by the mouse
      */
     private AppEntity contextEntity = null;
+
+    /**
+     * The object that was highlighted last event by the mouse
+     */
+    private AppEntity previousContextEntity = null;
 
     /**
      * The state of each mouse button
@@ -64,11 +69,24 @@ public class MouseObject extends AppObject {
      * @param screenY - mouse's current y
      */
     public void mouseMoved(int screenX, int screenY) {
+        this.previousContextEntity = this.contextEntity;
+        this.lastCameraPos = this.getCameraPos();
         this.setPos((float) screenX, (float) screenY);
         this.setCameraPos();
         this.deltaCameraPos = this.lastCameraPos.sub(this.cameraPos);
         this.updateContextEntity();
         this.updateContextEntityCurrent();
+
+        if (this.previousContextEntity != null && this.contextEntity != null) {
+            if (this.previousContextEntity.id != this.contextEntity.id) {
+                this.previousContextEntity.onMouseLeave();
+                this.contextEntity.onMouseEnter();
+            }
+        } else if (this.previousContextEntity != null) {
+            this.previousContextEntity.onMouseLeave();
+        } else if (this.contextEntity != null) {
+            this.contextEntity.onMouseEnter();
+        }
     }
 
     /**
@@ -97,13 +115,6 @@ public class MouseObject extends AppObject {
 
     }
 
-    @Override
-    public void postStep(float delta) {
-        if (!this.getDeltaPos().isZero()) {
-            this.lastCameraPos = this.getCameraPos();
-        }
-    }
-
     /**
      * Checks to see if the current context entitiy is still under the mouse
      * Probably could put back into updateContextEntity
@@ -126,6 +137,7 @@ public class MouseObject extends AppObject {
      * Updates the current object that is under the mouse
      */
     private void updateContextEntity() {
+        this.previousContextEntity = this.contextEntity;
         for (String layer : Layers.LAYERS) {
             Vector2 posToCheck = this.getGlobalPos();
 

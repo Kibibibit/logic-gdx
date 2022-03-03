@@ -68,15 +68,10 @@ public class LogicApp extends ApplicationAdapter{
     private Batches staticBatches;
 
     /**
-     * Functional interface so that we can call System.exit when the app is closed
-     */
-    private AppInterface appInterface;
-
-    /**
      * Main constructor, Generally call this one
      */
-    public LogicApp(AppInterface appInterface) {
-        this(AppConstants.TITLE, AppConstants.FRAME_WIDTH, AppConstants.FRAME_HEIGHT, appInterface);
+    public LogicApp() {
+        this(AppConstants.TITLE, AppConstants.FRAME_WIDTH, AppConstants.FRAME_HEIGHT);
     }
 
 
@@ -87,7 +82,7 @@ public class LogicApp extends ApplicationAdapter{
      * @param frameHeight - The height of the window
      * @param appInterface - This should call {@link App#close()}
      */
-    public LogicApp(String title, int frameWidth, int frameHeight, AppInterface appInterface) {
+    public LogicApp(String title, int frameWidth, int frameHeight) {
 
         /**
          * Define the config settings
@@ -98,8 +93,6 @@ public class LogicApp extends ApplicationAdapter{
 
         //Need to disable audio to stop a crash when the app closes due to there being no AL lib
         config.disableAudio(true);
-
-        this.appInterface = appInterface;
 
         /**
          * Set the public final vars
@@ -169,7 +162,6 @@ public class LogicApp extends ApplicationAdapter{
     public void dispose() {
         this.getData().dispose();
         this.batches.dispose();
-        this.appInterface.onClose();
     }
 
     @Override

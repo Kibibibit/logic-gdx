@@ -92,9 +92,31 @@ public abstract class AppEntity extends AppObject {
         return this.depth;
     }
 
+    /**
+     * Event called when the mouse clicks on this Entity,
+     * override as needed
+     * @param button - The mouse button that was pressed
+     */
     public void onMousePressed(int button) {}
+
+    /**
+     * Event called when the mouse is released on this Entity,
+     * override as needed
+     * @param button - The mouse button that was released
+     */
     public void onMouseReleased(int button) {}
 
+    /**
+     * Event called when the mouse selects this componenet,
+     * override as needed
+     */
+    public void onMouseEnter() {}
+
+    /**
+     * Event called when the mouse deselects this component,
+     * override as needed
+     */
+    public void onMouseLeave() {}
 
     
 
