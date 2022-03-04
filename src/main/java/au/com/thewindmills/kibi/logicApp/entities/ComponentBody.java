@@ -6,16 +6,16 @@ import au.com.thewindmills.kibi.appEngine.AppData;
 import au.com.thewindmills.kibi.appEngine.gfx.shapes.AbstractShape;
 import au.com.thewindmills.kibi.appEngine.objects.entities.DragableShapeEntity;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
+import au.com.thewindmills.kibi.logicApp.models.LogicModel;
 
 public class ComponentBody extends DragableShapeEntity {
 
-    public ComponentBody(AppData data, String layer, int depth, Vector2 pos, AbstractShape shape) {
-        super(data, layer, depth, pos, shape);
-    }
+    private LogicModel model;
 
-    @Override
-    public void mouseDragged() {
-        
+    public ComponentBody(AppData data, String layer, int depth, Vector2 pos, AbstractShape shape, LogicModel model) {
+        super(data, layer, depth, pos, shape);
+
+        this.model = model;
     }
 
     @Override
@@ -31,6 +31,10 @@ public class ComponentBody extends DragableShapeEntity {
     @Override
     public void dispose() {
         
+    }
+
+    public LogicModel getModel() {
+        return this.model;
     }
     
 }

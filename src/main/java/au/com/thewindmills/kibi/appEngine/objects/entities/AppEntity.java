@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
 import au.com.thewindmills.kibi.appEngine.objects.AppObject;
+import au.com.thewindmills.kibi.appEngine.utils.ArrayUtils;
+import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 
 /**
@@ -33,10 +35,22 @@ public abstract class AppEntity extends AppObject {
      */
     private final int depth;
 
+    /**
+     * True if this app is on a static draw layer
+     */
+    private final boolean onStaticLayer;
+
+
+    protected Vector2 mouseOffset;
+
     public AppEntity(AppData data, String layer, int depth, Vector2 pos) {
         super(data, pos);
         this.layer = layer;
         this.depth = depth;
+        this.mouseOffset = new Vector2(0,0);
+
+        onStaticLayer = ArrayUtils.arrayContains(Layers.STATIC_LAYERS, layer);
+
     }
 
     public boolean isVisible() {
@@ -97,19 +111,40 @@ public abstract class AppEntity extends AppObject {
         return this.depth;
     }
 
-    /**
-     * Event called when the mouse clicks on this Entity,
-     * override as needed
-     * @param button - The mouse button that was pressed
-     */
-    public void onMousePressed(int button) {}
+    public boolean onStaticLayer() {
+        return this.onStaticLayer;
+    }
 
     /**
-     * Event called when the mouse is released on this Entity,
-     * override as needed
+     * Event called when the mouse clicks on this Entity
+     * @param button - The mouse button that was pressed
+     */
+    public final void onMousePressed(int button) {
+
+        Vector2 mousePos = this.onStaticLayer ? this.getData().getMouse().getCameraPos() : this.getData().getMouse().getGlobalPos();
+
+        this.mouseOffset.set(mousePos.cpy().sub(this.getPos()));
+
+        this.doOnMousePressed(button);
+    }
+
+    /**
+     * Event called when the mouse is released on this Entity
      * @param button - The mouse button that was released
      */
-    public void onMouseReleased(int button) {}
+    public final void onMouseReleased(int button) {
+
+        this.mouseOffset.set(0, 0);
+
+        this.doOnMouseReleased(button);
+
+    }
+
+
+    public void doOnMousePressed(int button) {}
+
+    public void doOnMouseReleased(int button) {}
+
 
     /**
      * Event called when the mouse selects this componenet,

@@ -13,6 +13,8 @@ public abstract class DragableShapeEntity extends ShapeEntity {
     }
 
     @Override
-    public abstract void mouseDragged();
+    public void mouseDragged() {
+
+    }
     
 }

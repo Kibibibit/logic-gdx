@@ -99,6 +99,12 @@ public abstract class LogicModel extends AbstractModel {
 
     }
 
+    public boolean[] getOutputBits() {
+
+        return this.outputBits.clone();
+
+    }
+
 
 
 }

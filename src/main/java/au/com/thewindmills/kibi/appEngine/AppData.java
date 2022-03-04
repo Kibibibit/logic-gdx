@@ -237,16 +237,9 @@ public class AppData {
 
         for (String layer : layers) {
 
-            // Change the batch taht is rendering based on if the layer is static or not
-            Batches batch = batches;
-
-            if (ArrayUtils.arrayContains(Layers.STATIC_LAYERS, layer)) {
-                batch = staticBatches;
-            }
-
             for (AppEntity entity : entities.get(layer)) {
                 if (entity.isVisible()) {
-                    entity.render(batch);
+                    entity.render(entity.onStaticLayer() ? staticBatches : batches);
                 }
             }
         }

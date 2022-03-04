@@ -49,12 +49,12 @@ public class UiButton extends UiEntity {
     }
 
     @Override
-    public void onMousePressed(int button) {
+    public void doOnMousePressed(int button) {
         this.buttonPress.onPressed(button);
     }
 
     @Override
-    public void onMouseReleased(int button) {
+    public void doOnMouseReleased(int button) {
         this.buttonPress.onReleased(button);
     }
 
