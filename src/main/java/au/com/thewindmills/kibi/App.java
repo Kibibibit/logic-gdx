@@ -29,10 +29,12 @@ public class App
         and.setRow("01", "0");
         and.setRow("10", "0");
         and.setRow("11", "1");
+        and.result();
 
         TruthTable not = new TruthTable(1, 1, testMap);
         not.setRow("0", "1");
         not.setRow("1", "0");
+        not.result();
 
         try {
             Thread.sleep(300);
@@ -43,6 +45,7 @@ public class App
         TruthTable not2 = new TruthTable(1, 1, testMap);
         not2.setRow("0", "1");
         not2.setRow("1", "0");
+        not2.result();
 
         System.out.println("----------");
 
@@ -79,15 +82,55 @@ public class App
         and.trigger(1, true);
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(300);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        
 
         System.out.println("--- UPDATING AND AGAIN ---");
 
 
         and.trigger(1, false);
+
+
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        System.out.println("--- Breaking connection ---");
+
+        testMap.removeConnection(not2, 0, not, 0);
+        
+
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("--- Restoring connection ---");
+
+        testMap.addConnection(not2, 0, not, 0);
+
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("--- Removing not ---");
+
+        not.dispose();
+
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         /*
         // Create the actual application object

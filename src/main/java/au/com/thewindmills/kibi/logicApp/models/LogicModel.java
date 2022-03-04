@@ -30,7 +30,14 @@ public abstract class LogicModel extends AbstractModel {
         inputBits = new boolean[inputCount];
         outputBits = new boolean[outputCount];
 
+        this.init();
+
+        this.result();
+
     }
+
+
+    protected abstract void init();
 
     public void update(int pos, boolean value) {
 
@@ -40,7 +47,7 @@ public abstract class LogicModel extends AbstractModel {
                     Thread.sleep(propagationDelay);
                     inputBits[pos] = value;
 
-                    postDelay();
+                    result();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -51,16 +58,11 @@ public abstract class LogicModel extends AbstractModel {
 
     }
 
-    private void postDelay() {
-        System.out.println("POST DELAY " + id);
-        this.result();
-
-    }
 
     public void trigger(int pos, boolean value) {
         System.out.println("MANUAL UPDATE! Setting gate with id " + id + " to input " + pos + " -> " + value);
         inputBits[pos] = value;
-        this.postDelay();
+        result();
     }
 
     protected void postUpdate() {
@@ -69,8 +71,6 @@ public abstract class LogicModel extends AbstractModel {
             System.out.println(id + " is changing output state to " + BinaryUtils.getValueFromBits(outputBits));
             this.connectionMap.update(this, outputBits);
 
-        } else {
-            System.out.println(id + " got an input change but no output change!");
         }
 
         this.previousOutputState = BinaryUtils.getValueFromBits(outputBits);
@@ -90,6 +90,14 @@ public abstract class LogicModel extends AbstractModel {
      * Calculate output bits based on input bits
      */
     public abstract void result();
+
+
+
+    public void dispose() {
+
+        this.connectionMap.dispose(this);
+
+    }
 
 
 

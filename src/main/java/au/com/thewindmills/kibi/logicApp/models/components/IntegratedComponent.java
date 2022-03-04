@@ -16,6 +16,11 @@ public class IntegratedComponent extends LogicModel {
         
     }
 
+    @Override
+    protected void init() {
+        
+    }
+
 
     
     

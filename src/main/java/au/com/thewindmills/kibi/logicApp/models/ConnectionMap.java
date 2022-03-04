@@ -1,6 +1,8 @@
 package au.com.thewindmills.kibi.logicApp.models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -26,6 +28,7 @@ public class ConnectionMap {
         connections.put(inputConnection, outputConnection);
         outputModel.result();
         inputModel.result();
+        update(outputModel, outputModel.outputBits);
         
 
 
@@ -34,8 +37,9 @@ public class ConnectionMap {
 
     public void removeConnection(LogicModel inputModel, int inputNode, LogicModel outputModel, int outputNode) {
         connections.remove(new Connection(inputModel.id, inputNode), new Connection(outputModel.id, outputNode));
-        outputModel.result();
-        inputModel.result();
+        inputModel.update(inputNode, false);
+        
+        
         
     }
 
@@ -54,6 +58,35 @@ public class ConnectionMap {
 
         }
  
+    }
+
+
+    
+
+
+    public void dispose(LogicModel logicModel) {
+
+        List<Connection> keysToRemove = new ArrayList<Connection>();
+
+        for (Entry<Connection, Connection> entry : this.connections.entrySet()) {
+
+            if (entry.getKey().modelId == logicModel.id || entry.getValue().modelId == logicModel.id) {
+                keysToRemove.add(entry.getKey());
+            }
+
+        }
+
+        for (Connection key : keysToRemove) {
+
+            connections.remove(key);
+
+            models.get(key.modelId).update(key.nodeId, false);
+
+        }
+        
+
+        models.remove(logicModel.id);
+
     }
 
 

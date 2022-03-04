@@ -6,13 +6,18 @@ import java.util.Map;
 import au.com.thewindmills.kibi.logicApp.utils.BinaryUtils;
 
 public class TruthTable extends LogicModel {
-    private Map<Integer, boolean[]> table;
 
-    //TODO: Change this to take int in -> list of bools out
 
     public TruthTable(int inputCount, int outputCount, ConnectionMap connectionMap) {
         super(inputCount, outputCount, connectionMap);
+    }
 
+
+    private Map<Integer, boolean[]> table;
+
+
+    @Override
+    protected void init() {
         table = new HashMap<Integer, boolean[]>((int) Math.pow(2, inputCount));
 
         for (int i = 0; i < Math.pow(2, inputCount); i++) {
@@ -20,7 +25,6 @@ public class TruthTable extends LogicModel {
         }
 
         System.out.println(id + " truth table just created!");
-        this.result();
     }
 
     public void setRow(int input, boolean[] output) {
@@ -29,6 +33,7 @@ public class TruthTable extends LogicModel {
         } else {
             System.err.println("BAD OUTPUT BITS");
         }
+        this.result();
         
     }
 
