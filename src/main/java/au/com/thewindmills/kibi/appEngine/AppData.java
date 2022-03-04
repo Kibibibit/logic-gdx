@@ -14,16 +14,18 @@ import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.gfx.shapes.RectShape;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.UiButton;
+import au.com.thewindmills.kibi.appEngine.gfx.ui.UiButton.ButtonPress;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.UiEntity;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.UiPanel;
-import au.com.thewindmills.kibi.appEngine.gfx.ui.UiButton.ButtonPress;
 import au.com.thewindmills.kibi.appEngine.objects.AppObject;
 import au.com.thewindmills.kibi.appEngine.objects.MouseObject;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
-import au.com.thewindmills.kibi.appEngine.utils.ArrayUtils;
 import au.com.thewindmills.kibi.appEngine.utils.constants.AppConstants;
 import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
+import au.com.thewindmills.kibi.logicApp.entities.ComponentBody;
+import au.com.thewindmills.kibi.logicApp.models.ConnectionMap;
+import au.com.thewindmills.kibi.logicApp.models.TruthTable;
 
 /**
  * Stores a list of all {@link AppObject}s, controls their
@@ -165,6 +167,11 @@ public class AppData {
             }
         });
         button.setFillColor(new Color(0.35f, 0.35f, 0.35f, 1));
+
+
+        ConnectionMap testMap = new ConnectionMap();
+        AppEntity testDrag = new ComponentBody(this, Layers.MAIN, 0, new Vector2(50,50), new RectShape(50 ,50, 20, 20), new TruthTable(1, 1, testMap));
+
 
     }
 

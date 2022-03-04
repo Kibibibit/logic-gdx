@@ -121,7 +121,7 @@ public abstract class AppEntity extends AppObject {
      */
     public final void onMousePressed(int button) {
 
-        Vector2 mousePos = this.onStaticLayer ? this.getData().getMouse().getCameraPos() : this.getData().getMouse().getGlobalPos();
+        Vector2 mousePos = this.onStaticLayer ? this.getData().getMouse().getGlobalPos() : this.getData().getMouse().getCameraPos();
 
         this.mouseOffset.set(mousePos.cpy().sub(this.getPos()));
 

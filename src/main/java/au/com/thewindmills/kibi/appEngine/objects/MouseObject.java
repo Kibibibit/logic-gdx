@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
@@ -46,6 +47,8 @@ public class MouseObject extends AppObject {
      */
     private AppEntity previousContextEntity = null;
 
+    private boolean dragging = false;
+
     /**
      * The state of each mouse button
      */
@@ -74,6 +77,7 @@ public class MouseObject extends AppObject {
         this.setPos((float) screenX, (float) screenY);
         this.setCameraPos();
         this.deltaCameraPos = this.lastCameraPos.sub(this.cameraPos);
+        if (dragging) return;
         this.updateContextEntity();
         this.updateContextEntityCurrent();
 
@@ -108,6 +112,11 @@ public class MouseObject extends AppObject {
      * @param button - The button that was released
      */
     public void buttonReleased(int button) {
+
+        if (button == Input.Buttons.LEFT) {
+            dragging = false;
+        }
+        
 
         if (this.contextEntity != null) {
             this.contextEntity.onMouseReleased(button);
@@ -237,6 +246,7 @@ public class MouseObject extends AppObject {
         //Only trigger drag events if the current entity is actually dragable
         if (this.contextEntity != null) {
             if (this.contextEntity.isDragable()) {
+                dragging = true;
                 this.contextEntity.mouseDragged();
             }
         }
