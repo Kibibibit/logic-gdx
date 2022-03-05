@@ -243,9 +243,9 @@ public class MouseObject extends AppObject {
 
     public void mouseDragged(int screenX, int screenY) {
 
-        //Only trigger drag events if the current entity is actually dragable
+        //Only trigger drag events if the current entity is actually Draggable
         if (this.contextEntity != null) {
-            if (this.contextEntity.isDragable()) {
+            if (this.contextEntity.isDraggable()) {
                 dragging = true;
                 this.contextEntity.mouseDragged();
             }

@@ -170,7 +170,7 @@ public class AppData {
 
 
         ConnectionMap testMap = new ConnectionMap();
-        AppEntity testDrag = new ComponentBody(this, Layers.MAIN, 0, new Vector2(50,50), new RectShape(50 ,50, 20, 20), new TruthTable(1, 1, testMap));
+        AppEntity testDrag = new ComponentBody(this, Layers.MAIN, 0, new Vector2(50,50), new RectShape(50 ,50, 20, 50), new TruthTable(2, 1, testMap));
 
 
     }

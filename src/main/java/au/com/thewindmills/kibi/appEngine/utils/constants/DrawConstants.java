@@ -22,5 +22,10 @@ public class DrawConstants {
      * The default hover color of {@link UiButton}
      */
     public static final Color HOVER_COLOR = new Color(0.4f, 0.4f, 0.4f, 1f);
+
+    /**
+     * The default radius of a circle for a node
+     */
+    public static final float NODE_RADIUS = 5;
     
 }
