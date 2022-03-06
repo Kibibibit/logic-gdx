@@ -6,10 +6,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+/**
+ * Maps the input and output nodes of {@link LogicModel}s together,
+ * and handles passing updates between them
+ */
 public class ConnectionMap {
 
+    /**
+     * A map linking the id of each model to the model itself
+     */
     private Map<Long, LogicModel> models;
 
+    /**
+     * Maps the input node of a model to the output node of another model.
+     * This ensures one input can only be controlled by one output, but one output
+     * can control many inputs
+     */
     private Map<Connection, Connection> connections;
 
     public ConnectionMap() {
@@ -17,6 +29,13 @@ public class ConnectionMap {
         connections = new HashMap<Connection, Connection>();
     }
 
+    /**
+     * Creates a new connection between the given input and output
+     * @param inputModel
+     * @param inputNode
+     * @param outputModel
+     * @param outputNode
+     */
     public void addConnection(LogicModel inputModel, int inputNode, LogicModel outputModel, int outputNode) {
 
         models.put(inputModel.id, inputModel);
@@ -26,44 +45,49 @@ public class ConnectionMap {
         Connection outputConnection = new Connection(outputModel.id, outputNode);
 
         connections.put(inputConnection, outputConnection);
-        outputModel.result();
-        inputModel.result();
+        outputModel.doUpdate();
+        inputModel.doUpdate();
         update(outputModel, outputModel.outputBits);
-        
-
-
 
     }
 
+    /**
+     * Severes a connection between two nodes
+     * @param inputModel
+     * @param inputNode
+     * @param outputModel
+     * @param outputNode
+     */
     public void removeConnection(LogicModel inputModel, int inputNode, LogicModel outputModel, int outputNode) {
         connections.remove(new Connection(inputModel.id, inputNode), new Connection(outputModel.id, outputNode));
         inputModel.update(inputNode, false);
-        
-        
-        
+
     }
 
-
+    /**
+     * Update all connected inputs to the given output model, based on the output model state
+     * @param outputModel
+     * @param state
+     */
     public void update(LogicModel outputModel, boolean[] state) {
 
         for (Entry<Connection, Connection> entry : connections.entrySet()) {
-            
+
             if (entry.getValue().modelId == outputModel.id) {
                 System.out.println(outputModel.id + " is updating " + entry.getKey().modelId);
                 models.get(entry.getKey().modelId).update(
-                    entry.getKey().nodeId,
-                    state[entry.getKey().nodeId]
-                );
+                        entry.getKey().nodeId,
+                        state[entry.getKey().nodeId]);
             }
 
         }
- 
+
     }
 
-
-    
-
-
+    /**
+     * Dispose the given logic model, removing all its connections
+     * @param logicModel
+     */
     public void dispose(LogicModel logicModel) {
 
         List<Connection> keysToRemove = new ArrayList<Connection>();
@@ -83,13 +107,14 @@ public class ConnectionMap {
             models.get(key.modelId).update(key.nodeId, false);
 
         }
-        
 
         models.remove(logicModel.id);
 
     }
 
-
+    /**
+     * Helper class to store in the hashmap
+     */
     private class Connection {
 
         protected long modelId;

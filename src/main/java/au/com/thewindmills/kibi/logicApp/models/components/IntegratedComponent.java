@@ -3,6 +3,11 @@ package au.com.thewindmills.kibi.logicApp.models.components;
 import au.com.thewindmills.kibi.logicApp.models.ConnectionMap;
 import au.com.thewindmills.kibi.logicApp.models.LogicModel;
 
+/**
+ * A representation of an IC. Contains its' own set of logic models and own connection map,
+ * 
+ * @author Kibi
+ */
 public class IntegratedComponent extends LogicModel {
 
     
