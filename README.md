@@ -1,7 +1,5 @@
 # Logic-GDX
-
-## Description
-Logic-GDX is a logic gate simulator made in LibGDX
+Logic-GDX is a (hopefully) lightweight logic gate simulator made in LibGDX/LWJGL 3.
 
 ## Building the project
 The project can be built with `mvn clean package` or `./build/sh`
