@@ -11,12 +11,12 @@ public class DrawConstants {
     /**
      * The default stroke color of an {@link AbstractShape}
      */
-    public static final Color STROKE_COLOR = new Color(1, 1, 1, 1);
+    public static final Color STROKE_COLOR = new Color(0f, 0f, 0f, 1);
 
     /**
      * The default fill color of an {@link AbstractShape}
      */
-    public static final Color FILL_COLOR = new Color(0f,0f,0f,1f);
+    public static final Color FILL_COLOR = new Color(1f,1f,1f,1f);
 
     /**
      * The default hover color of {@link UiButton}
@@ -26,6 +26,10 @@ public class DrawConstants {
     /**
      * The default radius of a circle for a node
      */
-    public static final float NODE_RADIUS = 5;
-    
+    public static final float NODE_RADIUS = 9;
+
+    /**
+     * The average default stroke width of a shape
+     */
+    public static final float STROKE_WIDTH = 2;
 }

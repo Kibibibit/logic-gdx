@@ -88,14 +88,17 @@ public abstract class AbstractShape {
     }
 
 
-    protected abstract void drawShape(Batches batches);
+    protected abstract void drawStroke(Batches batches);
+
+    protected abstract void drawFill(Batches batches);
 
     public void draw(Batches batches) {
         //Draw the fill
         batches.shapeRenderer.set(ShapeType.Filled);
+        batches.shapeRenderer.setColor(strokeColor);
+        drawStroke(batches);
         batches.shapeRenderer.setColor(fillColor);
-        drawShape(batches);
-        
+        drawFill(batches);
 
         //TODO: Fix this using rotated rectangles;
         //Then draw the outline

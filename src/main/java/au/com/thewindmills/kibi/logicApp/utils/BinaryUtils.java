@@ -1,14 +1,32 @@
 package au.com.thewindmills.kibi.logicApp.utils;
 
+/**
+ * This class contains functions related to handling binary numbers,
+ * including gray code, or converting binary strings into ints.
+ * <br><br>
+ * All methods are unsigned
+ * 
+ * @author Kibi
+ */
 public class BinaryUtils {
 
+    /**
+     * Takes in a String of 1's and 0's, and returns the integer of that number
+     * @param s - The string to parse
+     * @return - An unsigned integer representation of the string
+     */
     public static int parse(String s) {
         return Integer.parseInt(s.strip().replaceAll(" ", ""),2);
     }
 
+    /**
+     * Takes in an integer, and returns the amount of bits needed to represent that number in binary
+     * @param s - Number to check
+     * @return - The amount of bits needed to store that number
+     */
     public static int findBits(int s) {
 
-        int bits = 1;
+        int bits = 0;
 
         while (Math.pow(2,bits) < s) {
             bits++;
@@ -18,10 +36,29 @@ public class BinaryUtils {
 
     }
 
+    /**
+     * Converts the given int into its' gray code version.
+     * <br><br>
+     * 0, 1, 2, 3 (00, 01, 10, 11) becomes
+     * <br><br>
+     * 0, 1, 3, 2 (00, 01, 11, 10)
+     * <br><br>
+     * This means only one digit changes between each number
+     * @param s - number to convert to gray code
+     * @return - the result
+     */
     public static int grayCode(int s) {
         return s ^ (s >> 1);
     }
 
+    /**
+     * Takes a gray coded number and returns in its' original form.
+     * 
+     * @see {@link BinaryUtils#grayCode(int)}
+     * 
+     * @param s
+     * @return
+     */
     public static int inverseGrayCode(int s) {
         int inv = 0;
 
@@ -32,14 +69,32 @@ public class BinaryUtils {
         return inv;
     }
     
+    /**
+     * Returns either 0 or 2 to the power of pos, if bit pos is set in value
+     * @param value - The value to check
+     * @param pos - the bit to check
+     * @return
+     */
     public static int getValueAtBit(int value, int pos) {
         return ((value >> pos) % 2) << pos;
     }
 
+    /**
+     * Returns true if the bit at pos in value is set to 1
+     * @param value - The value to check
+     * @param pos - the bit to check
+     * @return
+     */
     public static boolean bitActive(int value, int pos) {
         return (value >> pos) % 2 == 1;
     }
 
+    /**
+     * Takes in a boolean array representing a binary number where
+     * true -> 1 and false -> 0, and returns it as an integer
+     * @param array
+     * @return
+     */
     public static int getValueFromBits(boolean[] array) {
         int result = 0;
         for (int i = 0; i < array.length; i++) {
@@ -50,6 +105,12 @@ public class BinaryUtils {
         return result;
     }
 
+    /**
+     * Takes in a binary string of 1's and 0's and converts it to a boolean array
+     * of trues and falses
+     * @param value
+     * @return
+     */
     public static boolean[] getBitsFromString(String value) {
 
         
@@ -62,7 +123,7 @@ public class BinaryUtils {
             } else if (value.substring(i, i+1).equals("0")) {
                 output[i] = false;
             } else {
-                System.err.println(value + " is not a valid binary strin!");
+                System.err.println(value + " is not a valid binary string!");
             }
         }
 

@@ -2,6 +2,7 @@ package au.com.thewindmills.kibi.appEngine.gfx.shapes;
 
 import com.badlogic.gdx.math.Vector2;
 
+import au.com.thewindmills.kibi.appEngine.utils.constants.DrawConstants;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 
 /**
@@ -23,7 +24,7 @@ public class CircleShape extends AbstractShape {
     }
 
     @Override
-    protected void drawShape(Batches batches) {
+    protected void drawStroke(Batches batches) {
         batches.shapeRenderer.circle(pos.x, pos.y, radius);
     }
 
@@ -34,6 +35,12 @@ public class CircleShape extends AbstractShape {
     @Override
     public boolean inBounds(float x, float y) {
         return this.pos.dst(x, y) < radius;
+    }
+
+    @Override
+    protected void drawFill(Batches batches) {
+        batches.shapeRenderer.circle(pos.x, pos.y, radius - (DrawConstants.STROKE_WIDTH));
+        
     }
 
 }

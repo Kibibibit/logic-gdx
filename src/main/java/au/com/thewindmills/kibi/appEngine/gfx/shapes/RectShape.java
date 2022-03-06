@@ -2,6 +2,7 @@ package au.com.thewindmills.kibi.appEngine.gfx.shapes;
 
 import com.badlogic.gdx.math.Vector2;
 
+import static au.com.thewindmills.kibi.appEngine.utils.constants.DrawConstants.STROKE_WIDTH;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 
 /**
@@ -23,8 +24,13 @@ public class RectShape extends AbstractShape {
     }
 
     @Override
-    protected void drawShape(Batches batches) {
+    protected void drawStroke(Batches batches) {
         batches.shapeRenderer.rect(this.pos.x, this.pos.y, this.size.x, this.size.y);
+    }
+
+    @Override
+    protected void drawFill(Batches batches) {
+        batches.shapeRenderer.rect(this.pos.x + STROKE_WIDTH, this.pos.y + STROKE_WIDTH, this.size.x - STROKE_WIDTH*2, this.size.y - STROKE_WIDTH*2);
     }
 
     public Vector2 getSize() {
@@ -35,5 +41,7 @@ public class RectShape extends AbstractShape {
     public boolean inBounds(float x, float y) {
         return x > pos.x && x < pos.x + size.x && y > pos.y && y < pos.y + size.y;
     }
+
+    
 
 }

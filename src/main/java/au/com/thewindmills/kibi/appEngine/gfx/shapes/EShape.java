@@ -6,13 +6,8 @@ package au.com.thewindmills.kibi.appEngine.gfx.shapes;
  * @author Kibi
  */
 public enum EShape {
-    ARC,
     CIRCLE,
-    CURVE,
-    ELLIPSE,
-    LINE,
-    POLYGON,
     RECT,
-    TRIANGLE,
+    LINE
     
 }
