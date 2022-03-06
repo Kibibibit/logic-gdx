@@ -1,4 +1,8 @@
 # Logic-GDX
+
+The Lightweight-ish Logic Gate Simulator
+
+## Description
 Logic-GDX is a (hopefully) lightweight logic gate simulator made in LibGDX/LWJGL 3.
 
 ## Building the project
