@@ -1,4 +1,4 @@
-package au.com.thewindmills.kibi.logicApp.utils;
+package au.com.thewindmills.kibi.appEngine.utils.maths;
 
 /**
  * This class contains functions related to handling binary numbers,

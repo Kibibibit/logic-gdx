@@ -1,9 +1,9 @@
 package au.com.thewindmills.kibi.logicApp.models;
 
+import au.com.thewindmills.kibi.appEngine.utils.maths.BinaryUtils;
 import au.com.thewindmills.kibi.appEngine.utils.maths.RandomUtils;
 import au.com.thewindmills.kibi.logicApp.entities.ComponentBody;
 import au.com.thewindmills.kibi.logicApp.models.components.IntegratedComponent;
-import au.com.thewindmills.kibi.logicApp.utils.BinaryUtils;
 
 /**
  * Represents a component that makes up a logic circuit.

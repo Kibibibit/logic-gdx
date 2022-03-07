@@ -1,5 +1,4 @@
 # Logic-GDX
-
 The Lightweight-ish Logic Gate Simulator
 
 ## Description

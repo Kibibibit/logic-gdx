@@ -3,7 +3,7 @@ package au.com.thewindmills.kibi.logicApp.models;
 import java.util.HashMap;
 import java.util.Map;
 
-import au.com.thewindmills.kibi.logicApp.utils.BinaryUtils;
+import au.com.thewindmills.kibi.appEngine.utils.maths.BinaryUtils;
 
 /**
  * This class maps a binary input to a binary out,

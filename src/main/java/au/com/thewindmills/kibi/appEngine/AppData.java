@@ -167,6 +167,7 @@ public class AppData {
             }
         });
         button.setFillColor(new Color(0.35f, 0.35f, 0.35f, 1));
+        button.setStrokeColor(new Color(0.3f, 0.3f, 0.3f, 1));
 
 
         ConnectionMap testMap = new ConnectionMap();
