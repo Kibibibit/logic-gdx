@@ -2,6 +2,10 @@ package au.com.thewindmills.kibi.appEngine.utils.constants;
 
 import com.badlogic.gdx.graphics.Color;
 
+import au.com.thewindmills.kibi.appEngine.gfx.shapes.AbstractShape;
+import au.com.thewindmills.kibi.appEngine.gfx.ui.UiButton;
+import au.com.thewindmills.kibi.appEngine.utils.gfx.ColorUtils;
+
 /**
  * A few constants and color defaults for drawing objects
  * 
@@ -11,17 +15,17 @@ public class DrawConstants {
     /**
      * The default stroke color of an {@link AbstractShape}
      */
-    public static final Color STROKE_COLOR = new Color(0f, 0f, 0f, 1);
+    public static final Color STROKE_COLOR = Colors.BLACK;
 
     /**
      * The default fill color of an {@link AbstractShape}
      */
-    public static final Color FILL_COLOR = new Color(1f,1f,1f,1f);
+    public static final Color FILL_COLOR = Colors.WHITE;
 
     /**
      * The default hover color of {@link UiButton}
      */
-    public static final Color HOVER_COLOR = new Color(0.4f, 0.4f, 0.4f, 1f);
+    public static final Color HOVER_COLOR = ColorUtils.grey(0.4f);
 
     /**
      * The default radius of a circle for a node

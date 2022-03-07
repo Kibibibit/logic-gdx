@@ -26,7 +26,7 @@ public class AppConstants {
     /**
      * Default background color for the application
      */
-    public static final Color CLEAR_COLOR = new Color(0.2f, 0.2f, 0.2f, 1);
+    public static final Color CLEAR_COLOR = Colors.BACKGROUND;
 
     /**
      * Default ticks per second
