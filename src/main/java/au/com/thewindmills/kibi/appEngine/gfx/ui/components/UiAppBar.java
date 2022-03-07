@@ -9,7 +9,7 @@ import au.com.thewindmills.kibi.appEngine.gfx.ui.UiPanel;
 public class UiAppBar extends UiPanel {
 
     public UiAppBar(AppData data, String layer, int depth, float height) {
-        super(data, layer, depth, Gdx.graphics.getHeight()-height, 0, Gdx.graphics.getHeight(), height);
+        super(data, layer, depth, 0, Gdx.graphics.getHeight()-height, Gdx.graphics.getWidth(), height);
 
 
 
