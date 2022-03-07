@@ -148,13 +148,9 @@ public class AppData {
         //TODO: Create a builder pattern for this
         //Set the constants for this somewhere
 
-        UiAppBar appBar = new UiAppBar(this, Layers.UI, 0, 25)
+        UiEntity appBar = new UiAppBar(this, Layers.UI, 0, 25)
             .withFillColor(ColorUtils.grey(0.3f))
             .withStrokeColor(ColorUtils.grey(0.3f));
-
-        // UiEntity appBar = new UiPanel(this, Layers.UI, 0, 0, Gdx.graphics.getHeight()-25, Gdx.graphics.getWidth(), 25);
-        // appBar.setFillColor(new Color(0.3f, 0.3f, 0.3f, 1));
-        // appBar.setStrokeColor(new Color(0.3f, 0.3f, 0.3f, 1));
 
         
         UiEntity button = new UiButton(new Vector2(2.5f, 2.5f), new RectShape(0, 0, 50, 20), appBar, new ButtonPress() {
