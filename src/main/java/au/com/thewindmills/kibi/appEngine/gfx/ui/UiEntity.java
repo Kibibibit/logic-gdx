@@ -3,6 +3,7 @@ package au.com.thewindmills.kibi.appEngine.gfx.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
@@ -61,6 +62,15 @@ public abstract class UiEntity extends ShapeEntity {
         return this.relativePos;
     }
 
+    public UiEntity withStrokeColor(Color color) {
+        this.setStrokeColor(color);
+        return this;
+    }
+
+    public UiEntity withFillColor(Color color) {
+        this.setFillColor(color);
+        return this;
+    }
 
     
     

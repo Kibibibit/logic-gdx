@@ -31,6 +31,10 @@ public class Batches {
         this.spriteBatch = new SpriteBatch();
     }
     
+    /**
+     * Calls setProjectionMatrix on all renderers
+     * @param matrix
+     */
     public void setProjectionMatrix(Matrix4 matrix) {
         this.shapeRenderer.setProjectionMatrix(matrix);
         this.spriteBatch.setProjectionMatrix(matrix);

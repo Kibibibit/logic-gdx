@@ -3,7 +3,7 @@ package au.com.thewindmills.kibi.appEngine.utils.constants;
 import com.badlogic.gdx.graphics.Color;
 
 import au.com.thewindmills.kibi.appEngine.gfx.shapes.AbstractShape;
-import au.com.thewindmills.kibi.appEngine.gfx.ui.UiButton;
+import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiButton;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.ColorUtils;
 
 /**

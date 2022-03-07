@@ -6,23 +6,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.gfx.shapes.RectShape;
-import au.com.thewindmills.kibi.appEngine.gfx.ui.UiButton;
-import au.com.thewindmills.kibi.appEngine.gfx.ui.UiButton.ButtonPress;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.UiEntity;
-import au.com.thewindmills.kibi.appEngine.gfx.ui.UiPanel;
+import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiAppBar;
+import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiButton;
+import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiButton.ButtonPress;
 import au.com.thewindmills.kibi.appEngine.objects.AppObject;
 import au.com.thewindmills.kibi.appEngine.objects.MouseObject;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
 import au.com.thewindmills.kibi.appEngine.utils.constants.AppConstants;
 import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
+import au.com.thewindmills.kibi.appEngine.utils.gfx.ColorUtils;
 import au.com.thewindmills.kibi.logicApp.entities.ComponentBody;
 import au.com.thewindmills.kibi.logicApp.models.ConnectionMap;
 import au.com.thewindmills.kibi.logicApp.models.TruthTable;
@@ -147,9 +147,14 @@ public class AppData {
     private void createUi() {
         //TODO: Create a builder pattern for this
         //Set the constants for this somewhere
-        UiEntity appBar = new UiPanel(this, Layers.UI, 0, 0, Gdx.graphics.getHeight()-25, Gdx.graphics.getWidth(), 25);
-        appBar.setFillColor(new Color(0.3f, 0.3f, 0.3f, 1));
-        appBar.setStrokeColor(new Color(0.3f, 0.3f, 0.3f, 1));
+
+        UiAppBar appBar = new UiAppBar(this, Layers.UI, 0, 25)
+            .withFillColor(ColorUtils.grey(0.3f))
+            .withStrokeColor(ColorUtils.grey(0.3f));
+
+        // UiEntity appBar = new UiPanel(this, Layers.UI, 0, 0, Gdx.graphics.getHeight()-25, Gdx.graphics.getWidth(), 25);
+        // appBar.setFillColor(new Color(0.3f, 0.3f, 0.3f, 1));
+        // appBar.setStrokeColor(new Color(0.3f, 0.3f, 0.3f, 1));
 
         
         UiEntity button = new UiButton(new Vector2(2.5f, 2.5f), new RectShape(0, 0, 50, 20), appBar, new ButtonPress() {

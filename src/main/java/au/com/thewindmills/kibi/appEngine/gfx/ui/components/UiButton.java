@@ -1,10 +1,11 @@
-package au.com.thewindmills.kibi.appEngine.gfx.ui;
+package au.com.thewindmills.kibi.appEngine.gfx.ui.components;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
 import au.com.thewindmills.kibi.appEngine.gfx.shapes.AbstractShape;
+import au.com.thewindmills.kibi.appEngine.gfx.ui.UiEntity;
 import au.com.thewindmills.kibi.appEngine.utils.constants.DrawConstants;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 
