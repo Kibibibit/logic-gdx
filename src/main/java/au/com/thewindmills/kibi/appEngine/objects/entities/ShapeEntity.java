@@ -20,7 +20,7 @@ public abstract class ShapeEntity extends AppEntity {
     public ShapeEntity(AppData data, String layer, int depth, Vector2 pos, AbstractShape shape) {
         super(data, layer, depth, pos);
         this.shape = shape;
-        this.shape.setPos(this.getPos());
+        this.setPos(pos);
     }
 
     public void setStrokeColor(Color color) {
@@ -33,6 +33,18 @@ public abstract class ShapeEntity extends AppEntity {
 
     public AbstractShape getShape() {
         return this.shape;
+    }
+
+    @Override
+    public void setPos(Vector2 newPos) {
+        super.setPos(newPos);
+        this.shape.setPos(newPos);
+    }
+
+    @Override
+    public void setPos(float x, float y) {
+        super.setPos(x, y);
+        this.shape.setPos(x, y);
     }
 
     @Override

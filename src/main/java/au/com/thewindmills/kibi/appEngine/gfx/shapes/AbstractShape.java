@@ -34,7 +34,11 @@ public abstract class AbstractShape {
      * The color the fill of the shape will drawn in
      */
     protected Color fillColor = DrawConstants.FILL_COLOR;
-
+    
+    public AbstractShape(EShape shape) {
+        this.shape = shape;
+        this.pos = new Vector2(0,0);
+    }
 
     public AbstractShape(EShape shape, Vector2 pos) {
         this.pos = new Vector2(pos.x, pos.y);

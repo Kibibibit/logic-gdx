@@ -65,11 +65,11 @@ public abstract class AppObject {
         data.addObject(this);
     }
 
-    public final void setPos(float x, float y) {
+    public void setPos(float x, float y) {
         this.pos.set(x, y);
     }
 
-    public final void setPos(Vector2 newPos) {
+    public void setPos(Vector2 newPos) {
         this.setPos(newPos.x, newPos.y);
     }
 

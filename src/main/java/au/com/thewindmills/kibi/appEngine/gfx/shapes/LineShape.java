@@ -11,6 +11,10 @@ public class LineShape extends AbstractShape {
     private Vector2 end;
     private float width;
 
+    public LineShape() {
+        this(0,0,0,0,0);
+    }
+
     public LineShape(float x1, float y1, float x2, float y2, float width) {
         super(EShape.LINE, x1, y1);
         this.end = new Vector2(x2,y2);
@@ -21,6 +25,18 @@ public class LineShape extends AbstractShape {
         super(EShape.LINE , pos);
         this.end = end.cpy();
         this.width = width;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
+    public void setEnd(Vector2 end) {
+        this.end.set(end.x, end.y);
+    }
+
+    public void setEnd(float x, float y) {
+        this.end.set(x,y);
     }
 
     @Override

@@ -14,6 +14,10 @@ public class CircleShape extends AbstractShape {
 
     private float radius;
 
+    public CircleShape() {
+        this(0,0,0);
+    }
+
     public CircleShape(Vector2 pos, float radius) {
         this(pos.x, pos.y, radius);
     }
@@ -30,6 +34,10 @@ public class CircleShape extends AbstractShape {
 
     public float getRadius() {
         return this.radius;
+    }
+
+    public void setRadius(float radius) {
+        this.radius = radius;
     }
 
     @Override

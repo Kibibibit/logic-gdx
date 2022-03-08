@@ -14,6 +14,10 @@ public class RectShape extends AbstractShape {
 
     private Vector2 size;
 
+    public RectShape() {
+        this(0,0,0,0);
+    }
+
     public RectShape(Vector2 pos, Vector2 size) {
         super(EShape.RECT, pos);
         this.size = new Vector2(size.x, size.y);
@@ -36,6 +40,15 @@ public class RectShape extends AbstractShape {
     public Vector2 getSize() {
         return this.size;
     }
+
+    public void setSize(Vector2 size) {
+        this.size.set(size.x, size.y);
+    }
+
+    public void setSize(float w, float h) {
+        this.size.set(w, h);
+    }
+
 
     @Override
     public boolean inBounds(float x, float y) {
