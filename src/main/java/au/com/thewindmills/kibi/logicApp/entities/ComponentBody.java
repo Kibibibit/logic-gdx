@@ -9,6 +9,7 @@ import au.com.thewindmills.kibi.appEngine.AppData;
 import au.com.thewindmills.kibi.appEngine.gfx.shapes.AbstractShape;
 import au.com.thewindmills.kibi.appEngine.objects.entities.DraggableShapeEntity;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
+import au.com.thewindmills.kibi.appEngine.utils.io.json.JSONUtils;
 import au.com.thewindmills.kibi.logicApp.models.LogicModel;
 
 public class ComponentBody extends DraggableShapeEntity {
@@ -17,10 +18,11 @@ public class ComponentBody extends DraggableShapeEntity {
 
     private List<ComponentInOut> children;
 
-    public ComponentBody(AppData data, String layer, int depth, Vector2 pos, AbstractShape shape, LogicModel model) {
+    public ComponentBody(AppData data, String layer, int depth, Vector2 pos, AbstractShape shape, String modelFileName) {
         super(data, layer, depth, pos, shape);
 
-        this.model = model;
+        this.model = LogicModel.fromJson(JSONUtils.loadJsonObject(modelFileName), getData().getConnectionMap());
+        
         this.children = new ArrayList<ComponentInOut>();
 
         for (int in = 0; in < model.getInputCount(); in++) {

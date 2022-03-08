@@ -10,7 +10,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 
-import au.com.thewindmills.kibi.appEngine.gfx.shapes.RectShape;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.UiEntity;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiAppBar;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiButton.ButtonPress;
@@ -22,9 +21,7 @@ import au.com.thewindmills.kibi.appEngine.utils.constants.AppConstants;
 import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.ColorUtils;
-import au.com.thewindmills.kibi.logicApp.entities.ComponentBody;
 import au.com.thewindmills.kibi.logicApp.models.ConnectionMap;
-import au.com.thewindmills.kibi.logicApp.models.TruthTable;
 
 /**
  * Stores a list of all {@link AppObject}s, controls their
@@ -104,6 +101,11 @@ public class AppData {
     private MouseObject mouse;
 
     /**
+     * The main connectionmap of the main scene
+     */
+    private ConnectionMap connectionMap;
+
+    /**
      * Primary constructor, use this one!
      * 
      * @param application - The application to link to this data object
@@ -113,7 +115,7 @@ public class AppData {
         objectBuffer = new ArrayList<AppObject>();
         entities = new HashMap<String, List<AppEntity>>();
         entityBuffer = new ArrayList<AppEntity>();
-
+        connectionMap = new ConnectionMap();
         layers = Layers.LAYERS;
 
         for (String layer : layers) {
@@ -164,9 +166,6 @@ public class AppData {
                     }
                 }
             }).withFillColor(ColorUtils.grey(0.35f)).withStrokeColor(ColorUtils.grey(0.4f));
-
-
-        ConnectionMap testMap = new ConnectionMap();
         //AppEntity testDrag = new ComponentBody(this, Layers.MAIN, 0, new Vector2(50,50), new RectShape(50 ,50, 100, 100), new TruthTable("TES", 2, 1, testMap));
 
 
@@ -347,6 +346,10 @@ public class AppData {
 
     public Map<String, List<AppEntity>> getEntities() {
         return this.entities;
+    }
+
+    public ConnectionMap getConnectionMap() {
+        return this.connectionMap;
     }
 
 }
