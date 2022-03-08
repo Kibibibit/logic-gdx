@@ -40,6 +40,12 @@ public class IntegratedComponent extends LogicModel {
         return null;
     }
 
+    @Override
+    protected void getFromJson(JSONObject object) {
+        
+        
+    }
+
 
     
     

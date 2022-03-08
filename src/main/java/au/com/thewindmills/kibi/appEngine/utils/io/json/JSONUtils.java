@@ -3,11 +3,15 @@ package au.com.thewindmills.kibi.appEngine.utils.io.json;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import au.com.thewindmills.kibi.appEngine.utils.io.system.SystemUtils;
 import au.com.thewindmills.kibi.logicApp.models.LogicModel;
@@ -20,7 +24,7 @@ import au.com.thewindmills.kibi.logicApp.models.LogicModel;
  */
 public class JSONUtils {
 
-    protected static final Logger LOGGER = Logger.getLogger("JSONWriter");
+    protected static final Logger LOGGER = Logger.getLogger("JSONUtils");
 
     /**
      * Writes the given json object into a file.
@@ -59,6 +63,52 @@ public class JSONUtils {
         }
     }
 
+    /**
+     * Finds a JSONObject based on the given json file.
+     * Returns null in the event of an error
+     * @param filename
+     * @return
+     */
+    public static JSONObject loadJsonObject(String filename) {
+
+        FileReader fr;
+
+        try {
+            fr = new FileReader(getMainFolder()+"/"+filename);
+        } catch (FileNotFoundException e) {
+            LOGGER.warning("No file with name " + filename + " found!");
+            return null;
+        }
+
+
+
+        JSONParser parser = new JSONParser();
+        JSONObject out = null;
+
+        try {
+            out = (JSONObject) parser.parse(fr);
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+
+
+        try {
+            fr.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return out;
+
+    }
+
+    /**
+     * Returns the save location based on the operating system
+     * //TODO: Work out windows and mac locations
+     * @return
+     */
     public static String getMainFolder() {
 
         switch(SystemUtils.OS) {

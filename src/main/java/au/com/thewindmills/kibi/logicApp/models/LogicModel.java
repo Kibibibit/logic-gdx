@@ -1,7 +1,12 @@
 package au.com.thewindmills.kibi.logicApp.models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.json.simple.JSONObject;
 
@@ -21,6 +26,8 @@ import au.com.thewindmills.kibi.logicApp.models.components.IntegratedComponent;
  */
 public abstract class LogicModel extends AbstractModel {
 
+    protected static final Logger LOGGER = Logger.getLogger("LogicModel");
+
 
     public static final String FIELD_NAME = "name";
     public static final String FIELD_TYPE = "type";
@@ -28,6 +35,9 @@ public abstract class LogicModel extends AbstractModel {
     public static final String FIELD_OUTPUT_COUNT = "outputcount";
     public static final String TYPE_TABLE = "table";
     public static final String TYPE_IC = "ic";
+
+    public static final String CLASS_STRING = "STRING";
+    public static final String CLASS_INTEGER = "INTEGER";
 
 
     /**
@@ -220,6 +230,77 @@ public abstract class LogicModel extends AbstractModel {
 
 
         return new JSONObject(jsonMap);
+    }
+
+    protected abstract void getFromJson(JSONObject object);
+
+    protected static boolean checkField(JSONObject object, String fieldname, String type) {
+        if (object.containsKey(fieldname)) {
+
+            switch(type) {
+                case CLASS_STRING:
+                    if (object.get(fieldname) instanceof String) {
+                        return true;
+                    }
+                    break;
+
+                case CLASS_INTEGER:
+                    //This will need casting after the fact
+                    if (object.get(fieldname) instanceof Long) {
+                       return true;
+                    }
+                    break;
+
+                default:
+                    LOGGER.severe("Unrecognised type " + type);
+                    return false;
+            }
+
+            LOGGER.severe("Field " + fieldname + " is not of type " + type + "!");
+            return false;
+
+        }
+        LOGGER.severe("Object is missing field " + fieldname + "!");
+        return false;
+    }
+
+    public static LogicModel fromJson(JSONObject object, ConnectionMap connectionMap) {
+
+        //Check that all relevant fields are there
+        Map<String, String> fields = new HashMap<>();
+
+        fields.put(FIELD_NAME, CLASS_STRING);
+        fields.put(FIELD_INPUT_COUNT, CLASS_INTEGER);
+        fields.put(FIELD_OUTPUT_COUNT, CLASS_INTEGER);
+        fields.put(FIELD_TYPE, CLASS_STRING);
+        for (Entry<String, String> field : fields.entrySet()) {
+            if (!checkField(object, field.getKey(), field.getValue())) {
+                return null;
+            }
+        }
+
+        
+        String type = (String) object.get(FIELD_TYPE);
+        String name = (String) object.get(FIELD_NAME);
+        int inputCount = (int) ((Long) object.get(FIELD_INPUT_COUNT)).longValue();
+        int outputCount = (int) ((Long) object.get(FIELD_OUTPUT_COUNT)).longValue();
+
+        LogicModel out;
+
+        if (type.equals(TYPE_IC)) {
+            out = new IntegratedComponent(name, inputCount, outputCount, connectionMap);
+        } else if (type.equals(TYPE_TABLE)) {
+            out = new TruthTable(name, inputCount, outputCount, connectionMap);
+        } else {
+            LOGGER.severe("Unrecognised type " + type);
+            return null;
+        }
+
+        out.getFromJson(object);
+
+        return out;
+
+
     }
 
 

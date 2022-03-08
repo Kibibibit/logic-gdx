@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.json.simple.JSONObject;
+
 import au.com.thewindmills.kibi.appEngine.utils.maths.BinaryUtils;
 
 /**
@@ -107,6 +109,34 @@ public class TruthTable extends LogicModel {
         map.put(FIELD_TRUTH_TABLE, tableMap);
 
         return map;
+    }
+
+
+    @Override
+    protected void getFromJson(JSONObject object) {
+
+        if (!object.containsKey(FIELD_TRUTH_TABLE)) {
+            LOGGER.severe("JSON is missing field " + FIELD_TRUTH_TABLE);
+            return;
+        }
+
+        System.out.println(object.get(FIELD_TRUTH_TABLE).getClass().getName());
+
+        if (!(object.get(FIELD_TRUTH_TABLE) instanceof JSONObject)) {
+            LOGGER.severe("JSON has " + FIELD_TRUTH_TABLE + " in wrong type!");
+            return;
+        }
+
+        //Go through inputs and map
+        for (int i = 0; i < inputCount; i++) {
+
+        } 
+
+        //Do the same for outputs
+        for (int o = 0; o < outputCount; o++) {
+
+        }
+        
     }
 
 
