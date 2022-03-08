@@ -120,23 +120,29 @@ public class TruthTable extends LogicModel {
             return;
         }
 
-        System.out.println(object.get(FIELD_TRUTH_TABLE).getClass().getName());
-
         if (!(object.get(FIELD_TRUTH_TABLE) instanceof JSONObject)) {
             LOGGER.severe("JSON has " + FIELD_TRUTH_TABLE + " in wrong type!");
             return;
         }
 
         //Go through inputs and map
-        for (int i = 0; i < inputCount; i++) {
-
-        } 
-
-        //Do the same for outputs
-        for (int o = 0; o < outputCount; o++) {
-
+        for (int i = 0; i < Math.pow(2,inputCount); i++) {
+            setRowFromJson(i, (JSONObject) object.get(FIELD_TRUTH_TABLE));
         }
+
         
+    }
+
+    private void setRowFromJson(int index, JSONObject object) {
+
+        if (!object.containsKey(String.valueOf(index))) {
+            LOGGER.severe("MISSING KEY " + index + "!");
+            return;
+        }
+
+        setRow(index, BinaryUtils.getBitsFromString((String) object.get(String.valueOf(index))));
+        
+
     }
 
 

@@ -5,7 +5,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import au.com.thewindmills.kibi.appEngine.LogicApp;
 import au.com.thewindmills.kibi.appEngine.utils.io.json.JSONUtils;
 import au.com.thewindmills.kibi.logicApp.models.ConnectionMap;
-import au.com.thewindmills.kibi.logicApp.models.LogicModel;
 import au.com.thewindmills.kibi.logicApp.models.TruthTable;
 
 /**
@@ -50,9 +49,6 @@ public class App
         
         JSONUtils.writeToFile(not.toJson());
         JSONUtils.writeToFile(and.toJson());
-
-        LogicModel.fromJson(JSONUtils.loadJsonObject("NOT.json"), dummy);
-
     }
 
 }
