@@ -1,5 +1,10 @@
 package au.com.thewindmills.kibi.logicApp.models;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.simple.JSONObject;
+
 import au.com.thewindmills.kibi.appEngine.utils.maths.BinaryUtils;
 import au.com.thewindmills.kibi.appEngine.utils.maths.RandomUtils;
 import au.com.thewindmills.kibi.logicApp.entities.ComponentBody;
@@ -15,6 +20,15 @@ import au.com.thewindmills.kibi.logicApp.models.components.IntegratedComponent;
  * @author Kibi
  */
 public abstract class LogicModel extends AbstractModel {
+
+
+    public static final String FIELD_NAME = "name";
+    public static final String FIELD_TYPE = "type";
+    public static final String FIELD_INPUT_COUNT = "inputcount";
+    public static final String FIELD_OUTPUT_COUNT = "outputcount";
+    public static final String TYPE_TABLE = "table";
+    public static final String TYPE_IC = "ic";
+
 
     /**
      * The minimum propagation delay in milliseconds
@@ -66,13 +80,20 @@ public abstract class LogicModel extends AbstractModel {
      */
     protected boolean[] outputBits;
 
-    public LogicModel(int inputCount, int outputCount, ConnectionMap connectionMap) {
+    /**
+     * The name of this model
+     */
+    protected final String name;
+
+    public LogicModel(String name, int inputCount, int outputCount, ConnectionMap connectionMap) {
         // Propagation delay needs to be random
         this.propagationDelay = RandomUtils.randomIntInRange(MIN_DELAY, MAX_DELAY);
 
         this.connectionMap = connectionMap;
         this.inputCount = inputCount;
         this.outputCount = outputCount;
+
+        this.name = name;
 
         inputBits = new boolean[inputCount];
         outputBits = new boolean[outputCount];
@@ -173,6 +194,32 @@ public abstract class LogicModel extends AbstractModel {
 
         return this.outputBits.clone();
 
+    }
+
+    /**
+     * Do any subclass specific conversions for json, eg adding truth table rows, or making
+     * references to existing models
+     * @param map
+     * @return
+     */
+    protected abstract Map<String, Object> addToJsonMap(Map<String, Object> map);
+
+    /**
+     * Converts this model into a JSONObject for saving
+     * @return
+     */
+    public JSONObject toJson() {
+
+        Map<String, Object> jsonMap = new HashMap<>();
+
+        jsonMap.put(FIELD_NAME, this.name);
+        jsonMap.put(FIELD_INPUT_COUNT, this.inputCount);
+        jsonMap.put(FIELD_OUTPUT_COUNT, this.outputCount);
+
+        jsonMap = this.addToJsonMap(jsonMap);
+
+
+        return new JSONObject(jsonMap);
     }
 
 

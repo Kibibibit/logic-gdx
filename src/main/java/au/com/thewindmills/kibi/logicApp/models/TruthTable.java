@@ -2,6 +2,7 @@ package au.com.thewindmills.kibi.logicApp.models;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import au.com.thewindmills.kibi.appEngine.utils.maths.BinaryUtils;
 
@@ -15,13 +16,15 @@ import au.com.thewindmills.kibi.appEngine.utils.maths.BinaryUtils;
  */
 public class TruthTable extends LogicModel {
 
+    public static final String FIELD_TRUTH_TABLE = "truthtable";
+
     /**
      * Stores the mapping from an integer to the state of each bit of the output.
      */
     private Map<Integer, boolean[]> table;
 
-    public TruthTable(int inputCount, int outputCount, ConnectionMap connectionMap) {
-        super(inputCount, outputCount, connectionMap);
+    public TruthTable(String name, int inputCount, int outputCount, ConnectionMap connectionMap) {
+        super(name, inputCount, outputCount, connectionMap);
     }
 
 
@@ -88,4 +91,23 @@ public class TruthTable extends LogicModel {
     public void result() {
         this.outputBits = this.getRow(this.inputBits);
     }
+
+
+    @Override
+    protected Map<String, Object> addToJsonMap(Map<String, Object> map) {
+
+        map.put(FIELD_TYPE, TYPE_TABLE);
+
+        Map<Integer, String> tableMap = new HashMap<>();
+
+        for (Entry<Integer, boolean[]> entry : table.entrySet()) {
+            tableMap.put(entry.getKey(), BinaryUtils.getStringFromBits(entry.getValue()));
+        }
+
+        map.put(FIELD_TRUTH_TABLE, tableMap);
+
+        return map;
+    }
+
+
 }

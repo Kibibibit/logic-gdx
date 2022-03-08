@@ -8,14 +8,13 @@ import java.util.Map;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.gfx.shapes.RectShape;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.UiEntity;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiAppBar;
-import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiButton;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiButton.ButtonPress;
+import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiRectButton;
 import au.com.thewindmills.kibi.appEngine.objects.AppObject;
 import au.com.thewindmills.kibi.appEngine.objects.MouseObject;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
@@ -145,34 +144,30 @@ public class AppData {
      * Gets called at the end of {@link AppData#init()}
      */
     private void createUi() {
-        //TODO: Create a builder pattern for this
-        //Set the constants for this somewhere
 
         UiEntity appBar = new UiAppBar(this, Layers.UI, 0, 25)
             .withFillColor(ColorUtils.grey(0.3f))
             .withStrokeColor(ColorUtils.grey(0.3f));
 
         
-        UiEntity button = new UiButton(new Vector2(2.5f, 2.5f), new RectShape(0, 0, 50, 20), appBar, new ButtonPress() {
-            public void onPressed(int button) {
-                if (button == Input.Buttons.LEFT) {
-                    System.out.println("Hello!");
+        UiEntity button = new UiRectButton(new Vector2(2.5f, 2.5f), new Vector2(50, 20), appBar, new ButtonPress() {
+                public void onPressed(int button) {
+                    if (button == Input.Buttons.LEFT) {
+                        System.out.println("Hello!");
+                    }
+                    
                 }
-                
-            }
-
-            public void onReleased(int button) {
-                if (button == Input.Buttons.LEFT) {
-                    System.out.println("Goodbye!");
+    
+                public void onReleased(int button) {
+                    if (button == Input.Buttons.LEFT) {
+                        System.out.println("Goodbye!");
+                    }
                 }
-            }
-        });
-        button.setFillColor(new Color(0.35f, 0.35f, 0.35f, 1));
-        button.setStrokeColor(new Color(0.3f, 0.3f, 0.3f, 1));
+            }).withFillColor(ColorUtils.grey(0.35f)).withStrokeColor(ColorUtils.grey(0.4f));
 
 
         ConnectionMap testMap = new ConnectionMap();
-        AppEntity testDrag = new ComponentBody(this, Layers.MAIN, 0, new Vector2(50,50), new RectShape(50 ,50, 100, 100), new TruthTable(2, 1, testMap));
+        AppEntity testDrag = new ComponentBody(this, Layers.MAIN, 0, new Vector2(50,50), new RectShape(50 ,50, 100, 100), new TruthTable("TES", 2, 1, testMap));
 
 
     }

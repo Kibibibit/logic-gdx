@@ -106,6 +106,24 @@ public class BinaryUtils {
     }
 
     /**
+     * Takes in a boolean array representing a binary number where
+     * true -> 1 and false -> 0, and returns it as a string
+     * @param array
+     * @return
+     */
+    public static String getStringFromBits(boolean[] array) {
+
+        String out = "";
+
+        for (int i = 0; i < array.length; i++) {
+            out = out + (array[i] ? "1" : "0");
+        }
+
+        return out;
+
+    }
+
+    /**
      * Takes in a binary string of 1's and 0's and converts it to a boolean array
      * of trues and falses
      * @param value
