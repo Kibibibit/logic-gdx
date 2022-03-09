@@ -69,7 +69,7 @@ public class ComponentInOut extends DraggableShapeEntity {
     }
 
     @Override
-    public void mouseDragged() {
+    public void onMouseDragged() {
 
     }
 

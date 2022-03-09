@@ -13,7 +13,7 @@ public abstract class DraggableShapeEntity extends ShapeEntity {
     }
 
     @Override
-    public void mouseDragged() {
+    public void onMouseDragged() {
         Vector2 mousePos = this.onStaticLayer() ? getData().getMouse().getGlobalPos() : getData().getMouse().getCameraPos();
 
         this.setPos(mousePos.cpy().sub(this.mouseOffset));

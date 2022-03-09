@@ -156,13 +156,13 @@ public class AppData {
                 .withFillColor(ColorUtils.grey(0.3f))
                 .withStrokeColor(ColorUtils.grey(0.3f));
 
-        UiEntity listView = new UiListView(this, Layers.UI, 0, 0, 0, 55, Gdx.graphics.getHeight() - 25)
+        UiEntity listView = new UiListView(this, Layers.BELOW_UI, 0, 0, 0, 100, Gdx.graphics.getHeight() - 25)
                 .withFillColor(ColorUtils.grey(0.45f))
                 .withStrokeColor(ColorUtils.grey(0.3f));
 
         for (int i = 0; i < 40; i++) {
 
-            UiEntity button = new UiRectButton(new Vector2(2.5f, 2.5f), new Vector2(50, 20), listView,
+            UiEntity button = new UiRectButton(new Vector2(2.5f, 2.5f), new Vector2(100, 20), listView, String.valueOf(i),
                     new ButtonPress() {
                         public void onPressed(int button) {
                             if (button == Input.Buttons.LEFT) {
@@ -247,36 +247,45 @@ public class AppData {
 
         this.getCamera().update();
 
-        batches.begin();
+        
 
-        // We only do this for batches, as static batches are based on the window and
-        // not the camera
-        batches.setProjectionMatrix(this.getCamera().combined);
-
-        staticBatches.begin();
+        
 
         for (String layer : layers) {
+
+            staticBatches.begin();
+            batches.begin();
+
+            // We only do this for batches, as static batches are based on the window and
+            // not the camera
+            batches.setProjectionMatrix(this.getCamera().combined);
+
 
             for (AppEntity entity : entities.get(layer)) {
                 if (entity.isVisible()) {
                     entity.render(entity.onStaticLayer() ? staticBatches : batches);
                 }
             }
+
+            batches.end();
+            staticBatches.end();
+    
+            batches.beginText();
+            staticBatches.beginText();
+
+            for (AppEntity entity : entities.get(layer)) {
+                if (entity.isVisible()) {
+                    entity.renderText(entity.onStaticLayer() ? staticBatches : batches);
+                }
+            }
+
+            batches.endText();
+            staticBatches.endText();
         }
 
-        this.draw(batches);
-
-        batches.end();
-        staticBatches.end();
+        
     }
 
-    /**
-     * Any draw methods unrelated to entities should go here
-     * 
-     * @param batch
-     */
-    private void draw(Batches batches) {
-    }
 
     /**
      * The main update loop of the application

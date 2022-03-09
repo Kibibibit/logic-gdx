@@ -41,6 +41,11 @@ public abstract class AppEntity extends AppObject {
     private final boolean onStaticLayer;
 
 
+    private boolean beingDragged = false;
+
+    private boolean triggerReleaseAfterDrag = false;
+
+
     protected Vector2 mouseOffset;
 
     public AppEntity(AppData data, String layer, int depth, Vector2 pos) {
@@ -86,6 +91,10 @@ public abstract class AppEntity extends AppObject {
      * @param batches - {@link Batches} to draw with
      */
     protected void postDraw(Batches batches) {}
+
+
+    public void renderText(Batches batches) {}
+
 
     /**
      * Called every {@link AppData#render(Batches)}
@@ -136,10 +145,14 @@ public abstract class AppEntity extends AppObject {
 
         this.mouseOffset.set(0, 0);
 
-        this.doOnMouseReleased(button);
+        if (!beingDragged || triggerReleaseAfterDrag) {
+            this.doOnMouseReleased(button);
+            beingDragged = false;
+        }
+
+        
 
     }
-
 
     public void doOnMousePressed(int button) {}
 
@@ -158,11 +171,16 @@ public abstract class AppEntity extends AppObject {
      */
     public void onMouseLeave() {}
 
+    public final void mouseDragged() {
+        beingDragged = true;
+        onMouseDragged();
+    }
+
     /**
      * Event called when the mouse is dragged across the screen.
      * Override as needed
      */
-    public void mouseDragged() {}
+    public void onMouseDragged() {}
 
     /**
      * Event called with the mouse wheel is scrolled.
@@ -172,6 +190,10 @@ public abstract class AppEntity extends AppObject {
      */
     public void mouseScrolled(float amountX, float amountY) {}
     
+
+    public void setTriggerReleaseAfterDrag(boolean v) {
+        this.triggerReleaseAfterDrag = v;
+    }
 
     public boolean isDraggable() {
         return this.isDraggable;
