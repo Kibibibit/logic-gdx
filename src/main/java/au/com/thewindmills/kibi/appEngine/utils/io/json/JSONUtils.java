@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.json.simple.JSONObject;
@@ -101,6 +103,20 @@ public class JSONUtils {
 
 
         return out;
+
+    }
+
+    public static List<String> getFiles() {
+
+        List<String> filenames = new ArrayList<>();
+        File directory = new File(getMainFolder());
+
+        for (File file : directory.listFiles()) {
+            filenames.add(file.getName());
+        }
+
+        return filenames;
+
 
     }
 

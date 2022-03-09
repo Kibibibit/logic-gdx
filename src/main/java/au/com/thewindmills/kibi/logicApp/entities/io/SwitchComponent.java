@@ -9,6 +9,7 @@ import au.com.thewindmills.kibi.logicApp.entities.ComponentInOut;
 
 public class SwitchComponent extends IoComponent {
 
+    public static final String SWITCH_NAME = "Switch";
 
     private static final int SWITCH_HEIGHT = 50;
     private static final int SWITCH_WIDTH = 50;

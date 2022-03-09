@@ -38,8 +38,6 @@ public class TruthTable extends LogicModel {
         for (int i = 0; i < Math.pow(2, inputCount); i++) {
             table.put(i,  new boolean[outputCount]);
         }
-
-        System.out.println(id + " truth table just created!");
     }
 
     /**

@@ -8,6 +8,8 @@ import au.com.thewindmills.kibi.logicApp.entities.ComponentInOut;
 
 public class LightComponent extends IoComponent{
 
+    public static final String LIGHT_NAME = "Light";
+
     public static final int LIGHT_WIDTH = 20;
     public static final int LIGHT_HEIGHT = 20;
 

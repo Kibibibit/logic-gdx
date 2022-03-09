@@ -11,6 +11,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 
+import org.json.simple.JSONObject;
+
 import au.com.thewindmills.kibi.appEngine.gfx.ui.UiEntity;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiAppBar;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiListView;
@@ -20,13 +22,18 @@ import au.com.thewindmills.kibi.appEngine.objects.AppObject;
 import au.com.thewindmills.kibi.appEngine.objects.MouseObject;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
 import au.com.thewindmills.kibi.appEngine.utils.constants.AppConstants;
+import au.com.thewindmills.kibi.appEngine.utils.constants.DrawConstants;
 import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.ColorUtils;
+import au.com.thewindmills.kibi.appEngine.utils.io.json.JSONUtils;
 import au.com.thewindmills.kibi.logicApp.entities.ComponentBody;
+import au.com.thewindmills.kibi.logicApp.entities.io.IoComponent;
 import au.com.thewindmills.kibi.logicApp.entities.io.LightComponent;
 import au.com.thewindmills.kibi.logicApp.entities.io.SwitchComponent;
+import au.com.thewindmills.kibi.logicApp.entities.ui.CreateLogicModelButton;
 import au.com.thewindmills.kibi.logicApp.models.ConnectionMap;
+import au.com.thewindmills.kibi.logicApp.models.LogicModel;
 
 /**
  * Stores a list of all {@link AppObject}s, controls their
@@ -160,30 +167,26 @@ public class AppData {
                 .withFillColor(ColorUtils.grey(0.45f))
                 .withStrokeColor(ColorUtils.grey(0.3f));
 
-        for (int i = 0; i < 40; i++) {
 
-            UiEntity button = new UiRectButton(new Vector2(2.5f, 2.5f), new Vector2(100, 20), listView, String.valueOf(i),
-                    new ButtonPress() {
-                        public void onPressed(int button) {
-                            if (button == Input.Buttons.LEFT) {
-                                System.out.println("Hello!");
-                            }
+        for (String filename : JSONUtils.getFiles()) {
 
-                        }
+            JSONObject object = JSONUtils.loadJsonObject(filename);
 
-                        public void onReleased(int button) {
-                            if (button == Input.Buttons.LEFT) {
-                                System.out.println("Goodbye!");
-                            }
-                        }
-                    }).withFillColor(ColorUtils.grey(i/39f)).withStrokeColor(ColorUtils.grey(0.4f));
+            if (filename.startsWith(IoComponent.PRE_NO_RENDER)) {
+
+                object.replace(LogicModel.FIELD_NAME, LightComponent.LIGHT_NAME);
+                new CreateLogicModelButton(new Vector2(0,0), new Vector2(100 - DrawConstants.STROKE_WIDTH*2,25), listView, object, filename);
+                
+                JSONObject object2 = JSONUtils.loadJsonObject(filename);
+
+                object2.replace(LogicModel.FIELD_NAME, SwitchComponent.SWITCH_NAME);
+                new CreateLogicModelButton(new Vector2(0,0), new Vector2(100 - DrawConstants.STROKE_WIDTH*2,25), listView, object2, filename);
+
+            } else {
+                new CreateLogicModelButton(new Vector2(0,0),  new Vector2(100 - DrawConstants.STROKE_WIDTH*2,25), listView, object, filename);
+            }
+
         }
-
-        AppEntity testDrag = new ComponentBody(this, Layers.MAIN, 0, new Vector2(50, 50), "AND.json");
-        AppEntity testDrag2 = new ComponentBody(this, Layers.MAIN, 0, new Vector2(70, 50), "NOT.json");
-
-        AppEntity testLight = new LightComponent(this, Layers.MAIN, 0, new Vector2(100, 100));
-        AppEntity testSwitch = new SwitchComponent(this, Layers.MAIN, 0, new Vector2(50, 100));
 
     }
 
@@ -333,7 +336,6 @@ public class AppData {
             return false;
         }
         if (object instanceof AppEntity) {
-            System.out.println("Adding a new entity!");
             this.entityBuffer.add((AppEntity) object);
         }
         this.objectBuffer.add(object);
