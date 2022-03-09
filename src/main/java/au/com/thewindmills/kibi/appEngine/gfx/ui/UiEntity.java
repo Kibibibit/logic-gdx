@@ -81,6 +81,10 @@ public abstract class UiEntity extends ShapeEntity {
         return this;
     }
 
+    public UiEntity getParent() {
+        return this.parent;
+    }
+
     @Override
     public void mouseScrolled(float amountX, float amountY) {
 

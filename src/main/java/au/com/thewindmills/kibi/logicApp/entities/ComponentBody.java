@@ -15,6 +15,9 @@ import au.com.thewindmills.kibi.logicApp.models.LogicModel;
 
 public class ComponentBody extends DraggableShapeEntity {
 
+    private static final float PER_INPUT = 27.5f;
+    private static final float WIDTH = 60;
+
     protected LogicModel model;
 
     protected List<ComponentInOut> children;
@@ -37,9 +40,7 @@ public class ComponentBody extends DraggableShapeEntity {
 
     protected void init(Vector2 pos) {
         int highCount = Math.max(this.model.getInputCount(), this.model.getOutputCount());
-
-        //TODO: Set constants of some kind for this
-        this.getShape().setSize(50, highCount*25);
+        this.getShape().setSize(WIDTH, highCount*PER_INPUT);
         this.setPos(pos);
 
         for (int in = 0; in < model.getInputCount(); in++) {

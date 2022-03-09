@@ -254,6 +254,11 @@ public class MouseObject extends AppObject {
 
     }
 
+    public void drag(AppEntity entity) {
+        this.contextEntity = entity;
+        this.dragging = true;
+    }
+
 
     public void mouseScrolled(float amountX, float amountY) {
 

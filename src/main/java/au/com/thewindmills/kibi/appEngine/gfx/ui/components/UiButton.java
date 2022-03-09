@@ -16,27 +16,23 @@ public class UiButton extends UiEntity {
 
     private Color hoverColor = DrawConstants.HOVER_COLOR;
     private Color color;
-    private ButtonPress buttonPress;
 
     private String label;
 
     private final BitmapFont font;
 
-    public UiButton(AppData data, String layer, int depth, Vector2 pos, AbstractShape shape, String label,
-            ButtonPress buttonPress) {
+    public UiButton(AppData data, String layer, int depth, Vector2 pos, AbstractShape shape, String label) {
         super(data, layer, depth, pos, shape);
         this.color = shape.getFillColor();
-        this.buttonPress = buttonPress;
         this.label = label;
         this.font = new BitmapFont();
         font.setColor(Colors.WHITE);
 
     }
 
-    public UiButton(Vector2 relativePos, AbstractShape shape, UiEntity parent, String label, ButtonPress buttonPress) {
+    public UiButton(Vector2 relativePos, AbstractShape shape, UiEntity parent, String label) {
         super(relativePos, shape, parent);
         this.color = shape.getFillColor();
-        this.buttonPress = buttonPress;
         this.label = label;
         this.font = new BitmapFont();
         font.setColor(Colors.WHITE);
@@ -75,16 +71,6 @@ public class UiButton extends UiEntity {
     }
 
     @Override
-    public void doOnMousePressed(int button) {
-        this.buttonPress.onPressed(button);
-    }
-
-    @Override
-    public void doOnMouseReleased(int button) {
-        this.buttonPress.onReleased(button);
-    }
-
-    @Override
     public void onMouseEnter() {
         this.getShape().setFillColor(hoverColor);
     }
@@ -92,12 +78,6 @@ public class UiButton extends UiEntity {
     @Override
     public void onMouseLeave() {
         this.getShape().setFillColor(color);
-    }
-
-    public interface ButtonPress {
-        public abstract void onPressed(int button);
-
-        public abstract void onReleased(int button);
     }
 
 }

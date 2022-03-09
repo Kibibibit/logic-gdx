@@ -11,8 +11,8 @@ public class SwitchComponent extends IoComponent {
 
     public static final String SWITCH_NAME = "Switch";
 
-    private static final int SWITCH_HEIGHT = 50;
-    private static final int SWITCH_WIDTH = 50;
+    private static final int SWITCH_HEIGHT = 40;
+    private static final int SWITCH_WIDTH = 35;
 
     public SwitchComponent(AppData data, String layer, int depth, Vector2 pos) {
         super(data, layer, depth, pos, new RectShape());

@@ -1,6 +1,5 @@
 package au.com.thewindmills.kibi.appEngine.objects.entities;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
@@ -220,6 +219,10 @@ public abstract class AppEntity extends AppObject {
 
     public boolean canDelete() {
         return this.canDelete;
+    }
+
+    public void setBeingDragged(boolean v) {
+        this.beingDragged = v;
     }
 
 }
