@@ -1,14 +1,12 @@
 package au.com.thewindmills.kibi.appEngine.gfx.shapes;
 
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.math.Rectangle;
+import static au.com.thewindmills.kibi.appEngine.utils.constants.DrawConstants.STROKE_WIDTH;
+
 import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 import au.com.thewindmills.kibi.appEngine.utils.maths.AngleUtils;
 import au.com.thewindmills.kibi.appEngine.utils.maths.VectorUtils;
-
-import static au.com.thewindmills.kibi.appEngine.utils.constants.DrawConstants.STROKE_WIDTH;
 
 public class LineShape extends AbstractShape {
 

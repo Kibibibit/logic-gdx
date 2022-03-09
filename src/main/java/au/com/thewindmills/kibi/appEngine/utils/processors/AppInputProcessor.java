@@ -85,10 +85,17 @@ public class AppInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-
+        newButton(Input.Buttons.LEFT);
+        newButton(Input.Buttons.MIDDLE);
         if (!this.currentButtonState.get(Input.Buttons.LEFT)) {
-            return this.mouseMoved(screenX, screenY);
 
+            if (!this.currentButtonState.get(Input.Buttons.MIDDLE)) {
+                return this.mouseMoved(screenX, screenY);
+            }
+            if (this.data.getMouse() != null) {
+                this.data.getMouse().pan(screenX, screenY);
+                return false;
+            }
         }
 
         if (data.getMouse() != null) {

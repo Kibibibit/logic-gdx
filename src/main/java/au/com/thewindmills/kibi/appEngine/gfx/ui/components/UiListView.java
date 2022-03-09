@@ -15,7 +15,7 @@ public class UiListView extends UiPanel {
 
     private float currentY = 0;
 
-    private float nextChild = 0;
+    private float nextChild = DrawConstants.STROKE_WIDTH;
 
     public UiListView(AppData data, String layer, int depth, float x, float y, float width, float height) {
         super(data, layer, depth, x, y, width, height);

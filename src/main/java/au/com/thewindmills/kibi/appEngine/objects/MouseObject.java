@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
-import au.com.thewindmills.kibi.appEngine.gfx.shapes.LineShape;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
 import au.com.thewindmills.kibi.appEngine.utils.ArrayUtils;
 import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
@@ -225,6 +224,19 @@ public class MouseObject extends AppObject {
     protected void step(float delta) {
     }
 
+    public void pan(int screenX, int screenY) {
+
+        this.mouseMoved(screenX, screenY);
+
+        this.getData().getCamera().position.x += this.getDeltaPos().x;
+        this.getData().getCamera().position.y -= this.getDeltaPos().y;
+
+        System.out.println(
+            "Camera X: " + this.getData().getCamera().position.x + " | " +
+            "Camera Y: " + this.getData().getCamera().position.y
+        );
+    }
+
     public void mouseDragged(int screenX, int screenY) {
 
         //Only trigger drag events if the current entity is actually Draggable
@@ -242,17 +254,20 @@ public class MouseObject extends AppObject {
 
     public void mouseScrolled(float amountX, float amountY) {
 
-        boolean moveCamera = true;
+        boolean doZoom = true;
 
         if (this.contextEntity != null) {
             if (this.contextEntity.isScrollable()) {
                 this.contextEntity.mouseScrolled(amountX, amountY);
-                moveCamera = false;
+                doZoom = false;
             }
         }
-        if (moveCamera) {
-            this.getData().getCamera().position.x += amountX;
-            this.getData().getCamera().position.y -= amountY;
+        if (doZoom) {
+
+            float ratio = (float) Gdx.graphics.getHeight()/ (float)Gdx.graphics.getWidth();
+
+            this.getData().getCamera().viewportHeight += amountY * ratio * 20f;
+            this.getData().getCamera().viewportWidth += amountY * 20f;
         }
 
         this.mouseMoved((int)this.getPos().x, (int) this.getPos().y);

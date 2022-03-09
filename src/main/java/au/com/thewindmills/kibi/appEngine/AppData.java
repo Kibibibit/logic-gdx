@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 
@@ -16,8 +15,6 @@ import org.json.simple.JSONObject;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.UiEntity;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiAppBar;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiListView;
-import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiButton.ButtonPress;
-import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiRectButton;
 import au.com.thewindmills.kibi.appEngine.objects.AppObject;
 import au.com.thewindmills.kibi.appEngine.objects.MouseObject;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
@@ -27,7 +24,6 @@ import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.ColorUtils;
 import au.com.thewindmills.kibi.appEngine.utils.io.json.JSONUtils;
-import au.com.thewindmills.kibi.logicApp.entities.ComponentBody;
 import au.com.thewindmills.kibi.logicApp.entities.io.IoComponent;
 import au.com.thewindmills.kibi.logicApp.entities.io.LightComponent;
 import au.com.thewindmills.kibi.logicApp.entities.io.SwitchComponent;
