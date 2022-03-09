@@ -55,6 +55,16 @@ public class RectShape extends AbstractShape {
         return x > pos.x && x < pos.x + size.x && y > pos.y && y < pos.y + size.y;
     }
 
+    @Override
+    public float getHeight() {
+        return this.size.y;
+    }
+
+    @Override
+    public float getWidth() {
+        return this.size.x;
+    }
+
     
 
 }

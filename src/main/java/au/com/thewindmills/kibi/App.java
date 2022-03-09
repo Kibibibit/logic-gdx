@@ -5,7 +5,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import au.com.thewindmills.kibi.appEngine.LogicApp;
 import au.com.thewindmills.kibi.appEngine.utils.io.json.JSONUtils;
 import au.com.thewindmills.kibi.logicApp.entities.io.IoComponent;
-import au.com.thewindmills.kibi.logicApp.entities.io.SwitchComponent;
 import au.com.thewindmills.kibi.logicApp.models.ConnectionMap;
 import au.com.thewindmills.kibi.logicApp.models.TruthTable;
 

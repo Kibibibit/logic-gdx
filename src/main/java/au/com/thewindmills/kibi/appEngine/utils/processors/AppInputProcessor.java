@@ -21,6 +21,7 @@ public class AppInputProcessor implements InputProcessor {
 
     /**
      * Stores the state of each mouse button the last time {@link #touchUp()} or {@link #touchDown()} was called
+     * Primaryily used to keep track of which button was used to drag an object
      */
     private final Map<Integer, Boolean> currentButtonState;
     /**
@@ -57,10 +58,6 @@ public class AppInputProcessor implements InputProcessor {
         lastButtonState.replace(button, currentButtonState.get(button));
         currentButtonState.replace(button, true);
 
-        if (data.getMouse() != null) {
-            data.getMouse().setButtonState(button, true);
-        }
-
         if (lastButtonState.get(button) == false && currentButtonState.get(button) == true) {
             if (data.getMouse() != null) {
                 data.getMouse().buttonPressed(button);
@@ -76,10 +73,6 @@ public class AppInputProcessor implements InputProcessor {
         
         lastButtonState.replace(button, currentButtonState.get(button));
         currentButtonState.replace(button, false);
-
-        if (data.getMouse() != null) {
-            data.getMouse().setButtonState(button, false);
-        }
 
         if (lastButtonState.get(button) == true && currentButtonState.get(button) == false) {
             if (data.getMouse() != null) {
@@ -118,6 +111,11 @@ public class AppInputProcessor implements InputProcessor {
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
+
+        if (data.getMouse() != null) {
+            data.getMouse().mouseScrolled(amountX, amountY);
+        }
+
         return false;
     }
 

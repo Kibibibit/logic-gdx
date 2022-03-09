@@ -1,8 +1,5 @@
 package au.com.thewindmills.kibi.appEngine.objects;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
@@ -49,17 +46,11 @@ public class MouseObject extends AppObject {
 
     private boolean dragging = false;
 
-    /**
-     * The state of each mouse button
-     */
-    private final Map<Integer, Boolean> buttonStates;
-
     public MouseObject(AppData data) {
         super(data, new Vector2(0, 0));
         this.cameraPos = new Vector2(0, 0);
         this.lastCameraPos = cameraPos.cpy();
         this.deltaCameraPos = new Vector2(0, 0);
-        this.buttonStates = new HashMap<Integer, Boolean>();
 
     }
 
@@ -221,26 +212,6 @@ public class MouseObject extends AppObject {
     protected void step(float delta) {
     }
 
-    private void addButton(int button) {
-        if (!this.buttonStates.containsKey(button)) {
-            this.buttonStates.put(button, false);
-        }
-    }
-
-    public boolean getButtonState(int button) {
-
-        addButton(button);
-
-        return this.buttonStates.get(button);
-
-    }
-
-    public void setButtonState(int button, boolean state) {
-        addButton(button);
-
-        this.buttonStates.replace(button, state);
-    }
-
     public void mouseDragged(int screenX, int screenY) {
 
         //Only trigger drag events if the current entity is actually Draggable
@@ -252,6 +223,17 @@ public class MouseObject extends AppObject {
         }
         //Otherwise, just act like the mouse moved
         this.mouseMoved(screenX, screenY);
+
+    }
+
+
+    public void mouseScrolled(float amountX, float amountY) {
+
+        this.mouseMoved((int)this.getPos().x, (int) this.getPos().y);
+
+        if (this.contextEntity != null) {
+            this.contextEntity.mouseScrolled(amountX, amountY);
+        }
 
     }
 

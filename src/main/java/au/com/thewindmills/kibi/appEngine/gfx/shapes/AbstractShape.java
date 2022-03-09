@@ -105,4 +105,7 @@ public abstract class AbstractShape {
         drawFill(batches);
     }
 
+    public abstract float getHeight();
+    public abstract float getWidth();
+
 }

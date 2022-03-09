@@ -20,7 +20,7 @@ import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
  */
 public abstract class UiEntity extends ShapeEntity {
 
-    private final List<UiEntity> children;
+    protected final List<UiEntity> children;
 
     private UiEntity parent;
 
@@ -54,12 +54,20 @@ public abstract class UiEntity extends ShapeEntity {
         }
     }
 
-    protected void addChild(UiEntity child) {
+    public void addChild(UiEntity child) {
         this.children.add(child);
     }
 
-    protected Vector2 getRelativePos() {
+    public Vector2 getRelativePos() {
         return this.relativePos;
+    }
+
+    public void setRelativePos(Vector2 newPos) {
+        this.relativePos.set(newPos.x, newPos.y);
+    }
+
+    public void setRelativePos(float x, float y) {
+        this.relativePos.set(x, y);
     }
 
     public UiEntity withStrokeColor(Color color) {
@@ -72,7 +80,14 @@ public abstract class UiEntity extends ShapeEntity {
         return this;
     }
 
-    
+    @Override
+    public void mouseScrolled(float amountX, float amountY) {
+
+        if (this.parent != null) {
+            this.parent.mouseScrolled(amountX, amountY);
+        }
+
+    }
     
     
 }

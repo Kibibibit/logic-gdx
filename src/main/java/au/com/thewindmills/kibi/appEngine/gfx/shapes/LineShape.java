@@ -55,6 +55,16 @@ public class LineShape extends AbstractShape {
         
     }
 
+    @Override
+    public float getHeight() {
+        
+        return (float) Math.abs(this.pos.y - this.end.y);
+    }
+
+    @Override
+    public float getWidth() {
+        return (float) Math.abs(this.pos.x - this.end.x);
+    }
     
     
 }

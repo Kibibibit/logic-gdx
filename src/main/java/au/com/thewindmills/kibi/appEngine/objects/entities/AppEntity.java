@@ -163,6 +163,14 @@ public abstract class AppEntity extends AppObject {
      * Override as needed
      */
     public void mouseDragged() {}
+
+    /**
+     * Event called with the mouse wheel is scrolled.
+     * Override as needed
+     * @param amountX - The amount the wheel went sideways?
+     * @param amountY - the vertical scroll amount
+     */
+    public void mouseScrolled(float amountX, float amountY) {}
     
 
     public boolean isDraggable() {

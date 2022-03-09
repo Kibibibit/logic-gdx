@@ -6,12 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.gfx.ui.UiEntity;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiAppBar;
+import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiListView;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiButton.ButtonPress;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiRectButton;
 import au.com.thewindmills.kibi.appEngine.objects.AppObject;
@@ -44,8 +46,8 @@ public class AppData {
      */
     private static Long frames = 0L;
 
-
-    //TODO: replace these all with an ID hashmap in future to increase lookup speeds
+    // TODO: replace these all with an ID hashmap in future to increase lookup
+    // speeds
     /**
      * All objects currently in the application being used
      */
@@ -150,31 +152,38 @@ public class AppData {
      */
     private void createUi() {
 
-        UiEntity appBar = new UiAppBar(this, Layers.UI, 0, 25)
-            .withFillColor(ColorUtils.grey(0.3f))
-            .withStrokeColor(ColorUtils.grey(0.3f));
+        UiEntity appBar = new UiAppBar(this, Layers.UI, 4, 25)
+                .withFillColor(ColorUtils.grey(0.3f))
+                .withStrokeColor(ColorUtils.grey(0.3f));
 
-        
-        UiEntity button = new UiRectButton(new Vector2(2.5f, 2.5f), new Vector2(50, 20), appBar, new ButtonPress() {
-                public void onPressed(int button) {
-                    if (button == Input.Buttons.LEFT) {
-                        System.out.println("Hello!");
-                    }
-                    
-                }
-    
-                public void onReleased(int button) {
-                    if (button == Input.Buttons.LEFT) {
-                        System.out.println("Goodbye!");
-                    }
-                }
-            }).withFillColor(ColorUtils.grey(0.35f)).withStrokeColor(ColorUtils.grey(0.4f));
-        AppEntity testDrag = new ComponentBody(this, Layers.MAIN, 0, new Vector2(50,50), "AND.json");
-        AppEntity testDrag2 = new ComponentBody(this, Layers.MAIN, 0, new Vector2(70,50), "NOT.json");
+        UiEntity listView = new UiListView(this, Layers.UI, 0, 0, 0, 55, Gdx.graphics.getHeight() - 25)
+                .withFillColor(ColorUtils.grey(0.45f))
+                .withStrokeColor(ColorUtils.grey(0.3f));
 
-        AppEntity testLight = new LightComponent(this, Layers.MAIN, 0, new Vector2(100,100));
-        AppEntity testSwitch = new SwitchComponent(this, Layers.MAIN, 0, new Vector2(50,100));
+        for (int i = 0; i < 40; i++) {
 
+            UiEntity button = new UiRectButton(new Vector2(2.5f, 2.5f), new Vector2(50, 20), listView,
+                    new ButtonPress() {
+                        public void onPressed(int button) {
+                            if (button == Input.Buttons.LEFT) {
+                                System.out.println("Hello!");
+                            }
+
+                        }
+
+                        public void onReleased(int button) {
+                            if (button == Input.Buttons.LEFT) {
+                                System.out.println("Goodbye!");
+                            }
+                        }
+                    }).withFillColor(ColorUtils.grey(i/39f)).withStrokeColor(ColorUtils.grey(0.4f));
+        }
+
+        AppEntity testDrag = new ComponentBody(this, Layers.MAIN, 0, new Vector2(50, 50), "AND.json");
+        AppEntity testDrag2 = new ComponentBody(this, Layers.MAIN, 0, new Vector2(70, 50), "NOT.json");
+
+        AppEntity testLight = new LightComponent(this, Layers.MAIN, 0, new Vector2(100, 100));
+        AppEntity testSwitch = new SwitchComponent(this, Layers.MAIN, 0, new Vector2(50, 100));
 
     }
 
@@ -240,7 +249,8 @@ public class AppData {
 
         batches.begin();
 
-        //We only do this for batches, as static batches are based on the window and not the camera
+        // We only do this for batches, as static batches are based on the window and
+        // not the camera
         batches.setProjectionMatrix(this.getCamera().combined);
 
         staticBatches.begin();

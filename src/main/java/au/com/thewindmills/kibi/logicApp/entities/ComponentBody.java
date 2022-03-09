@@ -37,7 +37,7 @@ public class ComponentBody extends DraggableShapeEntity {
     protected void init(Vector2 pos) {
         int highCount = Math.max(this.model.getInputCount(), this.model.getOutputCount());
 
-        //TODO: Make this better
+        //TODO: Set constants of some kind for this
         ((RectShape) this.getShape()).setSize(50, highCount*25);
         this.setPos(pos);
 

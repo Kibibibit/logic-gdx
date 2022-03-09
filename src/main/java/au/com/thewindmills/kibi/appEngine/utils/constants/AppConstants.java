@@ -16,12 +16,12 @@ public class AppConstants {
     /**
      * Default window width for the application
      */
-    public static final int FRAME_WIDTH = 640;
+    public static final int FRAME_WIDTH = 1200;
 
     /**
      * Default window height for the application
      */
-    public static final int FRAME_HEIGHT = 480;
+    public static final int FRAME_HEIGHT = 640;
 
     /**
      * Default background color for the application

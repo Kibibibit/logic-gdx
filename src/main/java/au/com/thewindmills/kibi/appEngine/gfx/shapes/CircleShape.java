@@ -51,4 +51,14 @@ public class CircleShape extends AbstractShape {
         
     }
 
+    @Override
+    public float getHeight() {
+        return this.radius*2;
+    }
+
+    @Override
+    public float getWidth() {
+        return this.radius*2;
+    }
+
 }
