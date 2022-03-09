@@ -229,11 +229,15 @@ public class MouseObject extends AppObject {
 
     public void mouseScrolled(float amountX, float amountY) {
 
-
+        boolean moveCamera = true;
 
         if (this.contextEntity != null) {
-            this.contextEntity.mouseScrolled(amountX, amountY);
-        } else {
+            if (this.contextEntity.isScrollable()) {
+                this.contextEntity.mouseScrolled(amountX, amountY);
+                moveCamera = false;
+            }
+        }
+        if (moveCamera) {
             this.getData().getCamera().position.x += amountX;
             this.getData().getCamera().position.y -= amountY;
         }

@@ -45,6 +45,8 @@ public abstract class AppEntity extends AppObject {
 
     private boolean triggerReleaseAfterDrag = false;
 
+    private boolean isScrollable = false;
+
 
     protected Vector2 mouseOffset;
 
@@ -146,9 +148,9 @@ public abstract class AppEntity extends AppObject {
         this.mouseOffset.set(0, 0);
 
         if (!beingDragged || triggerReleaseAfterDrag) {
-            this.doOnMouseReleased(button);
-            beingDragged = false;
+            this.doOnMouseReleased(button);   
         }
+        beingDragged = false;
 
         
 
@@ -197,6 +199,14 @@ public abstract class AppEntity extends AppObject {
 
     public boolean isDraggable() {
         return this.isDraggable;
+    }
+
+    public boolean isScrollable() {
+        return this.isScrollable;
+    }
+
+    public void setIsScrollable(boolean isScrollable) {
+        this.isScrollable = isScrollable;
     }
 
 }

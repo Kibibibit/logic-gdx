@@ -28,7 +28,7 @@ public abstract class UiEntity extends ShapeEntity {
 
     public UiEntity(AppData data, String layer, int depth, Vector2 pos, AbstractShape shape) {
         super(data, layer, depth, pos, shape);
-
+        this.setIsScrollable(true);
         if (!ArrayUtils.arrayContains(Layers.STATIC_LAYERS, this.getLayer())) {
             LOGGER.warning("UI entity with id " + this.id + " has not been assinged to a static layer (Assigned to layer: " + this.getLayer()+")");
         }
@@ -42,6 +42,7 @@ public abstract class UiEntity extends ShapeEntity {
     public UiEntity(Vector2 relativePos, AbstractShape shape, UiEntity parent) {
         this(parent.getData(), parent.getLayer(), parent.getDepth()+1, parent.getPos().cpy().add(relativePos), shape);
         this.parent = parent;
+        this.setIsScrollable(true);
         this.relativePos = relativePos;
         this.parent.addChild(this);
     }
