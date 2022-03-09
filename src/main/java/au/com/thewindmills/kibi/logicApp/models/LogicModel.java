@@ -203,7 +203,6 @@ public abstract class LogicModel extends AbstractModel {
 
 
     public void dispose() {
-
         this.connectionMap.dispose(this);
 
     }

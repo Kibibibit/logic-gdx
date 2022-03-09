@@ -9,6 +9,8 @@ public class UiListView extends UiPanel {
 
     private static final float SCROLL_SPEED = 2.5f;
 
+    private static final float SPACING = 2f;
+
     private final float height;
 
     private float currentY = 0;
@@ -52,7 +54,7 @@ public class UiListView extends UiPanel {
 
         child.setRelativePos(DrawConstants.STROKE_WIDTH, height-nextChild-DrawConstants.STROKE_WIDTH-child.getShape().getHeight());
 
-        nextChild += child.getShape().getHeight();
+        nextChild += child.getShape().getHeight() + SPACING;
 
         super.addChild(child);
     }

@@ -29,7 +29,7 @@ public class UiButton extends UiEntity {
         this.buttonPress = buttonPress;
         this.label = label;
         this.font = new BitmapFont();
-        font.setColor(Colors.RED);
+        font.setColor(Colors.WHITE);
 
     }
 
@@ -39,7 +39,7 @@ public class UiButton extends UiEntity {
         this.buttonPress = buttonPress;
         this.label = label;
         this.font = new BitmapFont();
-        font.setColor(Colors.RED);
+        font.setColor(Colors.WHITE);
     }
 
 

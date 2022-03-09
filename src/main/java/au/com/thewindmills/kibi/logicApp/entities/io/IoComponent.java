@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
+import au.com.thewindmills.kibi.appEngine.gfx.shapes.AbstractShape;
 import au.com.thewindmills.kibi.appEngine.utils.constants.Colors;
 import au.com.thewindmills.kibi.logicApp.entities.ComponentBody;
 
@@ -15,8 +16,8 @@ public class IoComponent extends ComponentBody {
 
     private final Color fillColor;
 
-    public IoComponent(AppData data, String layer, int depth, Vector2 pos) {
-        super(data, layer, depth, pos, IO_FILENAME);
+    public IoComponent(AppData data, String layer, int depth, Vector2 pos, AbstractShape shape) {
+        super(data, layer, depth, pos, IO_FILENAME, shape);
         fillColor = this.getShape().getFillColor();
     }
 

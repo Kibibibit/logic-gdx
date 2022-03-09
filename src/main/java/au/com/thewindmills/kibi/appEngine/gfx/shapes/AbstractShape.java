@@ -38,16 +38,19 @@ public abstract class AbstractShape {
     public AbstractShape(EShape shape) {
         this.shape = shape;
         this.pos = new Vector2(0,0);
+        this.setPos(0, 0);
     }
 
     public AbstractShape(EShape shape, Vector2 pos) {
         this.pos = new Vector2(pos.x, pos.y);
         this.shape = shape;
+        this.setPos(pos.x, pos.y);
     }
 
     public AbstractShape(EShape shape, float x, float y) {
         this.pos = new Vector2(x, y);
         this.shape = shape;
+        this.setPos(x, y);
     }
 
     public void setStrokeColor(Color color) {
@@ -107,5 +110,16 @@ public abstract class AbstractShape {
 
     public abstract float getHeight();
     public abstract float getWidth();
+    public abstract void setHeight(float height);
+    public abstract void setWidth(float width);
+
+    public void setSize(float width, float height) {
+        this.setHeight(height);
+        this.setWidth(width);
+    }
+
+    public void setSize(Vector2 size) {
+        this.setSize(size.x, size.y);
+    }
 
 }

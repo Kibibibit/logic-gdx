@@ -6,10 +6,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
+import au.com.thewindmills.kibi.appEngine.gfx.shapes.LineShape;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
 import au.com.thewindmills.kibi.appEngine.utils.ArrayUtils;
 import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
 import au.com.thewindmills.kibi.appEngine.utils.processors.AppInputProcessor;
+import au.com.thewindmills.kibi.logicApp.entities.ComponentInOut;
+import au.com.thewindmills.kibi.logicApp.entities.WireComponent;
 
 /**
  * Represents the mouse within the game, stores methods for firing events
@@ -46,6 +49,10 @@ public class MouseObject extends AppObject {
 
     private boolean dragging = false;
 
+    private boolean drawingWire = false;
+
+    private WireComponent wire = null;
+
     public MouseObject(AppData data) {
         super(data, new Vector2(0, 0));
         this.cameraPos = new Vector2(0, 0);
@@ -68,7 +75,12 @@ public class MouseObject extends AppObject {
         this.setPos((float) screenX, (float) screenY);
         this.setCameraPos();
         this.deltaCameraPos = this.lastCameraPos.sub(this.cameraPos);
-        if (dragging) return;
+
+        if (wire != null) {
+            this.wire.getShape().setSize(this.getCameraPos());
+        }
+
+        if (dragging && !drawingWire) return;
         this.updateContextEntity();
         this.updateContextEntityCurrent();
 
@@ -106,6 +118,7 @@ public class MouseObject extends AppObject {
 
         if (button == Input.Buttons.LEFT) {
             dragging = false;
+            if (drawingWire) this.stopDrawingWire();
         }
         
 
@@ -215,7 +228,7 @@ public class MouseObject extends AppObject {
     public void mouseDragged(int screenX, int screenY) {
 
         //Only trigger drag events if the current entity is actually Draggable
-        if (this.contextEntity != null) {
+        if (this.contextEntity != null && !drawingWire) {
             if (this.contextEntity.isDraggable()) {
                 dragging = true;
                 this.contextEntity.mouseDragged();
@@ -246,6 +259,43 @@ public class MouseObject extends AppObject {
 
         
 
+    }
+
+    public boolean drawingWire() {
+        return this.drawingWire;
+    }
+
+    public void stopDrawingWire() {
+        this.drawingWire = false;
+        if (this.contextEntity != null) {
+            if (this.contextEntity instanceof ComponentInOut) {
+
+                ComponentInOut inOut = (ComponentInOut) this.contextEntity;
+
+                if (this.wire.getStart().isInput() != inOut.isInput()) {
+
+                    if (
+                        !inOut.isInput() || 
+                        !this.getData().getConnectionMap().inputConnected(
+                            inOut.getParent().getModel(), 
+                            inOut.getNode()
+                        )) {
+                            this.wire.setEnd(inOut);
+                        this.wire = null;
+                        return;
+                        }
+                }
+            }
+        }
+
+        this.wire.markForDisposal();
+        this.wire = null;
+        
+    }
+
+    public void startDrawingWire(WireComponent wire) {
+        this.drawingWire = true;
+        this.wire = wire;
     }
 
 }

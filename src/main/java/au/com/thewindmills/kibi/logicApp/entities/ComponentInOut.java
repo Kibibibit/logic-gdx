@@ -1,11 +1,13 @@
 package au.com.thewindmills.kibi.logicApp.entities;
 
+import static au.com.thewindmills.kibi.appEngine.utils.constants.DrawConstants.NODE_RADIUS;
+
 import com.badlogic.gdx.math.Vector2;
 
+import au.com.thewindmills.kibi.appEngine.gfx.shapes.AbstractShape;
 import au.com.thewindmills.kibi.appEngine.gfx.shapes.CircleShape;
-import au.com.thewindmills.kibi.appEngine.gfx.shapes.RectShape;
 import au.com.thewindmills.kibi.appEngine.objects.entities.DraggableShapeEntity;
-import static au.com.thewindmills.kibi.appEngine.utils.constants.DrawConstants.NODE_RADIUS;
+import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 
 public class ComponentInOut extends DraggableShapeEntity {
@@ -28,15 +30,14 @@ public class ComponentInOut extends DraggableShapeEntity {
         this.node = node;
         this.input = input;
 
-        RectShape parentBox = (RectShape) parent.getShape();
+        AbstractShape parentShape = parent.getShape();
 
-        float xOffset = this.input ? -HOR_OFFSET : parentBox.getSize().x + HOR_OFFSET;
+        float xOffset = this.input ? -HOR_OFFSET : parentShape.getWidth() + HOR_OFFSET;
 
         int count = this.input ? parent.getModel().getInputCount() : parent.getModel().getOutputCount();
-        float div = parentBox.getSize().y / count;
+        float div = parentShape.getHeight() / count;
 
-        float yOffset = div*this.node + (div/2); 
-
+        float yOffset = div * this.node + (div / 2);
 
         this.parentOffset = new Vector2(xOffset, yOffset);
 
@@ -44,9 +45,21 @@ public class ComponentInOut extends DraggableShapeEntity {
 
     }
 
+    public void light() {
+        this.parentOffset.set(parentOffset.x * 2, 0);
+    }
+
     private void updatePosition() {
         this.getPos().set(parent.getPos().cpy().add(this.parentOffset));
         this.getShape().setPos(this.getPos());
+    }
+
+    public ComponentBody getParent() {
+        return this.parent;
+    }
+
+    public int getNode() {
+        return this.node;
     }
 
     @Override
@@ -68,9 +81,14 @@ public class ComponentInOut extends DraggableShapeEntity {
 
     }
 
+    public boolean isInput() {
+        return this.input;
+    }
+
     @Override
     public void onMouseDragged() {
-
+        if (!this.input || !this.getData().getConnectionMap().inputConnected(this.getParent().getModel(), this.node))
+            new WireComponent(this.getData(), Layers.BELOW_MAIN, 0, this);
     }
 
 }

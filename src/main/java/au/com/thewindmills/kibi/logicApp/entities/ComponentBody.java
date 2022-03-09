@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
+import au.com.thewindmills.kibi.appEngine.gfx.shapes.AbstractShape;
 import au.com.thewindmills.kibi.appEngine.gfx.shapes.RectShape;
 import au.com.thewindmills.kibi.appEngine.objects.entities.DraggableShapeEntity;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
@@ -18,27 +19,27 @@ public class ComponentBody extends DraggableShapeEntity {
 
     protected List<ComponentInOut> children;
 
-    public ComponentBody(AppData data, String layer, int depth, Vector2 pos, String modelFileName) {
-        super(data, layer, depth, pos, new RectShape());
+    public ComponentBody(AppData data, String layer, int depth, Vector2 pos, String modelFileName, AbstractShape shape) {
+        super(data, layer, depth, pos, shape);
 
         this.model = LogicModel.fromJson(JSONUtils.loadJsonObject(modelFileName), getData().getConnectionMap());
         
         this.model.setEntity(this);
 
         this.children = new ArrayList<ComponentInOut>();
-
-
-
         this.init(pos);
-        
+        this.setCanDelete(true);
+    }
 
+    public ComponentBody(AppData data, String layer, int depth, Vector2 pos, String modelFileName) {
+        this(data, layer, depth, pos, modelFileName, new RectShape());
     }
 
     protected void init(Vector2 pos) {
         int highCount = Math.max(this.model.getInputCount(), this.model.getOutputCount());
 
         //TODO: Set constants of some kind for this
-        ((RectShape) this.getShape()).setSize(50, highCount*25);
+        this.getShape().setSize(50, highCount*25);
         this.setPos(pos);
 
         for (int in = 0; in < model.getInputCount(); in++) {

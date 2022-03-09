@@ -65,6 +65,18 @@ public class RectShape extends AbstractShape {
         return this.size.x;
     }
 
+    @Override
+    public void setHeight(float height) {
+        this.size.set(this.size.x, height);
+        
+    }
+
+    @Override
+    public void setWidth(float width) {
+        this.size.set(width, this.size.y);
+        
+    }
+
     
 
 }

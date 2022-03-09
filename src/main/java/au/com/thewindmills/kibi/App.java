@@ -24,7 +24,13 @@ public class App
         // Create the actual application object
         LogicApp app = new LogicApp();
         // Start the application
-        new Lwjgl3Application(app, app.config);
+
+        try {
+            new Lwjgl3Application(app, app.config);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
 
         
         System.exit(0);

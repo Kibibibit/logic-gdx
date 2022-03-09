@@ -1,5 +1,6 @@
 package au.com.thewindmills.kibi.appEngine.objects.entities;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
@@ -49,6 +50,8 @@ public abstract class AppEntity extends AppObject {
 
 
     protected Vector2 mouseOffset;
+
+    protected boolean canDelete = false;
 
     public AppEntity(AppData data, String layer, int depth, Vector2 pos) {
         super(data, pos);
@@ -132,6 +135,11 @@ public abstract class AppEntity extends AppObject {
      */
     public final void onMousePressed(int button) {
 
+        if (button == Input.Buttons.RIGHT && canDelete) {
+            this.markForDisposal();
+            return;
+        }
+
         Vector2 mousePos = this.onStaticLayer ? this.getData().getMouse().getGlobalPos() : this.getData().getMouse().getCameraPos();
 
         this.mouseOffset.set(mousePos.cpy().sub(this.getPos()));
@@ -160,6 +168,8 @@ public abstract class AppEntity extends AppObject {
 
     public void doOnMouseReleased(int button) {}
 
+
+   
 
     /**
      * Event called when the mouse selects this componenet,
@@ -207,6 +217,10 @@ public abstract class AppEntity extends AppObject {
 
     public void setIsScrollable(boolean isScrollable) {
         this.isScrollable = isScrollable;
+    }
+
+    public void setCanDelete(boolean v) {
+        this.canDelete = v;
     }
 
 }

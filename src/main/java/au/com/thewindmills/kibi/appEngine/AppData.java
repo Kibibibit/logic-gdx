@@ -175,15 +175,18 @@ public class AppData {
             if (filename.startsWith(IoComponent.PRE_NO_RENDER)) {
 
                 object.replace(LogicModel.FIELD_NAME, LightComponent.LIGHT_NAME);
-                new CreateLogicModelButton(new Vector2(0,0), new Vector2(100 - DrawConstants.STROKE_WIDTH*2,25), listView, object, filename);
+                new CreateLogicModelButton(new Vector2(0,0), new Vector2(100 - DrawConstants.STROKE_WIDTH*2,25), listView, object, filename)
+                    .withFillColor(ColorUtils.grey(0.3f));
                 
                 JSONObject object2 = JSONUtils.loadJsonObject(filename);
 
                 object2.replace(LogicModel.FIELD_NAME, SwitchComponent.SWITCH_NAME);
-                new CreateLogicModelButton(new Vector2(0,0), new Vector2(100 - DrawConstants.STROKE_WIDTH*2,25), listView, object2, filename);
+                new CreateLogicModelButton(new Vector2(0,0), new Vector2(100 - DrawConstants.STROKE_WIDTH*2,25), listView, object2, filename)
+                    .withFillColor(ColorUtils.grey(0.3f));
 
             } else {
-                new CreateLogicModelButton(new Vector2(0,0),  new Vector2(100 - DrawConstants.STROKE_WIDTH*2,25), listView, object, filename);
+                new CreateLogicModelButton(new Vector2(0,0),  new Vector2(100 - DrawConstants.STROKE_WIDTH*2,25), listView, object, filename)
+                    .withFillColor(ColorUtils.grey(0.3f));
             }
 
         }
@@ -207,6 +210,9 @@ public class AppData {
         // First remove all objects
 
         objects.removeIf((AppObject obj) -> {
+            if (obj.willDispose()) {
+                obj.dispose();
+            }
             return obj.willDispose();
         });
 

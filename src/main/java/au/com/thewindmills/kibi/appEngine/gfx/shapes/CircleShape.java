@@ -27,6 +27,7 @@ public class CircleShape extends AbstractShape {
         this.radius = radius;
     }
 
+
     @Override
     protected void drawStroke(Batches batches) {
         batches.shapeRenderer.circle(pos.x, pos.y, radius);
@@ -59,6 +60,18 @@ public class CircleShape extends AbstractShape {
     @Override
     public float getWidth() {
         return this.radius*2;
+    }
+
+    @Override
+    public void setHeight(float height) {
+        this.radius = height/2;
+        
+    }
+
+    @Override
+    public void setWidth(float width) {
+        this.radius = width/2;
+        
     }
 
 }

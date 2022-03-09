@@ -77,7 +77,7 @@ public class ConnectionMap {
                 System.out.println(outputModel.id + " is updating " + entry.getKey().modelId);
                 models.get(entry.getKey().modelId).update(
                         entry.getKey().nodeId,
-                        state[entry.getKey().nodeId]);
+                        state[entry.getValue().nodeId]);
             }
 
         }
@@ -110,6 +110,10 @@ public class ConnectionMap {
 
         models.remove(logicModel.id);
 
+    }
+
+    public boolean inputConnected(LogicModel model, int nodeId) {
+        return connections.containsKey(new Connection(model.id, nodeId));
     }
 
     /**
