@@ -4,6 +4,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 
 import au.com.thewindmills.kibi.appEngine.LogicApp;
 import au.com.thewindmills.kibi.appEngine.utils.io.json.JSONUtils;
+import au.com.thewindmills.kibi.logicApp.entities.io.IoComponent;
 import au.com.thewindmills.kibi.logicApp.entities.io.SwitchComponent;
 import au.com.thewindmills.kibi.logicApp.models.ConnectionMap;
 import au.com.thewindmills.kibi.logicApp.models.TruthTable;
@@ -48,14 +49,14 @@ public class App
         and.setRow("10", "0");
         and.setRow("11", "1");
 
-        TruthTable switchTable = new TruthTable(SwitchComponent.SWITCH_NAME, 1, 1, dummy);
-        switchTable.setRow("0","0");
-        switchTable.setRow("1", "1");
+        TruthTable ioTable = new TruthTable(IoComponent.IO_NAME, 1, 1, dummy);
+        ioTable.setRow("0","0");
+        ioTable.setRow("1", "1");
         
         
         JSONUtils.writeToFile(not.toJson());
         JSONUtils.writeToFile(and.toJson());
-        JSONUtils.writeToFile(switchTable.toJson());
+        JSONUtils.writeToFile(ioTable.toJson());
     }
 
 }

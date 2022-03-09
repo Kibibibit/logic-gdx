@@ -22,7 +22,9 @@ public class ComponentBody extends DraggableShapeEntity {
         super(data, layer, depth, pos, new RectShape());
 
         this.model = LogicModel.fromJson(JSONUtils.loadJsonObject(modelFileName), getData().getConnectionMap());
-                
+        
+        this.model.setEntity(this);
+
         this.children = new ArrayList<ComponentInOut>();
 
 
@@ -63,6 +65,8 @@ public class ComponentBody extends DraggableShapeEntity {
     protected void step(float delta) {
         
     }
+
+    public void onModelUpdate() {}
 
 
     @Override

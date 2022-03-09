@@ -5,18 +5,16 @@ import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
 import au.com.thewindmills.kibi.appEngine.gfx.shapes.RectShape;
-import au.com.thewindmills.kibi.logicApp.entities.ComponentBody;
 import au.com.thewindmills.kibi.logicApp.entities.ComponentInOut;
 
-public class SwitchComponent extends ComponentBody {
+public class SwitchComponent extends IoComponent {
 
-    public static final String SWITCH_NAME = "SWITCH";
 
     private static final int SWITCH_HEIGHT = 50;
     private static final int SWITCH_WIDTH = 50;
 
     public SwitchComponent(AppData data, String layer, int depth, Vector2 pos) {
-        super(data, layer, depth, pos, SWITCH_NAME + ".json");
+        super(data, layer, depth, pos);
     }
 
     @Override

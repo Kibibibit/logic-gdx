@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import org.json.simple.JSONObject;
 
+import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
 import au.com.thewindmills.kibi.appEngine.utils.maths.BinaryUtils;
 import au.com.thewindmills.kibi.appEngine.utils.maths.RandomUtils;
 import au.com.thewindmills.kibi.logicApp.entities.ComponentBody;
@@ -92,6 +93,12 @@ public abstract class LogicModel extends AbstractModel {
      */
     protected final String name;
 
+    /**
+     * If this model is connected to a {@link AppEntity}, it uses this to update them
+     */
+    private ComponentBody entity = null;
+
+
     public LogicModel(String name, int inputCount, int outputCount, ConnectionMap connectionMap) {
         // Propagation delay needs to be random
         this.propagationDelay = RandomUtils.randomIntInRange(MIN_DELAY, MAX_DELAY);
@@ -172,6 +179,10 @@ public abstract class LogicModel extends AbstractModel {
         }
 
         this.previousOutputState = BinaryUtils.getValueFromBits(outputBits);
+
+        if (this.entity != null) {
+            this.entity.onModelUpdate();
+        }
 
     }
 
@@ -298,6 +309,10 @@ public abstract class LogicModel extends AbstractModel {
         return out;
 
 
+    }
+
+    public void setEntity(ComponentBody body) {
+        this.entity = body;
     }
 
 
