@@ -90,6 +90,7 @@ public class LogicApp extends ApplicationAdapter{
         config = new Lwjgl3ApplicationConfiguration();
         config.setTitle(title);
         config.setWindowedMode(frameWidth, frameHeight);
+        config.setResizable(false);
 
         //Need to disable audio to stop a crash when the app closes due to there being no AL lib
         config.disableAudio(true);

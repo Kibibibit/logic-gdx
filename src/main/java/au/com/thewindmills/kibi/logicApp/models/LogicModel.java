@@ -11,12 +11,12 @@ import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
 import au.com.thewindmills.kibi.appEngine.utils.maths.BinaryUtils;
 import au.com.thewindmills.kibi.appEngine.utils.maths.RandomUtils;
 import au.com.thewindmills.kibi.logicApp.entities.ComponentBody;
-import au.com.thewindmills.kibi.logicApp.models.components.IntegratedComponent;
+import au.com.thewindmills.kibi.logicApp.models.components.IntergratedComponent;
 
 /**
  * Represents a component that makes up a logic circuit.
  * Can either be basic gates, represented by {@link TruthTables},
- * or more complex circuits through {@link IntegratedComponent}s
+ * or more complex circuits through {@link IntergratedComponent}s
  * <br><br>
  * This component is abstract, and needs to be created in engine with a {@link ComponentBody}
  * 
@@ -74,7 +74,7 @@ public abstract class LogicModel extends AbstractModel {
     protected int outputCount;
 
     /**
-     * The linked connection map that stores the connection between this model and all others in the scene/{@link IntegratedComponent}
+     * The linked connection map that stores the connection between this model and all others in the scene/{@link IntergratedComponent}
      */
     protected ConnectionMap connectionMap;
 
@@ -295,7 +295,7 @@ public abstract class LogicModel extends AbstractModel {
         LogicModel out;
 
         if (type.equals(TYPE_IC)) {
-            out = new IntegratedComponent(name, inputCount, outputCount, connectionMap);
+            out = new IntergratedComponent(name, inputCount, outputCount, connectionMap);
         } else if (type.equals(TYPE_TABLE)) {
             out = new TruthTable(name, inputCount, outputCount, connectionMap);
         } else {

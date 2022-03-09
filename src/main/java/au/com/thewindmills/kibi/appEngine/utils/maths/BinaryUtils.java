@@ -105,6 +105,26 @@ public class BinaryUtils {
         return result;
     }
 
+    public static boolean[] getBitsFromValue(int value, int bits) {
+
+        boolean[] out = new boolean[bits];
+        int x = value;
+
+        for (int i = bits-1; i >= 0; i--) {
+            int pow = (int) Math.pow(2,i);
+            if (x > pow) {
+                x -= pow;
+                out[i] = true;
+            } else {
+                out[i] = false;
+            }
+
+        }
+
+        return out;
+
+    }
+
     /**
      * Takes in a boolean array representing a binary number where
      * true -> 1 and false -> 0, and returns it as a string

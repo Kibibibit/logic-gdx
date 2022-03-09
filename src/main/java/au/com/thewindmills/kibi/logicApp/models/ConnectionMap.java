@@ -116,6 +116,11 @@ public class ConnectionMap {
         return connections.containsKey(new Connection(model.id, nodeId));
     }
 
+
+    public Map<Long, LogicModel> getModels() {
+        return this.models;
+    }
+
     /**
      * Helper class to store in the hashmap
      */
