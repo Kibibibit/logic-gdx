@@ -10,7 +10,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 
-import au.com.thewindmills.kibi.appEngine.gfx.shapes.RectShape;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.UiEntity;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiAppBar;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiButton.ButtonPress;
@@ -23,6 +22,8 @@ import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.ColorUtils;
 import au.com.thewindmills.kibi.logicApp.entities.ComponentBody;
+import au.com.thewindmills.kibi.logicApp.entities.io.LightComponent;
+import au.com.thewindmills.kibi.logicApp.entities.io.SwitchComponent;
 import au.com.thewindmills.kibi.logicApp.models.ConnectionMap;
 
 /**
@@ -170,6 +171,9 @@ public class AppData {
             }).withFillColor(ColorUtils.grey(0.35f)).withStrokeColor(ColorUtils.grey(0.4f));
         AppEntity testDrag = new ComponentBody(this, Layers.MAIN, 0, new Vector2(50,50), "AND.json");
         AppEntity testDrag2 = new ComponentBody(this, Layers.MAIN, 0, new Vector2(70,50), "NOT.json");
+
+        AppEntity testLight = new LightComponent(this, Layers.MAIN, 0, new Vector2(100,100));
+        AppEntity testSwitch = new SwitchComponent(this, Layers.MAIN, 0, new Vector2(50,100));
 
 
     }
