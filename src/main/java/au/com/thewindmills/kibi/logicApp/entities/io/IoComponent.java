@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
-import au.com.thewindmills.kibi.appEngine.utils.gfx.ColorUtils;
+import au.com.thewindmills.kibi.appEngine.utils.constants.Colors;
 import au.com.thewindmills.kibi.logicApp.entities.ComponentBody;
 
 public class IoComponent extends ComponentBody {
@@ -23,7 +23,7 @@ public class IoComponent extends ComponentBody {
     @Override
     public void onModelUpdate() {
 
-        this.setFillColor(this.getModel().getOutputBits()[0] ? ColorUtils.blue(1f) : this.fillColor);
+        this.setFillColor(this.getModel().getOutputBits()[0] ? Colors.BLUE : this.fillColor);
 
     }
 
