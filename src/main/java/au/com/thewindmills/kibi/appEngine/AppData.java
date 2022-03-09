@@ -15,6 +15,7 @@ import org.json.simple.JSONObject;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.UiEntity;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiAppBar;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiListView;
+import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiTextfield;
 import au.com.thewindmills.kibi.appEngine.objects.AppObject;
 import au.com.thewindmills.kibi.appEngine.objects.MouseObject;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
@@ -158,6 +159,8 @@ public class AppData {
         UiEntity appBar = new UiAppBar(this, Layers.UI, 4, 25)
                 .withFillColor(ColorUtils.grey(0.3f))
                 .withStrokeColor(ColorUtils.grey(0.3f));
+
+        UiEntity textField = new UiTextfield(new Vector2(100f,2.5f), 200, 20, appBar);
 
         UiEntity listView = new UiListView(this, Layers.BELOW_UI, 0, 0, 0, 100, Gdx.graphics.getHeight() - 25)
                 .withFillColor(ColorUtils.grey(0.45f))

@@ -129,7 +129,16 @@ public class AppInputProcessor implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
 
-       
+       if ((keycode >= Input.Keys.A && keycode <= Input.Keys.Z) || 
+            keycode == Input.Keys.ENTER ||
+            keycode == Input.Keys.SPACE ||
+            keycode == Input.Keys.BACKSPACE
+        ) {
+           if (data.getMouse() != null) {
+               // Mouse?
+               data.getMouse().typeKey(keycode);
+           }
+       }
 
         return false;
     }

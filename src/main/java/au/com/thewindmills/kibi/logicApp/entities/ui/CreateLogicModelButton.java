@@ -1,6 +1,5 @@
 package au.com.thewindmills.kibi.logicApp.entities.ui;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 import org.json.simple.JSONObject;

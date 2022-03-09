@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
+import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiTextfield;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
 import au.com.thewindmills.kibi.appEngine.utils.ArrayUtils;
 import au.com.thewindmills.kibi.appEngine.utils.constants.Layers;
@@ -52,6 +53,8 @@ public class MouseObject extends AppObject {
 
     private WireComponent wire = null;
 
+    private UiTextfield highlightedTextfield = null;
+
     public MouseObject(AppData data) {
         super(data, new Vector2(0, 0));
         this.cameraPos = new Vector2(0, 0);
@@ -79,7 +82,8 @@ public class MouseObject extends AppObject {
             this.wire.getShape().setSize(this.getCameraPos());
         }
 
-        if (dragging && !drawingWire) return;
+        if (dragging && !drawingWire)
+            return;
         this.updateContextEntity();
         this.updateContextEntityCurrent();
 
@@ -102,7 +106,21 @@ public class MouseObject extends AppObject {
      */
     public void buttonPressed(int button) {
 
+        if (this.highlightedTextfield != null) {
+            if (this.contextEntity != null) {
+                if (this.contextEntity.id != this.highlightedTextfield.id) {
+                    this.highlightedTextfield.setHighlight(false);
+                    this.highlightedTextfield = null;
+                }
+            } else {
+                this.highlightedTextfield.setHighlight(false);
+                this.highlightedTextfield = null;
+            }
+
+        }
+
         if (this.contextEntity != null) {
+
             this.contextEntity.onMousePressed(button);
         }
 
@@ -117,9 +135,9 @@ public class MouseObject extends AppObject {
 
         if (button == Input.Buttons.LEFT) {
             dragging = false;
-            if (drawingWire) this.stopDrawingWire();
+            if (drawingWire)
+                this.stopDrawingWire();
         }
-        
 
         if (this.contextEntity != null) {
             this.contextEntity.onMouseReleased(button);
@@ -242,14 +260,14 @@ public class MouseObject extends AppObject {
 
     public void mouseDragged(int screenX, int screenY) {
 
-        //Only trigger drag events if the current entity is actually Draggable
+        // Only trigger drag events if the current entity is actually Draggable
         if (this.contextEntity != null && !drawingWire) {
             if (this.contextEntity.isDraggable()) {
                 dragging = true;
                 this.contextEntity.mouseDragged();
             }
         }
-        //Otherwise, just act like the mouse moved
+        // Otherwise, just act like the mouse moved
         this.mouseMoved(screenX, screenY);
 
     }
@@ -258,7 +276,6 @@ public class MouseObject extends AppObject {
         this.contextEntity = entity;
         this.dragging = true;
     }
-
 
     public void mouseScrolled(float amountX, float amountY) {
 
@@ -272,15 +289,13 @@ public class MouseObject extends AppObject {
         }
         if (doZoom) {
 
-            float ratio = (float) Gdx.graphics.getHeight()/ (float)Gdx.graphics.getWidth();
+            float ratio = (float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth();
 
             this.getData().getCamera().viewportHeight += amountY * ratio * 20f;
             this.getData().getCamera().viewportWidth += amountY * 20f;
         }
 
-        this.mouseMoved((int)this.getPos().x, (int) this.getPos().y);
-
-        
+        this.mouseMoved((int) this.getPos().x, (int) this.getPos().y);
 
     }
 
@@ -297,28 +312,40 @@ public class MouseObject extends AppObject {
 
                 if (this.wire.getStart().isInput() != inOut.isInput()) {
 
-                    if (
-                        !inOut.isInput() || 
-                        !this.getData().getConnectionMap().inputConnected(
-                            inOut.getParent().getModel(), 
-                            inOut.getNode()
-                        )) {
-                            this.wire.setEnd(inOut);
+                    if (!inOut.isInput() ||
+                            !this.getData().getConnectionMap().inputConnected(
+                                    inOut.getParent().getModel(),
+                                    inOut.getNode())) {
+                        this.wire.setEnd(inOut);
                         this.wire = null;
                         return;
-                        }
+                    }
                 }
             }
         }
 
         this.wire.markForDisposal();
         this.wire = null;
-        
+
     }
 
     public void startDrawingWire(WireComponent wire) {
         this.drawingWire = true;
         this.wire = wire;
+    }
+
+    public UiTextfield getHighlightedTextfield() {
+        return this.highlightedTextfield;
+    }
+
+    public void setHighlightedTextfield(UiTextfield textfield) {
+        this.highlightedTextfield = textfield;
+    }
+
+    public void typeKey(int keycode) {
+        if (this.highlightedTextfield != null) {
+            this.highlightedTextfield.typeKey(keycode);
+        }
     }
 
 }

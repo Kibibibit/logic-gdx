@@ -64,6 +64,10 @@ public abstract class AbstractShape {
     public Color getFillColor() {
         return this.fillColor;
     }
+
+    public Color getStrokeColor() {
+        return this.strokeColor;
+    }
  
     public EShape geShape() {
         return this.shape;
