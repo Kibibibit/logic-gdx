@@ -105,7 +105,7 @@ public class ColorUtils {
      * @return
      */
     public static Color green(float shade) {
-        return red(shade, 1f);
+        return green(shade, 1f);
     }
 
 
