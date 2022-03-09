@@ -128,11 +128,18 @@ public class AppInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
+
+       
+
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
+        if (keycode == Input.Keys.BACKSPACE && data.getMouse() != null) {
+            data.getMouse().delete();
+        }
+
         return false;
     }
 

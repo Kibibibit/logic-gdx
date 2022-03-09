@@ -135,11 +135,6 @@ public abstract class AppEntity extends AppObject {
      */
     public final void onMousePressed(int button) {
 
-        if (button == Input.Buttons.RIGHT && canDelete) {
-            this.markForDisposal();
-            return;
-        }
-
         Vector2 mousePos = this.onStaticLayer ? this.getData().getMouse().getGlobalPos() : this.getData().getMouse().getCameraPos();
 
         this.mouseOffset.set(mousePos.cpy().sub(this.getPos()));
@@ -221,6 +216,10 @@ public abstract class AppEntity extends AppObject {
 
     public void setCanDelete(boolean v) {
         this.canDelete = v;
+    }
+
+    public boolean canDelete() {
+        return this.canDelete;
     }
 
 }

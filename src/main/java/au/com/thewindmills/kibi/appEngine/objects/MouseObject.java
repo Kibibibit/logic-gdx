@@ -187,6 +187,14 @@ public class MouseObject extends AppObject {
 
     }
 
+    public void delete() {
+        if (this.contextEntity != null) {
+            if (this.contextEntity.canDelete()) {
+                this.contextEntity.markForDisposal();
+            }
+        }
+    }
+
     public Vector2 getGlobalPos() {
         Vector2 globalPos = this.getPos().cpy();
         // We want origin to be bottom left, but input is weirdly calculated from top
@@ -230,11 +238,6 @@ public class MouseObject extends AppObject {
 
         this.getData().getCamera().position.x += this.getDeltaPos().x;
         this.getData().getCamera().position.y -= this.getDeltaPos().y;
-
-        System.out.println(
-            "Camera X: " + this.getData().getCamera().position.x + " | " +
-            "Camera Y: " + this.getData().getCamera().position.y
-        );
     }
 
     public void mouseDragged(int screenX, int screenY) {
