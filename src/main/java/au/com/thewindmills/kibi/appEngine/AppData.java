@@ -168,8 +168,8 @@ public class AppData {
                     }
                 }
             }).withFillColor(ColorUtils.grey(0.35f)).withStrokeColor(ColorUtils.grey(0.4f));
-        AppEntity testDrag = new ComponentBody(this, Layers.MAIN, 0, new Vector2(50,50), new RectShape(50 ,50, 100, 100), "AND.json");
-        AppEntity testDrag2 = new ComponentBody(this, Layers.MAIN, 0, new Vector2(70,50), new RectShape(50 ,50, 100, 100), "NOT.json");
+        AppEntity testDrag = new ComponentBody(this, Layers.MAIN, 0, new Vector2(50,50), "AND.json");
+        AppEntity testDrag2 = new ComponentBody(this, Layers.MAIN, 0, new Vector2(70,50), "NOT.json");
 
 
     }
