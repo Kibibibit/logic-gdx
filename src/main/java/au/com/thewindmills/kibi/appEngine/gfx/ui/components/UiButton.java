@@ -1,7 +1,6 @@
 package au.com.thewindmills.kibi.appEngine.gfx.ui.components;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 
@@ -19,14 +18,13 @@ public class UiButton extends UiEntity {
 
     private String label;
 
-    private final BitmapFont font;
 
     public UiButton(AppData data, String layer, int depth, Vector2 pos, AbstractShape shape, String label) {
         super(data, layer, depth, pos, shape);
         this.color = shape.getFillColor();
         this.label = label;
-        this.font = new BitmapFont();
-        font.setColor(Colors.WHITE);
+        
+        this.setTextColor(Colors.WHITE);
 
     }
 
@@ -34,17 +32,17 @@ public class UiButton extends UiEntity {
         super(relativePos, shape, parent);
         this.color = shape.getFillColor();
         this.label = label;
-        this.font = new BitmapFont();
-        font.setColor(Colors.WHITE);
+
+        this.setTextColor(Colors.WHITE);
     }
 
 
     @Override
-    public void renderText(Batches batches) {
-        this.font.draw(
+    public void onRenderText(Batches batches) {
+        batches.font.draw(
             batches.spriteBatch, label, 
             this.getPos().x,
-            this.getPos().y + this.getShape().getHeight()/2 + (this.font.getCapHeight()/2), 
+            this.getPos().y + this.getShape().getHeight()/2 + (batches.font.getCapHeight()/2), 
             this.getShape().getWidth(), 
             Align.center, 
             false);
@@ -66,9 +64,7 @@ public class UiButton extends UiEntity {
     }
 
     @Override
-    public void dispose() {
-        font.dispose();
-    }
+    public void dispose() {}
 
     @Override
     public void onMouseEnter() {

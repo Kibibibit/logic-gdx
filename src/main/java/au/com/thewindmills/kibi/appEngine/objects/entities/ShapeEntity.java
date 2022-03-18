@@ -57,6 +57,10 @@ public abstract class ShapeEntity extends AppEntity {
         shape.draw(batches);
     }
 
+    public final Vector2 getSize() {
+        return new Vector2(shape.getWidth(),shape.getHeight());
+    }
+
     
 
 }

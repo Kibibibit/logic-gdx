@@ -134,9 +134,8 @@ public class AppInputProcessor implements InputProcessor {
             keycode == Input.Keys.SPACE ||
             keycode == Input.Keys.BACKSPACE
         ) {
-           if (data.getMouse() != null) {
-               // Mouse?
-               data.getMouse().typeKey(keycode);
+           if (data.getPopUp() != null) {
+               data.getPopUp().typeKey(keycode);
            }
        }
 

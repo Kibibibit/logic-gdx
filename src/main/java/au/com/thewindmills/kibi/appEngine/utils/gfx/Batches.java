@@ -1,5 +1,6 @@
 package au.com.thewindmills.kibi.appEngine.utils.gfx;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
@@ -25,6 +26,8 @@ public class Batches {
      */
     public final SpriteBatch spriteBatch;
 
+    public final BitmapFont font;
+
     /**
      * Default (and only!) constructor
      */
@@ -32,6 +35,7 @@ public class Batches {
         this.shapeRenderer = new ShapeRenderer();
         this.shapeRenderer.setAutoShapeType(true);
         this.spriteBatch = new SpriteBatch();
+        this.font = new BitmapFont();
     }
 
     /**

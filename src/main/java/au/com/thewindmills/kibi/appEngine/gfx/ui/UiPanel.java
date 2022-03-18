@@ -23,6 +23,9 @@ public class UiPanel extends UiEntity {
     public void step(float delta) {}
 
     @Override
-    public void dispose() {}
+    public void dispose() {
+    }
+
+    
     
 }

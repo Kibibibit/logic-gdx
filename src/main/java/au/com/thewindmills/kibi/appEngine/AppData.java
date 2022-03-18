@@ -12,10 +12,11 @@ import com.badlogic.gdx.math.Vector2;
 
 import org.json.simple.JSONObject;
 
+import au.com.thewindmills.kibi.appEngine.gfx.ui.PopUpListener;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.UiEntity;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiAppBar;
 import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiListView;
-import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiTextfield;
+import au.com.thewindmills.kibi.appEngine.gfx.ui.components.UiTextPopUp;
 import au.com.thewindmills.kibi.appEngine.objects.AppObject;
 import au.com.thewindmills.kibi.appEngine.objects.MouseObject;
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
@@ -115,6 +116,12 @@ public class AppData {
     private ConnectionMap connectionMap;
 
     /**
+     * The text popup currently being displayed
+     */
+    private UiTextPopUp popUp = null;
+    private PopUpListener popUpListener = null;
+
+    /**
      * Primary constructor, use this one!
      * 
      * @param application - The application to link to this data object
@@ -159,8 +166,6 @@ public class AppData {
         UiEntity appBar = new UiAppBar(this, Layers.UI, 4, 25)
                 .withFillColor(ColorUtils.grey(0.3f))
                 .withStrokeColor(ColorUtils.grey(0.3f));
-
-        UiEntity textField = new UiTextfield(new Vector2(100f,2.5f), 200, 20, appBar);
 
         UiEntity listView = new UiListView(this, Layers.BELOW_UI, 0, 0, 0, 100, Gdx.graphics.getHeight() - 25)
                 .withFillColor(ColorUtils.grey(0.45f))
@@ -207,6 +212,7 @@ public class AppData {
     private void cleanupCore() {
 
         // First remove all objects
+
 
         objects.removeIf((AppObject obj) -> {
             if (obj.willDispose()) {
@@ -346,6 +352,35 @@ public class AppData {
         this.objectBuffer.add(object);
 
         return true;
+    }
+
+    public void displayPopUp(PopUpListener listener, UiTextPopUp popUp) {
+        if (this.popUp == null && this.popUpListener == null) {
+            this.popUpListener = listener;
+            this.popUp = popUp;
+
+        } else {
+            System.err.println("Already an open popUp!");
+            popUp.markForDisposal();
+        }
+    }
+
+    public void closePopUp(String result) {
+        if (this.popUp != null) {
+            if (this.popUpListener != null) {
+                this.popUpListener.onPopUpResult(result);
+                this.popUpListener = null;
+            }
+
+            this.popUp.markForDisposal();
+            this.popUp = null;
+            
+            
+        }
+    }
+
+    public UiTextPopUp getPopUp() {
+        return this.popUp;
     }
 
     public void setCamera(Camera camera) {

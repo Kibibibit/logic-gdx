@@ -1,5 +1,6 @@
 package au.com.thewindmills.kibi.appEngine.objects.entities;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 import au.com.thewindmills.kibi.appEngine.AppData;
@@ -47,6 +48,7 @@ public abstract class AppEntity extends AppObject {
 
     private boolean isScrollable = false;
 
+    private Color textColor = null;
 
     protected Vector2 mouseOffset;
 
@@ -97,8 +99,14 @@ public abstract class AppEntity extends AppObject {
     protected void postDraw(Batches batches) {}
 
 
-    public void renderText(Batches batches) {}
+    public void onRenderText(Batches batches) {}
 
+    public final void renderText(Batches batches) {
+        if (this.textColor != null) {
+            batches.font.setColor(this.textColor);
+            onRenderText(batches);
+        }
+    }
 
     /**
      * Called every {@link AppData#render(Batches)}
@@ -126,6 +134,14 @@ public abstract class AppEntity extends AppObject {
 
     public boolean onStaticLayer() {
         return this.onStaticLayer;
+    }
+    
+    public final void setTextColor(Color color) {
+        this.textColor = color;
+    }
+
+    public final Color getTextColor() {
+        return this.textColor;
     }
 
     /**
