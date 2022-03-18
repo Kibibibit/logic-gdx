@@ -61,7 +61,7 @@ public abstract class LogicModel extends AbstractModel {
      * <br><br>
      * This helps with metastable circuits like latches
      */
-    protected final int propagationDelay;
+    protected int propagationDelay;
 
     /**
      * The previous output of the circuit. Used to determine if the model needs to update its connected models
@@ -96,7 +96,7 @@ public abstract class LogicModel extends AbstractModel {
     /**
      * The name of this model
      */
-    protected final String name;
+    protected String name;
 
     protected String[] inputNames;
 
@@ -109,6 +109,15 @@ public abstract class LogicModel extends AbstractModel {
 
 
     public LogicModel(String name, int inputCount, int outputCount, ConnectionMap connectionMap) {
+        doConstruct(name, inputCount, outputCount, connectionMap);
+    }
+
+    public LogicModel(long id, String name, int inputCount, int outputCount, ConnectionMap connectionMap) {
+        super(id);
+        doConstruct(name, inputCount, outputCount, connectionMap);
+    }
+
+    private void doConstruct(String name, int inputCount, int outputCount, ConnectionMap connectionMap) {
         // Propagation delay needs to be random
         this.propagationDelay = RandomUtils.randomIntInRange(MIN_DELAY, MAX_DELAY);
 
@@ -125,7 +134,6 @@ public abstract class LogicModel extends AbstractModel {
 
         this.init();
         this.doUpdate();
-
     }
 
     /**
@@ -343,8 +351,16 @@ public abstract class LogicModel extends AbstractModel {
 
     }
 
+    public void setConnectionMap(ConnectionMap connectionMap) {
+        this.connectionMap = connectionMap;
+    }
+
     public void setEntity(ComponentBody body) {
         this.entity = body;
+    }
+
+    public ComponentBody getEntity() {
+        return this.entity;
     }
 
     public String getName() {
@@ -373,6 +389,18 @@ public abstract class LogicModel extends AbstractModel {
 
     public String[] getOutputNames() {
         return this.outputNames;
+    }
+
+    public abstract LogicModel makeInternalClone(ConnectionMap connectionMap, long id);
+
+    public LogicModel internalClone(ConnectionMap connectionMap, long id) {
+        LogicModel clone = makeInternalClone(connectionMap, id);
+        clone.propagationDelay = this.propagationDelay;
+        clone.inputNames = this.inputNames;
+        clone.outputNames = this.outputNames;
+        clone.entity = this.entity;
+
+        return clone;
     }
 
 

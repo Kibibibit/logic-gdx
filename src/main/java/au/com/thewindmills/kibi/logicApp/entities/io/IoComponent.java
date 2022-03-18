@@ -21,6 +21,10 @@ public class IoComponent extends ComponentBody {
         fillColor = this.getShape().getFillColor();
     }
 
+    public String getNodeName() {
+        return this.children.get(0).getLabel();
+    }
+
     @Override
     public void onModelUpdate() {
 

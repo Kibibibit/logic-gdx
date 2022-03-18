@@ -29,6 +29,7 @@ import au.com.thewindmills.kibi.appEngine.utils.io.json.JSONUtils;
 import au.com.thewindmills.kibi.logicApp.entities.io.IoComponent;
 import au.com.thewindmills.kibi.logicApp.entities.io.LightComponent;
 import au.com.thewindmills.kibi.logicApp.entities.io.SwitchComponent;
+import au.com.thewindmills.kibi.logicApp.entities.ui.CreateIcModelButton;
 import au.com.thewindmills.kibi.logicApp.entities.ui.CreateLogicModelButton;
 import au.com.thewindmills.kibi.logicApp.models.ConnectionMap;
 import au.com.thewindmills.kibi.logicApp.models.LogicModel;
@@ -166,6 +167,8 @@ public class AppData {
         UiEntity appBar = new UiAppBar(this, Layers.UI, 4, 25)
                 .withFillColor(ColorUtils.grey(0.3f))
                 .withStrokeColor(ColorUtils.grey(0.3f));
+
+        new CreateIcModelButton(appBar).withFillColor(ColorUtils.grey(0.45f)).withStrokeColor(ColorUtils.grey(0.3f));
 
         UiEntity listView = new UiListView(this, Layers.BELOW_UI, 0, 0, 0, 100, Gdx.graphics.getHeight() - 25)
                 .withFillColor(ColorUtils.grey(0.45f))

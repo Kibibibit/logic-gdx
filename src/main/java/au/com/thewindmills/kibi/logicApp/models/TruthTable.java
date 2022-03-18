@@ -29,6 +29,9 @@ public class TruthTable extends LogicModel {
         super(name, inputCount, outputCount, connectionMap);
     }
 
+    public TruthTable(long id, String name, int inputCount, int outputCount, ConnectionMap connectionMap) {
+        super(id, name, inputCount, outputCount, connectionMap);
+    }
 
     @Override
     protected void init() {
@@ -141,6 +144,22 @@ public class TruthTable extends LogicModel {
         setRow(index, BinaryUtils.getBitsFromString((String) object.get(String.valueOf(index))));
         
 
+    }
+
+
+    @Override
+    public LogicModel makeInternalClone(ConnectionMap connectionMap, long id) {
+        TruthTable clone = new TruthTable(id, this.name, this.inputCount, this.outputCount, connectionMap);
+        clone.table = this.table;
+        return clone;
+
+    }
+
+    public Map<Integer, boolean[]> getTable() {
+        return this.table;
+    }
+    public void setTable(Map<Integer, boolean[]> table) {
+        this.table = table;
     }
 
 

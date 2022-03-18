@@ -143,4 +143,8 @@ public class ComponentInOut extends DraggableShapeEntity implements PopUpListene
 
     }
 
+    public String getLabel() {
+        return this.label;
+    }
+
 }

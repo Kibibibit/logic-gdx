@@ -23,5 +23,10 @@ public abstract class AbstractModel {
         nextId++;
     }
 
+    public AbstractModel(long id) {
+        this.id = id;
+        nextId = id++;
+    }
+
 
 }

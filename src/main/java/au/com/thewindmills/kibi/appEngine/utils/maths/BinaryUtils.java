@@ -112,7 +112,7 @@ public class BinaryUtils {
 
         for (int i = bits-1; i >= 0; i--) {
             int pow = (int) Math.pow(2,i);
-            if (x > pow) {
+            if (x >= pow) {
                 x -= pow;
                 out[i] = true;
             } else {
@@ -121,6 +121,7 @@ public class BinaryUtils {
 
         }
 
+        
         return out;
 
     }
