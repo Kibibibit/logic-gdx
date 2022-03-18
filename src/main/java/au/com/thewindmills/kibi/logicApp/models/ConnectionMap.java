@@ -12,6 +12,9 @@ import java.util.Map.Entry;
  */
 public class ConnectionMap {
 
+    public static long nextId = 0;
+    public final long id = nextId;
+
     /**
      * A map linking the id of each model to the model itself
      */
@@ -25,6 +28,7 @@ public class ConnectionMap {
     private Map<Connection, Connection> connections;
 
     public ConnectionMap() {
+        nextId++;
         models = new HashMap<Long, LogicModel>();
         connections = new HashMap<Connection, Connection>();
     }

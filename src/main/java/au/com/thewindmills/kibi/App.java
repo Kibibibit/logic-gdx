@@ -48,15 +48,23 @@ public class App
         not.setRow("0", "1");
         not.setRow("1", "0");
 
+        not.setInputNames(new String[]{"A"});
+        not.setOutputNames(new String[]{"A'"});
+
         TruthTable and = new TruthTable("AND", 2, 1, dummy);
         and.setRow("00", "0");
         and.setRow("01", "0");
         and.setRow("10", "0");
         and.setRow("11", "1");
 
+        and.setInputNames(new String[]{"A","B"});
+        and.setOutputNames(new String[]{"C"});
+
         TruthTable ioTable = new TruthTable(IoComponent.IO_NAME, 1, 1, dummy);
         ioTable.setRow("0","0");
         ioTable.setRow("1", "1");
+        ioTable.setInputNames(new String[]{""});
+        ioTable.setOutputNames(new String[]{""});
         
         
         JSONUtils.writeToFile(not.toJson());

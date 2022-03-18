@@ -9,6 +9,7 @@ import au.com.thewindmills.kibi.appEngine.AppData;
 import au.com.thewindmills.kibi.appEngine.gfx.shapes.AbstractShape;
 import au.com.thewindmills.kibi.appEngine.gfx.shapes.RectShape;
 import au.com.thewindmills.kibi.appEngine.objects.entities.DraggableShapeEntity;
+import au.com.thewindmills.kibi.appEngine.utils.constants.Colors;
 import au.com.thewindmills.kibi.appEngine.utils.gfx.Batches;
 import au.com.thewindmills.kibi.appEngine.utils.io.json.JSONUtils;
 import au.com.thewindmills.kibi.logicApp.models.LogicModel;
@@ -17,6 +18,7 @@ public class ComponentBody extends DraggableShapeEntity {
 
     private static final float PER_INPUT = 27.5f;
     private static final float WIDTH = 60;
+    private boolean mouseIn = false;
 
     protected LogicModel model;
 
@@ -39,6 +41,7 @@ public class ComponentBody extends DraggableShapeEntity {
     }
 
     protected void init(Vector2 pos) {
+        this.setTextColor(Colors.BLACK);
         int highCount = Math.max(this.model.getInputCount(), this.model.getOutputCount());
         this.getShape().setSize(WIDTH, highCount*PER_INPUT);
         this.setPos(pos);
@@ -55,6 +58,26 @@ public class ComponentBody extends DraggableShapeEntity {
             if (out > highCount) {
                 highCount = out;
             }
+        }
+    }
+
+    @Override
+    public void onMouseEnter() {
+        this.mouseIn = true;
+    }
+
+    @Override
+    public void onMouseLeave() {
+        this.mouseIn = false;
+    }
+
+    @Override
+    public void onRenderText(Batches batches) {
+        if (mouseIn) {
+            batches.font.draw(
+                    batches.spriteBatch, this.model.getName(),
+                    this.getPos().x,
+                    this.getPos().y);
         }
     }
 

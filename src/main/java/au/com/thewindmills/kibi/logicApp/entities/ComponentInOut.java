@@ -32,7 +32,10 @@ public class ComponentInOut extends DraggableShapeEntity implements PopUpListene
     public ComponentInOut(ComponentBody parent, int node, boolean input) {
         super(parent.getData(), parent.getLayer(), parent.getDepth() + 1, parent.getPos().cpy(),
                 new CircleShape(0, 0, NODE_RADIUS));
-        this.label = (input ? "IN " : "OUT ") + node;
+        this.label = (input ? parent.getModel().getInputNames() : parent.getModel().getOutputNames())[node];
+        if (this.label.isBlank()) {
+            this.label = (input ? "IN " : "OUT ") + node;
+        }
         this.parent = parent;
         this.node = node;
         this.input = input;
@@ -134,6 +137,7 @@ public class ComponentInOut extends DraggableShapeEntity implements PopUpListene
         if (result != null) {
             if (!result.strip().isEmpty()) {
                 this.label = result;
+                (this.input ? this.parent.getModel().getInputNames() : this.parent.getModel().getOutputNames())[this.node] = result;
             }
         }
 

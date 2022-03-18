@@ -49,6 +49,19 @@ public class IntergratedComponent extends LogicModel {
         
     }
 
+
+    public void createFromConnectionMap(ConnectionMap connectionMap) {
+        if (this.connectionMap.id == connectionMap.id) {
+            System.err.println("Don't recursively add connection maps!");
+            return;
+        }
+
+        //Do some stuff here
+
+    }
+
+
+
     protected void doPostUpdate() {
         this.result();
         this.postUpdate();

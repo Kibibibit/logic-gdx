@@ -1,10 +1,12 @@
 package au.com.thewindmills.kibi.logicApp.models;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import au.com.thewindmills.kibi.appEngine.objects.entities.AppEntity;
@@ -31,11 +33,14 @@ public abstract class LogicModel extends AbstractModel {
     public static final String FIELD_TYPE = "type";
     public static final String FIELD_INPUT_COUNT = "inputcount";
     public static final String FIELD_OUTPUT_COUNT = "outputcount";
+    public static final String FIELD_INPUT_NAMES = "inputnames";
+    public static final String FIELD_OUTPUT_NAMES = "outputnames";
     public static final String TYPE_TABLE = "table";
     public static final String TYPE_IC = "ic";
 
     public static final String CLASS_STRING = "STRING";
     public static final String CLASS_INTEGER = "INTEGER";
+    public static final String CLASS_STRING_ARRAY = "STRING_ARRAY";
 
 
     /**
@@ -93,6 +98,10 @@ public abstract class LogicModel extends AbstractModel {
      */
     protected final String name;
 
+    protected String[] inputNames;
+
+    protected String[] outputNames;
+
     /**
      * If this model is connected to a {@link AppEntity}, it uses this to update them
      */
@@ -111,6 +120,8 @@ public abstract class LogicModel extends AbstractModel {
 
         inputBits = new boolean[inputCount];
         outputBits = new boolean[outputCount];
+        inputNames = new String[inputCount];
+        outputNames = new String[outputCount];
 
         this.init();
         this.doUpdate();
@@ -233,6 +244,14 @@ public abstract class LogicModel extends AbstractModel {
         jsonMap.put(FIELD_INPUT_COUNT, this.inputCount);
         jsonMap.put(FIELD_OUTPUT_COUNT, this.outputCount);
 
+        JSONArray inputNameArray = new JSONArray();
+        inputNameArray.addAll(Arrays.asList(inputNames));
+        jsonMap.put(FIELD_INPUT_NAMES, inputNameArray);
+        
+        JSONArray outputNameArray = new JSONArray();
+        outputNameArray.addAll(Arrays.asList(outputNames));
+        jsonMap.put(FIELD_OUTPUT_NAMES, outputNameArray);
+
         jsonMap = this.addToJsonMap(jsonMap);
 
 
@@ -257,6 +276,11 @@ public abstract class LogicModel extends AbstractModel {
                        return true;
                     }
                     break;
+                
+                case CLASS_STRING_ARRAY:
+                    if (object.get(fieldname) instanceof JSONArray) {
+                        return true;
+                    }
 
                 default:
                     LOGGER.severe("Unrecognised type " + type);
@@ -280,6 +304,8 @@ public abstract class LogicModel extends AbstractModel {
         fields.put(FIELD_INPUT_COUNT, CLASS_INTEGER);
         fields.put(FIELD_OUTPUT_COUNT, CLASS_INTEGER);
         fields.put(FIELD_TYPE, CLASS_STRING);
+        fields.put(FIELD_INPUT_NAMES, CLASS_STRING_ARRAY);
+        fields.put(FIELD_OUTPUT_NAMES, CLASS_STRING_ARRAY);
         for (Entry<String, String> field : fields.entrySet()) {
             if (!checkField(object, field.getKey(), field.getValue())) {
                 return null;
@@ -294,6 +320,8 @@ public abstract class LogicModel extends AbstractModel {
 
         LogicModel out;
 
+        
+
         if (type.equals(TYPE_IC)) {
             out = new IntergratedComponent(name, inputCount, outputCount, connectionMap);
         } else if (type.equals(TYPE_TABLE)) {
@@ -302,6 +330,11 @@ public abstract class LogicModel extends AbstractModel {
             LOGGER.severe("Unrecognised type " + type);
             return null;
         }
+
+        String[] inputNames = (String[]) ((JSONArray) object.get(FIELD_INPUT_NAMES)).toArray(new String[0]);
+        String[] outputNames = (String[]) ((JSONArray) object.get(FIELD_OUTPUT_NAMES)).toArray(new String[0]);
+        out.setInputNames(inputNames);
+        out.setOutputNames(outputNames);
 
         out.getFromJson(object);
 
@@ -312,6 +345,34 @@ public abstract class LogicModel extends AbstractModel {
 
     public void setEntity(ComponentBody body) {
         this.entity = body;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public boolean setInputNames(String[] inputNames) {
+        if (inputNames.length == this.inputNames.length) {
+            this.inputNames = inputNames;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean setOutputNames(String[] outputNames) {
+        if (outputNames.length == this.outputNames.length) {
+            this.outputNames = outputNames;
+            return true;
+        }
+        return false;
+    }
+
+    public String[] getInputNames() {
+        return this.inputNames;
+    }
+
+    public String[] getOutputNames() {
+        return this.outputNames;
     }
 
 
