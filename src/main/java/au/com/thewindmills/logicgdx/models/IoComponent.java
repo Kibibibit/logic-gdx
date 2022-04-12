@@ -1,5 +1,7 @@
 package au.com.thewindmills.logicgdx.models;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -55,6 +57,20 @@ public abstract class IoComponent {
         node = toJsonObjectImpl(mapper, node);
 
         return node;
+    }
+
+    public static void saveJsonObject(IoComponent object) {
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writeValue(Paths.get(object.getName()+".json").toFile(), object.toJsonObject());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
     }
 
     public UpdateResponse update(long id, boolean state) {

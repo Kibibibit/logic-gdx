@@ -5,10 +5,9 @@ import java.util.HashSet;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import au.com.thewindmills.logicgdx.models.ChipComponent;
+import au.com.thewindmills.logicgdx.models.IoComponent;
 import au.com.thewindmills.logicgdx.models.TruthTable;
 import au.com.thewindmills.logicgdx.utils.AppConstants;
 
@@ -85,14 +84,8 @@ public class App
 
         chip.setExternalMappingOut(table2.getIoId("!A"),chip.getIoId("O'"), true);
 
-        ObjectMapper mapper = new ObjectMapper();
-        String json;
-        try {
-            json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(chip.toJsonObject());
-            System.out.println(json);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        IoComponent.saveJsonObject(table);
+        IoComponent.saveJsonObject(table2);
 
         new Lwjgl3Application(new LogicGDX(), config);
     }
