@@ -3,16 +3,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>au.com.thewindmills.kibi</groupId>
+  <groupId>au.com.thewindmills</groupId>
   <artifactId>logic-gdx</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>2.0</version>
 
   <name>logic-gdx</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
     <gdx.version>1.10.0</gdx.version>
   </properties>
 
@@ -34,12 +34,6 @@
       <artifactId>gdx-backend-lwjgl3</artifactId>
       <version>${gdx.version}</version>
     </dependency>
-
-    <dependency>
-      <groupId>com.googlecode.json-simple</groupId>
-      <artifactId>json-simple</artifactId>
-      <version>1.1.1</version>
-    </dependency>
   </dependencies>
 
   <build>
@@ -58,7 +52,7 @@
             <manifest>
               <addClasspath>true</addClasspath>
               <classpathPrefix>lib/</classpathPrefix>
-              <mainClass>au.com.thewindmills.kibi.App</mainClass>
+              <mainClass>au.com.thewindmills.App</mainClass>
             </manifest>
           </archive>
         </configuration>
