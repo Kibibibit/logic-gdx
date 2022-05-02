@@ -11,10 +11,24 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
     <gdx.version>1.10.0</gdx.version>
+    <lwjgl.version>3.3.1</lwjgl.version>
+    <imgui.java.version>1.86.4</imgui.java.version>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.lwjgl</groupId>
+        <artifactId>lwjgl-bom</artifactId>
+        <version>${lwjgl.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -36,9 +50,47 @@
     </dependency>
 
     <dependency>
-      <groupId>com.googlecode.json-simple</groupId>
-      <artifactId>json-simple</artifactId>
-      <version>1.1.1</version>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-glfw</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-opengl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl</artifactId>
+      <classifier>natives-linux</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-glfw</artifactId>
+      <classifier>natives-linux</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-opengl</artifactId>
+      <classifier>natives-linux</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>io.github.spair</groupId>
+      <artifactId>imgui-java-binding</artifactId>
+      <version>${imgui.java.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.github.spair</groupId>
+      <artifactId>imgui-java-lwjgl3</artifactId>
+      <version>${imgui.java.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.github.spair</groupId>
+      <artifactId>imgui-java-natives-linux</artifactId>
+      <version>${imgui.java.version}</version>
     </dependency>
   </dependencies>
 
@@ -58,7 +110,7 @@
             <manifest>
               <addClasspath>true</addClasspath>
               <classpathPrefix>lib/</classpathPrefix>
-              <mainClass>au.com.thewindmills.kibi.App</mainClass>
+              <mainClass>au.com.thewindmills.logicgdx.App</mainClass>
             </manifest>
           </archive>
         </configuration>
