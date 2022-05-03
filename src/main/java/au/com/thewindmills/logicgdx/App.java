@@ -1,8 +1,13 @@
 package au.com.thewindmills.logicgdx;
 
+import java.util.HashMap;
+import java.util.HashSet;
+
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
+import au.com.thewindmills.logicgdx.models.ChipComponent;
+import au.com.thewindmills.logicgdx.models.TruthTable;
 import au.com.thewindmills.logicgdx.utils.AppConstants;
 
 /**
@@ -18,6 +23,68 @@ public class App
         config.setWindowedMode(AppConstants.APP_WIDTH, AppConstants.APP_HEIGHT);
         config.setTitle(AppConstants.APP_TITLE);
 
+        TruthTable table = new TruthTable();
+
+        table.addInput("A");
+        table.addInput("B");
+        table.addOutput("O");
+
+        table.setRow(new HashSet<String>(), new HashMap<String, Boolean>(){{
+            put("O", false);
+        }});
+
+        table.setRow(new HashSet<String>(){{
+            add("A");
+        }}, new HashMap<String, Boolean>(){{
+            put("O", false);
+        }});
+
+        table.setRow(new HashSet<String>(){{
+            add("B");
+        }}, new HashMap<String, Boolean>(){{
+            put("O", false);
+        }});
+
+        table.setRow(new HashSet<String>(){{
+            add("A");
+            add("B");
+        }}, new HashMap<String, Boolean>(){{
+            put("O", true);
+        }});
+
+        TruthTable table2 = new TruthTable();
+
+        table2.addInput("A");
+        table2.addOutput("!A");
+
+        table2.setRow(new HashSet<String>(), new HashMap<String, Boolean>(){{
+            put("!A", true);
+        }});
+        table2.setRow(new HashSet<String>(){{add("A");}}, new HashMap<String, Boolean>(){{
+            put("!A", false);
+        }});
+
+
+        ChipComponent chip = new ChipComponent();
+
+        chip.addInput("A'");
+        chip.addInput("B'");
+        chip.addOutput("O'");
+
+        chip.addChild(table);
+
+        chip.setExternalMappingIn(table.getIoId("A"), chip.getIoId("A'"), true);
+        chip.setExternalMappingIn(table.getIoId("B"), chip.getIoId("B'"), true);
+
+        chip.addChild(table2);
+
+        chip.setInternalMapping(table2.getIoId("A"), table.getIoId("O"), true);
+
+
+        chip.setExternalMappingOut(table2.getIoId("!A"),chip.getIoId("O'"), true);
+
+        chip.update(chip.getIoId("A'"), true);
+        chip.update(chip.getIoId("B'"), true);
 
         new Lwjgl3Application(new LogicGDX(), config);
     }
