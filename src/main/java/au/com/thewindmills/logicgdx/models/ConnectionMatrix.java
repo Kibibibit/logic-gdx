@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 public class ConnectionMatrix {
 
     private Map<Long, IoComponent> children;
@@ -78,6 +81,21 @@ public class ConnectionMatrix {
             }
         }
 
+
+        return out;
+    }
+
+    public ObjectNode toJsonObject(ObjectMapper mapper) {
+        ObjectNode out = mapper.createObjectNode();
+
+        ObjectNode childrenNode = mapper.createObjectNode();
+
+        for (IoComponent child : children.values()) {
+            childrenNode.set(String.valueOf(child.id), child.toJsonObject());
+        }
+
+        out.set("children",  childrenNode);
+        out.set("matrix", mapper.valueToTree(matrix));
 
         return out;
     }

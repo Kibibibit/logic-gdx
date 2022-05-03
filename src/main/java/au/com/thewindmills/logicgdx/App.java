@@ -5,6 +5,8 @@ import java.util.HashSet;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import au.com.thewindmills.logicgdx.models.ChipComponent;
 import au.com.thewindmills.logicgdx.models.TruthTable;
@@ -23,7 +25,7 @@ public class App
         config.setWindowedMode(AppConstants.APP_WIDTH, AppConstants.APP_HEIGHT);
         config.setTitle(AppConstants.APP_TITLE);
 
-        TruthTable table = new TruthTable();
+        TruthTable table = new TruthTable("AND");
 
         table.addInput("A");
         table.addInput("B");
@@ -52,7 +54,7 @@ public class App
             put("O", true);
         }});
 
-        TruthTable table2 = new TruthTable();
+        TruthTable table2 = new TruthTable("NOT");
 
         table2.addInput("A");
         table2.addOutput("!A");
@@ -65,7 +67,7 @@ public class App
         }});
 
 
-        ChipComponent chip = new ChipComponent();
+        ChipComponent chip = new ChipComponent("NAND");
 
         chip.addInput("A'");
         chip.addInput("B'");
@@ -83,8 +85,14 @@ public class App
 
         chip.setExternalMappingOut(table2.getIoId("!A"),chip.getIoId("O'"), true);
 
-        chip.update(chip.getIoId("A'"), true);
-        chip.update(chip.getIoId("B'"), true);
+        ObjectMapper mapper = new ObjectMapper();
+        String json;
+        try {
+            json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(chip.toJsonObject());
+            System.out.println(json);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
         new Lwjgl3Application(new LogicGDX(), config);
     }

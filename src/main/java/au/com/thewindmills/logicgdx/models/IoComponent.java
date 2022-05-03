@@ -3,12 +3,17 @@ package au.com.thewindmills.logicgdx.models;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public abstract class IoComponent {
 
     protected final long id;
+    protected String name;
     private static long componentIdNext = 0;
     private static long componentIoIdNext = 0;
 
@@ -20,7 +25,8 @@ public abstract class IoComponent {
     protected Map<Long, Boolean> inputStates;
     protected Map<Long, Boolean> outputStates;
 
-    public IoComponent() {
+    public IoComponent(String name) {
+        this.name = name;
         id = newComponentId();
         inputs = new HashSet<>();
         outputs = new HashSet<>();
@@ -30,6 +36,26 @@ public abstract class IoComponent {
     }
 
     protected abstract void doUpdate(long id, boolean state);
+
+    protected abstract ObjectNode toJsonObjectImpl(ObjectMapper mapper, ObjectNode node);
+
+    public ObjectNode toJsonObject() {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode node = mapper.createObjectNode();
+
+        node.put("id", id);
+        node.put("type", this.getClass().getSimpleName());
+        node.put("name", name);
+
+        ObjectNode ioLabelNode = mapper.valueToTree(ioLabels);
+        node.set("io_labels", ioLabelNode);
+        node.set("inputs", mapper.convertValue(inputs, ArrayNode.class));
+        node.set("outputs", mapper.convertValue(outputs, ArrayNode.class));
+
+        node = toJsonObjectImpl(mapper, node);
+
+        return node;
+    }
 
     public UpdateResponse update(long id, boolean state) {
 
@@ -43,34 +69,32 @@ public abstract class IoComponent {
         } else {
             throw new IllegalArgumentException();
         }
-        
+
         doUpdate(id, state);
 
         for (Entry<Long, Boolean> entry : outputStates.entrySet()) {
-            System.out.println("("+
-                String.valueOf(entry.getKey()+
-                ") "+
-                ioLabels.get(entry.getKey()) +
-                " is " +
-                String.valueOf(entry.getValue())
-                ));
+            System.out.println("(" +
+                    String.valueOf(entry.getKey() +
+                            ") " +
+                            ioLabels.get(entry.getKey()) +
+                            " is " +
+                            String.valueOf(entry.getValue())));
         }
 
         return new UpdateResponse(new HashMap<>(outputStates), true);
-
 
     }
 
     private long newIo(String label) {
         long ioId = newComponentIoId();
-       
+
         ioLabels.put(ioId, label);
         return ioId;
     }
 
     public long addInput(String label) {
         long ioId = newIo(label);
-        System.out.println("Adding input of id " + ioId + " ("+label+") to " + id);
+        System.out.println("Adding input of id " + ioId + " (" + label + ") to " + id);
         inputs.add(ioId);
         inputStates.put(ioId, false);
         return ioId;
@@ -78,13 +102,19 @@ public abstract class IoComponent {
 
     public long addOutput(String label) {
         long ioId = newIo(label);
-        System.out.println("Adding output of id " + ioId + " ("+label+") to " + id);
+        System.out.println("Adding output of id " + ioId + " (" + label + ") to " + id);
         outputs.add(ioId);
         outputStates.put(ioId, false);
         return ioId;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
+    public String getName() {
+        return name;
+    }
 
     protected static long newComponentId() {
         return componentIdNext++;
@@ -99,12 +129,12 @@ public abstract class IoComponent {
             return -1;
         }
 
-        for (Entry<Long, String> entry: ioLabels.entrySet()) {
+        for (Entry<Long, String> entry : ioLabels.entrySet()) {
             if (entry.getValue().equals(label)) {
                 return entry.getKey();
             }
         }
-        
+
         return -1;
     }
 
@@ -139,5 +169,5 @@ public abstract class IoComponent {
     public final int getOutputCount() {
         return outputs.size();
     }
-    
+
 }

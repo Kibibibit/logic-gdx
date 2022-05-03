@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 public class ChipComponent extends IoComponent {
 
     private ConnectionMatrix matrix;
@@ -13,11 +16,11 @@ public class ChipComponent extends IoComponent {
     private Map<Long, Long> inMap;
     private Map<Long, Long> outMap;
 
-    public ChipComponent() {
-        super();
+    public ChipComponent(String name) {
+        super(name);
         matrix = new ConnectionMatrix();
-        inChip = new ChipInOut();
-        outChip = new ChipInOut();
+        inChip = new ChipInOut(name + " in");
+        outChip = new ChipInOut(name + " out");
         inMap = new HashMap<>();
         outMap = new HashMap<>();
     }
@@ -84,6 +87,15 @@ public class ChipComponent extends IoComponent {
             long ioId = outMap.get(entry.getKey());
             outputStates.put(ioId, entry.getValue());
         }
+    }
+
+
+    @Override
+    protected ObjectNode toJsonObjectImpl(ObjectMapper mapper, ObjectNode node) {
+
+        node.set("matrix", matrix.toJsonObject(mapper));
+
+        return node;
     }
     
 }

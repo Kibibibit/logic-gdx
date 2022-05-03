@@ -16,6 +16,7 @@
     <gdx.version>1.10.0</gdx.version>
     <lwjgl.version>3.3.1</lwjgl.version>
     <imgui.java.version>1.86.4</imgui.java.version>
+    <jackson.version>2.13.2</jackson.version>
   </properties>
 
   <dependencyManagement>
@@ -91,6 +92,22 @@
       <groupId>io.github.spair</groupId>
       <artifactId>imgui-java-natives-linux</artifactId>
       <version>${imgui.java.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}.2</version>
     </dependency>
   </dependencies>
 

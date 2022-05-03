@@ -5,13 +5,16 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 public class TruthTable extends IoComponent {
 
 
     private Map<HashSet<Long>, HashMap<Long, Boolean>> table;
 
-    public TruthTable() {
-        super();
+    public TruthTable(String name) {
+        super(name);
         table = new HashMap<HashSet<Long>, HashMap<Long, Boolean>>();
     }
 
@@ -97,6 +100,33 @@ public class TruthTable extends IoComponent {
         if (outputStates == null) {
             throw new NullPointerException("Output states ended up null after update!");
         }
+    }
+
+    @Override
+    protected ObjectNode toJsonObjectImpl(ObjectMapper mapper, ObjectNode node) {
+
+        ObjectNode tableNode = mapper.createObjectNode();
+
+
+        for (Entry<HashSet<Long>, HashMap<Long, Boolean>> entry : table.entrySet()) {
+            
+            String hashString = "";
+
+            for (long id : entry.getKey()) {
+                if (hashString.trim().length() == 0) {
+                    hashString = String.valueOf(id);
+                } else {
+                    hashString = String.format("%s;%d",hashString, id);
+                }
+                
+            }
+
+            tableNode.set(hashString, mapper.valueToTree(entry.getValue()));
+
+        }
+
+
+        return node.set("table",tableNode);
     }
     
     
