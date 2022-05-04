@@ -63,7 +63,7 @@ public abstract class IoComponent {
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            mapper.writeValue(Paths.get(object.getName()+".json").toFile(), object.toJsonObject());
+            mapper.writeValue(Paths.get("data/"+object.getName()+".json").toFile(), object.toJsonObject());
         } catch (IOException e) {
             e.printStackTrace();
         }
