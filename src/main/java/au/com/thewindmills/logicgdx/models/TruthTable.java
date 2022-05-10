@@ -2,14 +2,17 @@ package au.com.thewindmills.logicgdx.models;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class TruthTable extends IoComponent {
 
+    public static final String FIELD_TABLE = "table";
 
     private Map<HashSet<Long>, HashMap<Long, Boolean>> table;
 
@@ -19,32 +22,32 @@ public class TruthTable extends IoComponent {
     }
 
     @Override
-    public long addInput(String label) {
-        long ioId = super.addInput(label);
-
+    protected long addInputImpl(String label, long ioId) {
+        super.addInputImpl(label, ioId);
         for (HashSet<Long> set : table.keySet()) {
             HashSet<Long> cloneSet = new HashSet<>(set);
             cloneSet.add(ioId);
             table.put(cloneSet, tableOutput());
         }
 
-        table.put(new HashSet<Long>(){{add(ioId);}}, tableOutput());
+        table.put(new HashSet<Long>() {
+            {
+                add(ioId);
+            }
+        }, tableOutput());
 
         return ioId;
     }
 
-    @Override 
-    public long addOutput(String label) {
-        long ioId = super.addOutput(label);
-
+    @Override
+    protected long addOutputImpl(String label, long ioId) {
+        super.addOutputImpl(label, ioId);
         for (HashSet<Long> set : table.keySet()) {
             table.put(set, tableOutput());
         }
 
         return ioId;
     }
-
-
 
     public void setRow(HashSet<String> inputs, HashMap<String, Boolean> outputs) {
         HashSet<Long> idSet = new HashSet<>();
@@ -66,14 +69,13 @@ public class TruthTable extends IoComponent {
             if (ioId != -1 && this.outputs.contains(ioId)) {
                 idMap.put(ioId, outputs.get(label));
             } else {
-                System.err.println("ioId does not exist or is an input not output!");
+                System.err.println("ioId "+ioId+" does not exist or is an input not output!");
                 throw new IllegalArgumentException();
             }
         }
 
         table.put(idSet, idMap);
     }
-
 
     private HashMap<Long, Boolean> tableOutput() {
         HashMap<Long, Boolean> out = new HashMap<>();
@@ -82,9 +84,6 @@ public class TruthTable extends IoComponent {
         }
         return out;
     }
-
-
-
 
     @Override
     protected void doUpdate(long id, boolean state) {
@@ -107,29 +106,74 @@ public class TruthTable extends IoComponent {
 
         ObjectNode tableNode = mapper.createObjectNode();
 
-
         for (Entry<HashSet<Long>, HashMap<Long, Boolean>> entry : table.entrySet()) {
-            
+
             String hashString = "";
 
             for (long id : entry.getKey()) {
                 if (hashString.trim().length() == 0) {
                     hashString = String.valueOf(id);
                 } else {
-                    hashString = String.format("%s;%d",hashString, id);
+                    hashString = String.format("%s;%d", hashString, id);
                 }
-                
+
             }
 
             tableNode.set(hashString, mapper.valueToTree(entry.getValue()));
 
         }
 
-
-        return node.set("table",tableNode);
+        return node.set(FIELD_TABLE, tableNode);
     }
-    
-    
 
+    @Override
+    protected void fromJsonObjectImpl(ObjectNode object, Map<Long, Long> idMap) {
+
+        if (!object.has(FIELD_TABLE)) {
+            throw new IllegalArgumentException("Missing field " + FIELD_TABLE);
+        }
+
+        if (object.get(FIELD_TABLE) instanceof ObjectNode) {
+
+            ObjectNode tableObject = (ObjectNode) object.get(FIELD_TABLE);
+
+            Iterator<Entry<String, JsonNode>> tableIterator = tableObject.fields();
+
+            while (tableIterator.hasNext()) {
+                Entry<String, JsonNode> entry = tableIterator.next();
+
+                HashSet<String> set = new HashSet<>();
+
+                for (String value : entry.getKey().split(";")) {
+                    if (!value.isEmpty()) {
+                        set.add(ioLabels.get(idMap.get(Long.valueOf(value))));
+                    }
+
+                }
+
+                HashMap<String, Boolean> map = new HashMap<>();
+
+                Iterator<Entry<String, JsonNode>> iterator = entry.getValue().fields();
+
+                while (iterator.hasNext()) {
+                    Entry<String, JsonNode> entry2 = iterator.next();
+
+                    map.put(
+                            ioLabels.get(
+                                    idMap.get(
+                                            Long.valueOf(entry2.getKey()))),
+                            entry2.getValue().asBoolean());
+
+                }
+
+                setRow(set, map);
+
+            }
+
+        } else {
+            throw new IllegalArgumentException(FIELD_TABLE + " is in wrong format!");
+        }
+
+    }
 
 }

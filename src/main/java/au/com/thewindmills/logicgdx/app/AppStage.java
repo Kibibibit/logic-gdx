@@ -9,13 +9,14 @@ import au.com.thewindmills.logicgdx.app.actors.IoActor;
 import au.com.thewindmills.logicgdx.app.actors.LogicActor;
 
 public class AppStage extends Stage {
-    
+
     public AppStage(Viewport viewport) {
         super(viewport);
+        
 
         Group actors = new Group();
 
-        actors.addActor(new IoActor("data/sprites/test.png"));
+        actors.addActor(new IoActor("data/sprites/AND.png"));
         actors.setZIndex(100);
 
         this.addActor(actors);

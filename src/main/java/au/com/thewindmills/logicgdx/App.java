@@ -16,9 +16,8 @@ import au.com.thewindmills.logicgdx.utils.AppConstants;
  * 
  * @author Kibi
  */
-public class App 
-{
-    public static void main( String[] args ) {
+public class App {
+    public static void main(String[] args) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 
         config.setWindowedMode(AppConstants.APP_WIDTH, AppConstants.APP_HEIGHT);
@@ -30,41 +29,62 @@ public class App
         table.addInput("B");
         table.addOutput("O");
 
-        table.setRow(new HashSet<String>(), new HashMap<String, Boolean>(){{
-            put("O", false);
-        }});
+        table.setRow(new HashSet<String>(), new HashMap<String, Boolean>() {
+            {
+                put("O", false);
+            }
+        });
 
-        table.setRow(new HashSet<String>(){{
-            add("A");
-        }}, new HashMap<String, Boolean>(){{
-            put("O", false);
-        }});
+        table.setRow(new HashSet<String>() {
+            {
+                add("A");
+            }
+        }, new HashMap<String, Boolean>() {
+            {
+                put("O", false);
+            }
+        });
 
-        table.setRow(new HashSet<String>(){{
-            add("B");
-        }}, new HashMap<String, Boolean>(){{
-            put("O", false);
-        }});
+        table.setRow(new HashSet<String>() {
+            {
+                add("B");
+            }
+        }, new HashMap<String, Boolean>() {
+            {
+                put("O", false);
+            }
+        });
 
-        table.setRow(new HashSet<String>(){{
-            add("A");
-            add("B");
-        }}, new HashMap<String, Boolean>(){{
-            put("O", true);
-        }});
+        table.setRow(new HashSet<String>() {
+            {
+                add("A");
+                add("B");
+            }
+        }, new HashMap<String, Boolean>() {
+            {
+                put("O", true);
+            }
+        });
 
         TruthTable table2 = new TruthTable("NOT");
 
         table2.addInput("A");
         table2.addOutput("!A");
 
-        table2.setRow(new HashSet<String>(), new HashMap<String, Boolean>(){{
-            put("!A", true);
-        }});
-        table2.setRow(new HashSet<String>(){{add("A");}}, new HashMap<String, Boolean>(){{
-            put("!A", false);
-        }});
-
+        table2.setRow(new HashSet<String>(), new HashMap<String, Boolean>() {
+            {
+                put("!A", true);
+            }
+        });
+        table2.setRow(new HashSet<String>() {
+            {
+                add("A");
+            }
+        }, new HashMap<String, Boolean>() {
+            {
+                put("!A", false);
+            }
+        });
 
         ChipComponent chip = new ChipComponent("NAND");
 
@@ -81,11 +101,33 @@ public class App
 
         chip.setInternalMapping(table2.getIoId("A"), table.getIoId("O"), true);
 
+        chip.setExternalMappingOut(table2.getIoId("!A"), chip.getIoId("O'"), true);
 
-        chip.setExternalMappingOut(table2.getIoId("!A"),chip.getIoId("O'"), true);
+        chip.update(chip.getIoId("A'"), true);
+        chip.update(chip.getIoId("B'"), true);
 
-        IoComponent.saveJsonObject(table);
+        System.out.println();
+        System.out.println();
+
+        IoComponent.saveJsonObject(chip);
         IoComponent.saveJsonObject(table2);
+        IoComponent.saveJsonObject(table);
+
+        try {
+            IoComponent table3 = IoComponent.fromJsonObject(chip.toJsonObject());
+
+            table3.setName(table3.getName() + "TEST");
+
+            IoComponent.saveJsonObject(table3);
+
+            table3.update(table3.getIoId("A'"), true);
+            table3.update(table3.getIoId("B'"), true);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // IoComponent.saveJsonObject(table2);
 
         new Lwjgl3Application(new LogicGDX(), config);
     }

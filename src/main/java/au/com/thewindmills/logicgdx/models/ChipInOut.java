@@ -1,12 +1,17 @@
 package au.com.thewindmills.logicgdx.models;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ChipInOut extends IoComponent {
+
+    public static final String FIELD_IN_TO_OUT = "in_to_out";
 
     Map<Long, Long> inToOut;
 
@@ -27,7 +32,32 @@ public class ChipInOut extends IoComponent {
     @Override
     protected ObjectNode toJsonObjectImpl(ObjectMapper mapper, ObjectNode node) {
 
-        return node.set("in_to_out", mapper.valueToTree(inToOut));
+        return node.set(FIELD_IN_TO_OUT, mapper.valueToTree(inToOut));
+    }
+
+    @Override
+    protected void fromJsonObjectImpl(ObjectNode object, Map<Long,Long> idMap) {
+       
+        if (!object.has(FIELD_IN_TO_OUT)) {
+            throw new IllegalArgumentException("Missing field " + FIELD_IN_TO_OUT);
+        }
+
+        Iterator<Entry<String, JsonNode>> iterator = object.get(FIELD_IN_TO_OUT).fields();
+        
+        Map<Long, Long> newInToOut = new HashMap<>();
+        while (iterator.hasNext()) {
+
+            Entry<String, JsonNode> entry = iterator.next();
+
+            newInToOut.put(
+                idMap.get(Long.valueOf(entry.getKey())),
+                idMap.get(Long.valueOf(entry.getValue().asText()))
+            );
+
+        }
+
+        inToOut = newInToOut;
+        
     }
 
 
