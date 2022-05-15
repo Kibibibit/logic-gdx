@@ -113,7 +113,14 @@ public class App {
         try {
             System.out.println(mapper.writeValueAsString(table.toInstructionSet()));
 
-            IoComponent.saveJsonObject(table);
+            chip.saveJsonObject();
+
+
+            IoComponent table3 = IoComponent.fromJson("NAND");
+
+            table3.update(table3.getIoId("A'"), true);
+            table3.update(table3.getIoId("B'"), true);
+            table3.update(table3.getIoId("A'"), false);
 
         } catch (Exception e) {
             e.printStackTrace();

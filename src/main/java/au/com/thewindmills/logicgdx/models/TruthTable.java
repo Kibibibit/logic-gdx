@@ -1,15 +1,11 @@
 package au.com.thewindmills.logicgdx.models;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import au.com.thewindmills.logicgdx.models.json.ComponentType;
 import au.com.thewindmills.logicgdx.models.json.Instruction;
@@ -54,7 +50,7 @@ public class TruthTable extends IoComponent {
         return ioId;
     }
 
-    public void setRow(HashSet<String> inputs, HashMap<String, Boolean> outputs) {
+    public void setRow(Set<String> inputs, Map<String, Boolean> outputs) {
         HashSet<Long> idSet = new HashSet<>();
 
         for (String label : inputs) {
@@ -74,7 +70,7 @@ public class TruthTable extends IoComponent {
             if (ioId != -1 && this.outputs.contains(ioId)) {
                 idMap.put(ioId, outputs.get(label));
             } else {
-                System.err.println("ioId "+ioId+" does not exist or is an input not output!");
+                System.err.println("ioId " + ioId + " does not exist or is an input not output!");
                 throw new IllegalArgumentException();
             }
         }
@@ -107,81 +103,6 @@ public class TruthTable extends IoComponent {
     }
 
     @Override
-    protected ObjectNode toJsonObjectImpl(ObjectMapper mapper, ObjectNode node) {
-
-        ObjectNode tableNode = mapper.createObjectNode();
-
-        for (Entry<HashSet<Long>, HashMap<Long, Boolean>> entry : table.entrySet()) {
-
-            String hashString = "";
-
-            for (long id : entry.getKey()) {
-                if (hashString.trim().length() == 0) {
-                    hashString = String.valueOf(id);
-                } else {
-                    hashString = String.format("%s;%d", hashString, id);
-                }
-
-            }
-
-            tableNode.set(hashString, mapper.valueToTree(entry.getValue()));
-
-        }
-
-        return node.set(FIELD_TABLE, tableNode);
-    }
-
-    @Override
-    protected void fromJsonObjectImpl(ObjectNode object, Map<Long, Long> idMap) {
-
-        if (!object.has(FIELD_TABLE)) {
-            throw new IllegalArgumentException("Missing field " + FIELD_TABLE);
-        }
-
-        if (object.get(FIELD_TABLE) instanceof ObjectNode) {
-
-            ObjectNode tableObject = (ObjectNode) object.get(FIELD_TABLE);
-
-            Iterator<Entry<String, JsonNode>> tableIterator = tableObject.fields();
-
-            while (tableIterator.hasNext()) {
-                Entry<String, JsonNode> entry = tableIterator.next();
-
-                HashSet<String> set = new HashSet<>();
-
-                for (String value : entry.getKey().split(";")) {
-                    if (!value.isEmpty()) {
-                        set.add(ioLabels.get(idMap.get(Long.valueOf(value))));
-                    }
-
-                }
-
-                HashMap<String, Boolean> map = new HashMap<>();
-
-                Iterator<Entry<String, JsonNode>> iterator = entry.getValue().fields();
-
-                while (iterator.hasNext()) {
-                    Entry<String, JsonNode> entry2 = iterator.next();
-
-                    map.put(
-                            ioLabels.get(
-                                    idMap.get(
-                                            Long.valueOf(entry2.getKey()))),
-                            entry2.getValue().asBoolean());
-
-                }
-
-                setRow(set, map);
-
-            }
-
-        } else {
-            throw new IllegalArgumentException(FIELD_TABLE + " is in wrong format!");
-        }
-
-    }
-
-    @Override
     protected InstructionSet makeInstructionSet(InstructionSet set) {
         set.setType(ComponentType.TRUTH);
 
@@ -200,10 +121,41 @@ public class TruthTable extends IoComponent {
 
             set.addInstruction(Instruction.setRow(inSet, outMap));
 
-
         }
 
         return set;
+    }
+
+    @Override
+    protected void readInstructionImpl(Instruction instruction) throws IOException {
+        switch (instruction.getType()) {
+            case SET_ROW:
+                Set<String> inputs = new HashSet<>();
+                Map<String, Boolean> outputs = new HashMap<>();
+
+                String inString = instruction.getInstructionString().split(Instruction.IO_SEP)[0];
+                String outString = instruction.getInstructionString().split(Instruction.IO_SEP)[1];
+                
+
+                for (String in : inString.split(Instruction.LABEL_SEP)) {
+                    if (!in.isEmpty()) inputs.add(in);
+                }
+
+                for (String out : outString.split(Instruction.LABEL_SEP)) {
+                    outputs.put(out.split(Instruction.VALUE_SEP)[0],
+                            Boolean.valueOf(out.split(Instruction.VALUE_SEP)[1]));
+                }
+
+
+                this.setRow(inputs, outputs);
+
+                break;
+            default:
+                this.instructionError(instruction.getType());
+                break;
+
+        }
+
     }
 
 }

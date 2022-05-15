@@ -9,13 +9,17 @@ public class Instruction {
 
     private static final String ADD_STRING = "%s";
 
-    private static final String LABEL_SEP = ";";
-    private static final String VALUE_SEP = ":";
-    private static final String IO_SEP = "|";
+    public static final String LABEL_SEP = ";";
+    public static final String VALUE_SEP = "=";
+    public static final String IO_SEP = ",";
 
     private int index;
     private InstructionType type;
     private String instructionString;
+
+    public Instruction() {
+        type = InstructionType.INVALID;
+    }
 
     private Instruction(InstructionType type) {
         this.type = type;
@@ -47,8 +51,22 @@ public class Instruction {
         outputString = outputString.replaceFirst(LABEL_SEP, "");
 
         return new Instruction(InstructionType.SET_ROW).setInstructionString(String.format(instructionString, inputString, IO_SEP, outputString));
+    }
 
+    public static Instruction addChild(int index, String name) {
+        return new Instruction(InstructionType.ADD_CHILD).setInstructionString(
+            String.format("%d%s%s", index, VALUE_SEP,name)
+            );
+    }
 
+    public static Instruction mapping(int inIndex, String inLabel, int outIndex, String outLabel) {
+        String instructionString = String.format("%s%s%s",
+         String.format("%d%s%s", inIndex, VALUE_SEP, inLabel),
+         IO_SEP,
+         String.format("%d%s%s", outIndex, VALUE_SEP, outLabel)
+        );
+
+        return new Instruction(InstructionType.MAPPING).setInstructionString(instructionString);
     }
 
 
@@ -68,6 +86,10 @@ public class Instruction {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public void setType(InstructionType type) {
+        this.type = type;
     }
 
     public InstructionType getType() {

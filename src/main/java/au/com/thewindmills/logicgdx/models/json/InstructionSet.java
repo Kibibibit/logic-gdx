@@ -28,8 +28,9 @@ public class InstructionSet {
 
     public JsonNode toJsonObject(ObjectMapper mapper) throws JsonMappingException, JsonProcessingException {
         return mapper.readTree(mapper.writeValueAsString(this));
-
     }
+
+
 
     public List<Instruction> getInstructions() {
         return new ArrayList<>(instructions);

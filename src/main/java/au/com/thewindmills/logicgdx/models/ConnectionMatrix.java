@@ -1,15 +1,16 @@
 package au.com.thewindmills.logicgdx.models;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import au.com.thewindmills.logicgdx.models.json.Instruction;
+import au.com.thewindmills.logicgdx.models.json.InstructionSet;
+import au.com.thewindmills.logicgdx.utils.AppConstants;
 
 public class ConnectionMatrix {
 
@@ -17,6 +18,8 @@ public class ConnectionMatrix {
     public static final String FIELD_CHILDREN = "children";
 
     private Map<Long, IoComponent> children;
+
+    private Map<Integer, Long> indexToChild;
 
     private Map<Long, Long> ioToChild;
 
@@ -33,13 +36,10 @@ public class ConnectionMatrix {
         outputs = new HashSet<>();
         matrix = new HashMap<>();
         ioToChild = new HashMap<>();
+        indexToChild = new HashMap<>();
     }
 
     public void addChild(IoComponent child) {
-        addChild(child, false);
-    }
-
-    public void addChild(IoComponent child, boolean reverse) {
 
         children.put(child.getId(), child);
 
@@ -91,89 +91,111 @@ public class ConnectionMatrix {
         return out;
     }
 
-    public ObjectNode toJsonObject(ObjectMapper mapper) {
-        ObjectNode out = mapper.createObjectNode();
+    public InstructionSet makeInstructionSet(InstructionSet set) {
+        int i = 2;
 
-        ObjectNode childrenNode = mapper.createObjectNode();
+        Map<Long, Integer> indexMap = new HashMap<>();
 
         for (IoComponent child : children.values()) {
-            childrenNode.set(String.valueOf(child.id), child.toJsonObject());
-        }
-
-        out.set(FIELD_CHILDREN,  childrenNode);
-        out.set(ChipComponent.FIELD_MATRIX, mapper.valueToTree(matrix));
-
-        return out;
-    }
-
-    public void fromJsonObject(ObjectNode object, Map<Long, Long> idMap) throws Exception {
-
-        if (!object.has(FIELD_CHILDREN)) {
-            throw new IllegalArgumentException("Missing " + FIELD_CHILDREN);
-        }
-
-        
-
-        Iterator<Entry<String, JsonNode>> childrenIterator = object.get(FIELD_CHILDREN).fields();
-
-        while (childrenIterator.hasNext()) {
-
-            Entry<String, JsonNode> childEntry = childrenIterator.next();
-            this.addChild(IoComponent.fromJsonObject((ObjectNode) childEntry.getValue(), idMap));
-        }
-
-
-        if (!object.has(FIELD_MATRIX)) {
-            throw new IllegalArgumentException("Missing " + FIELD_MATRIX);
-        }
-
-
-        Map<String, Boolean> newMatrix = new HashMap<>();
-
-        Iterator<Entry<String, JsonNode>> matrixIterator = object.get(FIELD_MATRIX).fields();
-
-        while (matrixIterator.hasNext()) {
-            Entry<String, JsonNode> entry = matrixIterator.next();
-            String oldKey = entry.getKey();
-            boolean value = entry.getValue().asBoolean();
-
-            String key = String.format("%d:%d",
-        idMap.get(Long.valueOf(oldKey.split(":")[0])),
-             idMap.get(Long.valueOf(oldKey.split(":")[1]))
-            );
-
-            newMatrix.put(
-                key,
-                value
-                );
-        }
-
-        matrix = newMatrix;
-
-
-
-    }
-
-    public void fromJsonObject(ChipComponent parent, ObjectNode object, Map<Long, Long> idMap) throws Exception {
-        children = new HashMap<>();
-        inputs = new HashSet<>();
-        outputs = new HashSet<>();
-        matrix = new HashMap<>();
-        ioToChild = new HashMap<>();
-        fromJsonObject(object, idMap);
-
-        for (Entry<Long, IoComponent> child : children.entrySet()) {
-            if (child.getValue() instanceof ChipInOut) {
-                if (child.getValue().getName().endsWith(" out")) {
-                    parent.setOutChip((ChipInOut)child.getValue());
+            if (!(child instanceof ChipInOut)) {
+                indexMap.put(child.id, i);
+                if (!Paths.get(String.format(AppConstants.SAVE_PATH, child.name)).toFile().exists()) {
+                    try {
+                        child.saveJsonObject();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-                if (child.getValue().getName().endsWith(" in")) {
-                    parent.setInChip((ChipInOut)child.getValue());
+                
+                set.addInstruction(
+                    Instruction.addChild(i++, child.name)
+                );
+            } else {
+                if (((ChipInOut) child).getIsInput()) {
+                    indexMap.put(child.id, 0);
+                } else {
+                    indexMap.put(child.id, 1);
+                }
+            }
+        }
+        
+        for (Entry<String, Boolean> entry : matrix.entrySet()) {
+        
+            if (entry.getValue()) {
+
+                Long inIo = Long.valueOf(entry.getKey().split(":")[0]);
+                Long outIo = Long.valueOf(entry.getKey().split(":")[1]);
+                
+                IoComponent input = children.get(ioToChild.get(inIo));
+                IoComponent output = children.get(ioToChild.get(outIo));
+
+                set.addInstruction(Instruction.mapping(
+                    indexMap.get(input.id), input.getIoLabel(inIo), 
+                    indexMap.get(output.id), output.getIoLabel(outIo)));
+                
+            }
+
+        }
+
+        return set;
+    }
+
+    public void readInstruction(Instruction instruction) throws IOException {
+
+        if (!indexToChild.containsKey(0) || !indexToChild.containsKey(1)) {
+            for (IoComponent child : children.values()) {
+                if (child instanceof ChipInOut) {
+                    if (((ChipInOut) child).getIsInput()) {
+                        indexToChild.put(0, child.id);
+                    } else {
+                        indexToChild.put(1, child.id);
+                    }
                 }
             }
         }
 
+        switch(instruction.getType()) {
+            case ADD_CHILD:
+
+                String name = instruction.getInstructionString().split(Instruction.VALUE_SEP)[1];
+                int index = Integer.valueOf(instruction.getInstructionString().split(Instruction.VALUE_SEP)[0]);
+                IoComponent child = IoComponent.fromJson(name);
+
+                this.addChild(child);
+                this.indexToChild.put(index,child.id);
+
+                break;
+            case MAPPING:
+
+                String inString = instruction.getInstructionString().split(Instruction.IO_SEP)[0];
+                String outString = instruction.getInstructionString().split(Instruction.IO_SEP)[1];
+
+                IoComponent input = children.get(
+                    indexToChild.get(
+                        Integer.valueOf(inString.split(Instruction.VALUE_SEP)[0])
+                    )
+                );
+
+                String inLabel = inString.split(Instruction.VALUE_SEP)[1];
+
+                IoComponent output = children.get(
+                    indexToChild.get(
+                        Integer.valueOf(outString.split(Instruction.VALUE_SEP)[0])
+                    )
+                );
+
+                String outLabel = outString.split(Instruction.VALUE_SEP)[1];
+
+                this.setMatrix(input.getIoId(inLabel), output.getIoId(outLabel), true);
+
+                break;
+            default:
+                throw new IOException("Unrecognised instruction: " + instruction.getType().name() +" for ConnectionMatrix");
+            
+        }
+
     }
+    
 
     
 }

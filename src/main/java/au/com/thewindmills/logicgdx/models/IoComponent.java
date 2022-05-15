@@ -2,21 +2,24 @@ package au.com.thewindmills.logicgdx.models;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.core.exc.StreamWriteException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import au.com.thewindmills.logicgdx.models.json.Instruction;
 import au.com.thewindmills.logicgdx.models.json.InstructionSet;
+import au.com.thewindmills.logicgdx.models.json.InstructionType;
 import au.com.thewindmills.logicgdx.utils.AppConstants;
 
 public abstract class IoComponent {
@@ -67,164 +70,78 @@ public abstract class IoComponent {
         for (Long output : outputs) {
             set.addInstruction(Instruction.addOutput(ioLabels.get(output)));
         }
-        
+
         set = makeInstructionSet(set);
 
         return set;
     }
 
-
-
-    protected abstract ObjectNode toJsonObjectImpl(ObjectMapper mapper, ObjectNode node);
-
-    public ObjectNode toJsonObject() {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode node = mapper.createObjectNode();
-
-        node.put(FIELD_ID, id);
-        node.put(FIELD_TYPE, this.getClass().getSimpleName());
-        node.put(FIELD_NAME, name);
-
-        ObjectNode ioLabelNode = mapper.valueToTree(ioLabels);
-        node.set(FIELD_IO_LABELS, ioLabelNode);
-        node.set(FIELD_INPUTS, mapper.convertValue(inputs, ArrayNode.class));
-        node.set(FIELD_OUTPUTS, mapper.convertValue(outputs, ArrayNode.class));
-
-        node = toJsonObjectImpl(mapper, node);
-
-        return node;
-    }
-
-    public static void saveJsonObject(IoComponent object) {
+    public void saveJsonObject()
+            throws JsonMappingException, StreamWriteException, DatabindException, JsonProcessingException, IOException {
 
         ObjectMapper mapper = new ObjectMapper();
-        try {
-            mapper.writeValue(Paths.get(String.format(AppConstants.SAVE_PATH,object.getName())).toFile(), object.toInstructionSet().toJsonObject(mapper));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        mapper.writeValue(Paths.get(String.format(AppConstants.SAVE_PATH, this.getName())).toFile(),
+                this.toInstructionSet().toJsonObject(mapper));
 
     }
 
-    protected abstract void fromJsonObjectImpl(ObjectNode object, Map<Long, Long> idMap) throws Exception;
+    protected abstract void readInstructionImpl(Instruction instruction) throws IOException;
 
-    public static IoComponent fromJsonObject(ObjectNode object) throws Exception {
-        Map<Long, Long> idMap = getJsonNumbers(object);
-        return IoComponent.fromJsonObject(object, idMap);
-    }
-
-    public static IoComponent fromJsonObject(ObjectNode object, Map<Long, Long> idMap) throws Exception {
-
-        if (!object.has(FIELD_TYPE)) {
-            throw new IllegalArgumentException("Missing " + FIELD_TYPE + "!");
-        }
-
-        if (!object.has(FIELD_NAME)) {
-            throw new IllegalArgumentException("Missing " + FIELD_NAME + "!");
-        }
-
-        IoComponent out;
-        String name = object.get(FIELD_NAME).asText();
-
-        switch (object.get(FIELD_TYPE).asText()) {
-
-            case "TruthTable":
-                out = new TruthTable(name);
+    private void readInstruction(Instruction instruction) throws IOException {
+        switch(instruction.getType()) {
+            case ADD_INPUT:
+                this.addInput(instruction.getInstructionString());
                 break;
-
-            case "ChipComponent":
-                out = new ChipComponent(name);
+            case ADD_OUTPUT:
+                this.addOutput(instruction.getInstructionString());
                 break;
-
-            case "ChipInOut":
-                out = new ChipInOut(name);
-                break;
-
             default:
-                throw new Exception("Unrecognised object type!");
+                this.readInstructionImpl(instruction);
+                break;
         }
-
-        
-
-        out.id = idMap.get(object.get(FIELD_ID).asLong());
-        out.setName(name);
+    }
 
 
-        Iterator<Entry<String, JsonNode>> ioLabelIterator = object.get(FIELD_IO_LABELS).fields();
-        while (ioLabelIterator.hasNext()) {
-            Entry<String, JsonNode> entry = ioLabelIterator.next();
+    public static IoComponent fromJson(String name) throws StreamReadException, DatabindException, IOException {
 
-            out.ioLabels.put(
-                    idMap.get(Long.valueOf(entry.getKey())),
-                    entry.getValue().asText());
-        }
+        ObjectMapper mapper = new ObjectMapper();
 
-        ArrayNode inputArray = (ArrayNode) object.get(FIELD_INPUTS);
-        for (JsonNode inputNode : inputArray) {
-            long newId = idMap.get(Long.valueOf(inputNode.asText()));
+        InstructionSet set = mapper.readValue(Paths.get(String.format(AppConstants.SAVE_PATH, name)).toFile(), InstructionSet.class);
+        IoComponent component;
 
-            out.addInput(out.ioLabels.get(newId), newId);
-
+        switch (set.getType()) {
+            case CHIP:
+                component = new ChipComponent(name);
+                break;
+            case CHIP_IN_OUT:
+                throw new IOException("Don't generate ChipInOuts from instructions!!!");
+            case TRUTH:
+                component = new TruthTable(name);
+                break;
+            default:
+                throw new IOException("Got unrecognised component type " + set.getType().toString());
             
         }
 
-        ArrayNode outputArray = (ArrayNode) object.get(FIELD_OUTPUTS);
-        for (JsonNode outputNode : outputArray) {
-            long newId = idMap.get(Long.valueOf(outputNode.asText()));
+        List<Instruction> instructionsSorted = set.getInstructions();
+        instructionsSorted.sort(new Comparator<Instruction>() {
+            public int compare(Instruction a, Instruction b) {
+                return a.getIndex() - b.getIndex();
+            }
+        });
 
-            out.addOutput(out.ioLabels.get(newId), newId);
-
+        for (Instruction instruction : instructionsSorted) {
+            component.readInstruction(instruction);
         }
-
         
-        out.fromJsonObjectImpl(object, idMap);
-        
-
-        return out;
+        return component;
 
     }
 
-    public static Map<Long, Long> getJsonNumbers(ObjectNode object) {
-
-        ObjectMapper mapper = new ObjectMapper();
-
-        String json;
-        try {
-            json = mapper.writeValueAsString(object);
-
-            Map<Long, Long> idSet = new HashMap<>();
-            for (String a : json.split("([^0-9.]+)")) {
-                if (!a.isEmpty()) {
-                    if (a.startsWith("11")) {
-                        if (Long.valueOf(a) >= componentIoIdNext) {
-                            componentIoIdNext = Long.valueOf(a) + 1;
-                        }
-                    } else {
-                        if (Long.valueOf(a) >= componentIdNext) {
-                            componentIdNext = Long.valueOf(a) + 1;
-                        }
-                    }
-
-                    idSet.put(Long.valueOf(a), 0L);
-                }
-            }
-
-            for (Long a : idSet.keySet()) {
-                if (a.toString().startsWith("11")) {
-                    idSet.put(a, newComponentIoId());
-                } else {
-                    idSet.put(a, newComponentId());
-                }
-            }
-
-            return idSet;
-
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        System.err.println("Try failed with no catch");
-        return null;
-    }
+    protected final void instructionError(InstructionType type) throws IOException {
+        throw new IOException("Got bad instruction type: "+type.name()+" for class: "+this.getClass().getSimpleName());
+    } 
+    
 
     public UpdateResponse update(long id, boolean state) {
 
@@ -310,7 +227,7 @@ public abstract class IoComponent {
 
     public final long getIoId(String label) {
         if (!ioLabels.containsValue(label)) {
-            System.err.println("Io labels doesn't have label: "+label);
+            System.err.println("Io labels doesn't have label: " + label);
             return -1;
         }
 
