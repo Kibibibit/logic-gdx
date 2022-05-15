@@ -15,6 +15,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import au.com.thewindmills.logicgdx.models.json.Instruction;
+import au.com.thewindmills.logicgdx.models.json.InstructionSet;
+import au.com.thewindmills.logicgdx.utils.AppConstants;
+
 public abstract class IoComponent {
 
     public static final String FIELD_ID = "id";
@@ -49,6 +53,28 @@ public abstract class IoComponent {
 
     protected abstract void doUpdate(long id, boolean state);
 
+    protected abstract InstructionSet makeInstructionSet(InstructionSet set);
+
+    public InstructionSet toInstructionSet() {
+        InstructionSet set = new InstructionSet();
+
+        set.setName(this.name);
+
+        for (Long input : inputs) {
+            set.addInstruction(Instruction.addInput(ioLabels.get(input)));
+        }
+
+        for (Long output : outputs) {
+            set.addInstruction(Instruction.addOutput(ioLabels.get(output)));
+        }
+        
+        set = makeInstructionSet(set);
+
+        return set;
+    }
+
+
+
     protected abstract ObjectNode toJsonObjectImpl(ObjectMapper mapper, ObjectNode node);
 
     public ObjectNode toJsonObject() {
@@ -73,7 +99,7 @@ public abstract class IoComponent {
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            mapper.writeValue(Paths.get("data/" + object.getName() + ".json").toFile(), object.toJsonObject());
+            mapper.writeValue(Paths.get(String.format(AppConstants.SAVE_PATH,object.getName())).toFile(), object.toInstructionSet().toJsonObject(mapper));
         } catch (IOException e) {
             e.printStackTrace();
         }

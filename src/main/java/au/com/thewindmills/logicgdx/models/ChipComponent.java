@@ -9,6 +9,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import au.com.thewindmills.logicgdx.models.json.ComponentType;
+import au.com.thewindmills.logicgdx.models.json.InstructionSet;
+
 public class ChipComponent extends IoComponent {
 
     public static final String FIELD_MATRIX = "matrix";
@@ -163,6 +166,13 @@ public class ChipComponent extends IoComponent {
         }
 
         outMap = newOutMap;
+    }
+
+
+    @Override
+    protected InstructionSet makeInstructionSet(InstructionSet set) {
+        set.setType(ComponentType.CHIP);
+        return set;
     }
     
 }

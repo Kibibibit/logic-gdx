@@ -9,6 +9,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import au.com.thewindmills.logicgdx.models.json.ComponentType;
+import au.com.thewindmills.logicgdx.models.json.InstructionSet;
+
 public class ChipInOut extends IoComponent {
 
     public static final String FIELD_IN_TO_OUT = "in_to_out";
@@ -58,6 +61,12 @@ public class ChipInOut extends IoComponent {
 
         inToOut = newInToOut;
         
+    }
+
+    @Override
+    protected InstructionSet makeInstructionSet(InstructionSet set) {
+        set.setType(ComponentType.CHIP_IN_OUT);
+        return set;
     }
 
 

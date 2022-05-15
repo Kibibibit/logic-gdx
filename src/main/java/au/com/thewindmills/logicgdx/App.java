@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import au.com.thewindmills.logicgdx.models.ChipComponent;
 import au.com.thewindmills.logicgdx.models.IoComponent;
@@ -103,31 +104,21 @@ public class App {
 
         chip.setExternalMappingOut(table2.getIoId("!A"), chip.getIoId("O'"), true);
 
-        chip.update(chip.getIoId("A'"), true);
-        chip.update(chip.getIoId("B'"), true);
-
         System.out.println();
         System.out.println();
 
-        IoComponent.saveJsonObject(chip);
-        IoComponent.saveJsonObject(table2);
-        IoComponent.saveJsonObject(table);
+        ObjectMapper mapper = new ObjectMapper();
+
 
         try {
-            IoComponent table3 = IoComponent.fromJsonObject(chip.toJsonObject());
+            System.out.println(mapper.writeValueAsString(table.toInstructionSet()));
 
-            table3.setName(table3.getName() + "TEST");
-
-            IoComponent.saveJsonObject(table3);
-
-            table3.update(table3.getIoId("A'"), true);
-            table3.update(table3.getIoId("B'"), true);
+            IoComponent.saveJsonObject(table);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        // IoComponent.saveJsonObject(table2);
 
         new Lwjgl3Application(new LogicGDX(), config);
     }

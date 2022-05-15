@@ -5,10 +5,15 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import au.com.thewindmills.logicgdx.models.json.ComponentType;
+import au.com.thewindmills.logicgdx.models.json.Instruction;
+import au.com.thewindmills.logicgdx.models.json.InstructionSet;
 
 public class TruthTable extends IoComponent {
 
@@ -174,6 +179,31 @@ public class TruthTable extends IoComponent {
             throw new IllegalArgumentException(FIELD_TABLE + " is in wrong format!");
         }
 
+    }
+
+    @Override
+    protected InstructionSet makeInstructionSet(InstructionSet set) {
+        set.setType(ComponentType.TRUTH);
+
+        for (Entry<HashSet<Long>, HashMap<Long, Boolean>> entry : table.entrySet()) {
+
+            Set<String> inSet = new HashSet<>();
+            for (Long id : entry.getKey()) {
+                inSet.add(ioLabels.get(id));
+            }
+
+            Map<String, Boolean> outMap = new HashMap<>();
+
+            for (Entry<Long, Boolean> outEntry : entry.getValue().entrySet()) {
+                outMap.put(ioLabels.get(outEntry.getKey()), outEntry.getValue());
+            }
+
+            set.addInstruction(Instruction.setRow(inSet, outMap));
+
+
+        }
+
+        return set;
     }
 
 }
