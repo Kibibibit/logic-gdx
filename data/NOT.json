@@ -1,1 +1,0 @@
-{"name":"NOT","uuid":null,"type":"TRUTH","instructions":[{"index":0,"type":"ADD_INPUT","instructionString":"A"},{"index":1,"type":"ADD_OUTPUT","instructionString":"!A"},{"index":2,"type":"SET_ROW","instructionString":",!A=true"},{"index":3,"type":"SET_ROW","instructionString":"A,!A=false"}]}

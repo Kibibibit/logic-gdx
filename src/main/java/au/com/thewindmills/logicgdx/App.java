@@ -5,10 +5,7 @@ import java.util.HashSet;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import au.com.thewindmills.logicgdx.models.ChipComponent;
-import au.com.thewindmills.logicgdx.models.IoComponent;
 import au.com.thewindmills.logicgdx.models.TruthTable;
 import au.com.thewindmills.logicgdx.utils.AppConstants;
 
@@ -24,19 +21,25 @@ public class App {
         config.setWindowedMode(AppConstants.APP_WIDTH, AppConstants.APP_HEIGHT);
         config.setTitle(AppConstants.APP_TITLE);
 
-        TruthTable table = new TruthTable("AND");
+        makeDefaultGates();
 
-        table.addInput("A");
-        table.addInput("B");
-        table.addOutput("O");
+        new Lwjgl3Application(new LogicGDX(), config);
+    }
 
-        table.setRow(new HashSet<String>(), new HashMap<String, Boolean>() {
+    private static void makeDefaultGates() {
+        TruthTable andGate = new TruthTable("AND");
+
+        andGate.addInput("A");
+        andGate.addInput("B");
+        andGate.addOutput("O");
+
+        andGate.setRow(new HashSet<String>(), new HashMap<String, Boolean>() {
             {
                 put("O", false);
             }
         });
 
-        table.setRow(new HashSet<String>() {
+        andGate.setRow(new HashSet<String>() {
             {
                 add("A");
             }
@@ -46,7 +49,7 @@ public class App {
             }
         });
 
-        table.setRow(new HashSet<String>() {
+        andGate.setRow(new HashSet<String>() {
             {
                 add("B");
             }
@@ -56,7 +59,7 @@ public class App {
             }
         });
 
-        table.setRow(new HashSet<String>() {
+        andGate.setRow(new HashSet<String>() {
             {
                 add("A");
                 add("B");
@@ -67,17 +70,17 @@ public class App {
             }
         });
 
-        TruthTable table2 = new TruthTable("NOT");
+        TruthTable not = new TruthTable("NOT");
 
-        table2.addInput("A");
-        table2.addOutput("!A");
+        not.addInput("A");
+        not.addOutput("!A");
 
-        table2.setRow(new HashSet<String>(), new HashMap<String, Boolean>() {
+        not.setRow(new HashSet<String>(), new HashMap<String, Boolean>() {
             {
                 put("!A", true);
             }
         });
-        table2.setRow(new HashSet<String>() {
+        not.setRow(new HashSet<String>() {
             {
                 add("A");
             }
@@ -87,47 +90,13 @@ public class App {
             }
         });
 
-        ChipComponent chip = new ChipComponent("NAND");
-
-        chip.addInput("A'");
-        chip.addInput("B'");
-        chip.addOutput("O'");
-
-        chip.addChild(table);
-
-        chip.setExternalMappingIn(table.getIoId("A"), chip.getIoId("A'"), true);
-        chip.setExternalMappingIn(table.getIoId("B"), chip.getIoId("B'"), true);
-
-        chip.addChild(table2);
-
-        chip.setInternalMapping(table2.getIoId("A"), table.getIoId("O"), true);
-
-        chip.setExternalMappingOut(table2.getIoId("!A"), chip.getIoId("O'"), true);
-
-        System.out.println();
-        System.out.println();
-
-        ObjectMapper mapper = new ObjectMapper();
-
-
         try {
-            System.out.println(mapper.writeValueAsString(table.toInstructionSet()));
-
-            chip.saveJsonObject();
-
-
-            IoComponent table3 = IoComponent.fromJson("NAND");
-
-            table3.update(table3.getIoId("A'"), true);
-            table3.update(table3.getIoId("B'"), true);
-            table3.update(table3.getIoId("A'"), false);
+            andGate.saveJsonObject();
+            not.saveJsonObject();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-        new Lwjgl3Application(new LogicGDX(), config);
     }
 
 }

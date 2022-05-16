@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import au.com.thewindmills.logicgdx.app.AppStage;
+import au.com.thewindmills.logicgdx.app.LogicAssetManager;
 import au.com.thewindmills.logicgdx.gui.ProgramUI;
 
 public class LogicGDX extends ApplicationAdapter {
@@ -18,6 +19,8 @@ public class LogicGDX extends ApplicationAdapter {
     private Viewport viewport;
     private Camera camera;
     private ProgramUI programUI;
+    private LogicAssetManager manager;
+
 
     @Override
     public void create() {
@@ -26,12 +29,19 @@ public class LogicGDX extends ApplicationAdapter {
 
         viewport = new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         viewport.apply();
-        stage = new AppStage(viewport);
+        
 
         camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
 
         programUI = new ProgramUI();
         programUI.init(); 
+
+        manager = new LogicAssetManager();
+
+        manager.addImage("AND");
+        manager.loadImages();
+
+        stage = new AppStage(viewport, manager);
     }
 
     @Override
@@ -52,6 +62,7 @@ public class LogicGDX extends ApplicationAdapter {
     public void dispose() {
         stage.dispose();
         programUI.dispose();
+        manager.dispose();
     }
 
 }

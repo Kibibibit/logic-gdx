@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class InstructionSet {
     
     private String name;
-    private String uuid;
     private ComponentType type;
 
     private List<Instruction> instructions;
@@ -42,14 +41,6 @@ public class InstructionSet {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
     }
 
     public ComponentType getType() {
