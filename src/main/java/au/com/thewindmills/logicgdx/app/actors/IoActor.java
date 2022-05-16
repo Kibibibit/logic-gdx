@@ -13,7 +13,9 @@ public class IoActor extends LogicActor {
     public IoActor(String spriteName, LogicAssetManager manager) {
         this.manager = manager;
         this.spriteName = spriteName;
+        
         this.setPosition(AppConstants.APP_WIDTH/2, AppConstants.APP_HEIGHT/2);
+        this.setSize(manager.getImage(spriteName).getWidth(), manager.getImage(spriteName).getHeight());
     }
 
     @Override

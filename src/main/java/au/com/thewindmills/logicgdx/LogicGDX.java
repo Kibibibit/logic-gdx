@@ -42,6 +42,8 @@ public class LogicGDX extends ApplicationAdapter {
         manager.loadImages();
 
         stage = new AppStage(viewport, manager);
+        
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
