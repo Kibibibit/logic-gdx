@@ -6,6 +6,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
+import au.com.thewindmills.logicgdx.LogicGDX;
 import imgui.ImGui;
 import imgui.flag.ImGuiConfigFlags;
 import imgui.gl3.ImGuiImplGl3;
@@ -25,9 +26,9 @@ public class ProgramUI extends AbstractUi {
     }
 
     @Override
-    public void ui() {
-        toolbarUi.ui();
-        sidebarUi.ui();
+    public void ui(LogicGDX logicGDX) {
+        toolbarUi.ui(logicGDX);
+        sidebarUi.ui(logicGDX);
     }
 
     public void init() {
@@ -43,11 +44,11 @@ public class ProgramUI extends AbstractUi {
         imGuiGl3.init();
     }
 
-    public void render() {
+    public void render(LogicGDX logicGDX) {
         imGuiGlfw.newFrame();
         ImGui.newFrame();
 
-        this.ui();
+        this.ui(logicGDX);
 
         ImGui.render();
         imGuiGl3.renderDrawData(ImGui.getDrawData());

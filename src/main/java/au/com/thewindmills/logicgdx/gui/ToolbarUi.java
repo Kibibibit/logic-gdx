@@ -1,5 +1,6 @@
 package au.com.thewindmills.logicgdx.gui;
 
+import au.com.thewindmills.logicgdx.LogicGDX;
 import imgui.ImGui;
 import imgui.ImGuiViewport;
 import imgui.flag.ImGuiWindowFlags;
@@ -8,7 +9,7 @@ public class ToolbarUi extends AbstractUi {
 
     public static final int TOOLBAR_HEIGHT = 25;
 
-    public void ui() {
+    public void ui(LogicGDX logicGDX) {
         ImGuiViewport viewport = ImGui.getMainViewport();
 
         ImGui.setNextWindowPos(viewport.getPosX(), viewport.getPosY());

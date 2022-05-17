@@ -245,11 +245,21 @@ public abstract class IoComponent {
     }
 
     public final boolean getInputState(long id) {
-        return inputStates.get(id);
+        if (inputStates.containsKey(id)) {
+            return inputStates.get(id);
+        }
+        System.err.println("Missing input id " + id);
+        return false;
+        
     }
 
     public final boolean getOutputState(long id) {
-        return outputStates.get(id);
+        if (outputStates.containsKey(id)) {
+            return outputStates.get(id);
+        }
+        System.err.println("Missing output id " + id);
+        return false;
+        
     }
 
     public final long getId() {

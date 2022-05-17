@@ -3,27 +3,23 @@ package au.com.thewindmills.logicgdx.app;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import au.com.thewindmills.logicgdx.app.actors.IoActor;
+import au.com.thewindmills.logicgdx.app.actors.ComponentBodyActor;
+import au.com.thewindmills.logicgdx.app.actors.ComponentIoActor;
+import au.com.thewindmills.logicgdx.app.assets.LogicAssetManager;
 
 public class AppStage extends Stage {
 
     LogicAssetManager manager;
     Actor touchedActor = null;
+    boolean dragging = false;
     Vector2 mouseOffset = new Vector2();
 
     public AppStage(Viewport viewport, LogicAssetManager manager) {
         super(viewport);
         this.manager = manager;
-
-        Group actors = new Group();
-
-        actors.addActor(new IoActor("AND", manager));
-        actors.setZIndex(100);
-        this.addActor(actors);
 
     }
 
@@ -41,9 +37,19 @@ public class AppStage extends Stage {
         Actor actor = this.hit(stageCoords.x, stageCoords.y, true);
 
         if (actor != null) {
-            touchedActor = actor;
-            mouseOffset.set(actor.getX() - stageCoords.x, actor.getY() - stageCoords.y);
+            if (actor instanceof ComponentBodyActor) {
+                touchedActor = actor;
+                mouseOffset.set(actor.getParent().getX() - stageCoords.x, actor.getParent().getY() - stageCoords.y);
+
+            }
+            if (actor instanceof ComponentIoActor) {
+                System.out.print(((ComponentIoActor) actor).getIoName());
+                System.out.print(":");
+                System.out.println(((ComponentIoActor) actor).getState());
+                
+            }
             return true;
+
         }
 
         return false;
@@ -56,6 +62,7 @@ public class AppStage extends Stage {
             touchedActor = null;
             return true;
         }
+        dragging = false;
         return false;
 
     }
@@ -63,9 +70,12 @@ public class AppStage extends Stage {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         Vector2 stageCoords = getStageCoords(screenX, screenY);
-
+        dragging = true;
         if (touchedActor != null) {
-            touchedActor.setPosition(stageCoords.x + mouseOffset.x, stageCoords.y + mouseOffset.y);
+            if (touchedActor instanceof ComponentBodyActor) {
+                ((ComponentBodyActor) touchedActor).drag(stageCoords.x + mouseOffset.x, stageCoords.y + mouseOffset.y);
+            }
+            
             return true;
         }
 

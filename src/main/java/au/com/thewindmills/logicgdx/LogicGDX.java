@@ -9,7 +9,8 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import au.com.thewindmills.logicgdx.app.AppStage;
-import au.com.thewindmills.logicgdx.app.LogicAssetManager;
+import au.com.thewindmills.logicgdx.app.actors.ComponentActor;
+import au.com.thewindmills.logicgdx.app.assets.LogicAssetManager;
 import au.com.thewindmills.logicgdx.gui.ProgramUI;
 
 public class LogicGDX extends ApplicationAdapter {
@@ -37,13 +38,20 @@ public class LogicGDX extends ApplicationAdapter {
         programUI.init(); 
 
         manager = new LogicAssetManager();
-
-        manager.addImage("AND");
+        manager.addImages();
         manager.loadImages();
 
         stage = new AppStage(viewport, manager);
         
         Gdx.input.setInputProcessor(stage);
+    }
+
+    public AppStage getStage() {
+        return this.stage;
+    }
+
+    public void addActor(String name) {
+        this.stage.addActor(new ComponentActor(name, this.manager));
     }
 
     @Override
@@ -55,9 +63,9 @@ public class LogicGDX extends ApplicationAdapter {
     @Override
     public void render() {
         camera.update();
-        ScreenUtils.clear(0, 0, 0, 1);
+        ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1);
         stage.draw();
-        programUI.render();
+        programUI.render(this);
     }
 
     @Override
