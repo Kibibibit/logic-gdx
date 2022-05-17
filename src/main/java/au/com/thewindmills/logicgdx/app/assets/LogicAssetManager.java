@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import au.com.thewindmills.logicgdx.utils.AppConstants;
@@ -13,6 +14,11 @@ public class LogicAssetManager {
 
     public static final int TILE_SIZE = 16;
     public static final String SPRITE_SHEET = "sheet";
+    public static final String FONT_SHEET = "font-sheet";
+    public static final int FONT_WIDTH = 7;
+    public static final int FONT_HEIGHT = 12;
+
+    private static final String CHAR_MAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890 ";
 
     public static final String spritePath(String name) {
         return String.format(AppConstants.TEXTURE_PATH,name);
@@ -21,7 +27,10 @@ public class LogicAssetManager {
     private AssetManager manager;
     private Set<String> imagePaths;
     private TextureRegion[][] sheet;
+    private TextureRegion[][] font;
 
+    private int fontRows;
+    private int fontCols;
 
     public LogicAssetManager() {
         imagePaths = new HashSet<>();
@@ -53,7 +62,9 @@ public class LogicAssetManager {
         System.out.println("Images loaded!, creating spritesheet");
 
         sheet = TextureRegion.split(this.getImage(SPRITE_SHEET), TILE_SIZE, TILE_SIZE);
-
+        font = TextureRegion.split(this.getImage(FONT_SHEET), FONT_WIDTH, FONT_HEIGHT);
+        fontRows = font.length;
+        fontCols = font[0].length;
         System.out.println("Done!");
     }
 
@@ -63,6 +74,45 @@ public class LogicAssetManager {
 
     public Texture getImage(String spriteName) {
         return manager.get(spritePath(spriteName));
+    }
+
+    public void drawText(Batch batch, String text, float x, float y) {
+        for (int i = 0; i < text.length(); i++) {
+            batch.draw(getChar(text.substring(i, i+1)), x + (FONT_WIDTH*i), y);
+        }
+    }
+
+    public int getTextWidth(String text) {
+        return FONT_WIDTH*text.length();
+    }
+
+    public void drawTextCentered(Batch batch, String text, float x, float y) {
+        x -= Math.round(getTextWidth(text)*0.5f);
+        y -= Math.round(FONT_HEIGHT*0.5f);
+        drawText(batch, text, x, y);
+    }
+
+    public TextureRegion getChar(String c) {
+        if (c.length() != 1) {
+            throw new IllegalArgumentException("Invalid string '" + c + "' for getChar");
+        }
+
+        if (CHAR_MAP.contains(c)) {
+
+            int i = CHAR_MAP.indexOf(c);
+            int x = i;
+            int y = 0;
+            while (x >= fontCols) {
+                x -= fontCols;
+                y++;
+            }
+            return font[y][x];
+
+        } else {
+            return font[fontRows-1][fontCols-1];
+        }
+
+
     }
 
     public TextureRegion getSprite(SheetSection section) {
@@ -95,6 +145,7 @@ public class LogicAssetManager {
 
     public void addImages() {
         this.addImage(SPRITE_SHEET);
+        this.addImage(FONT_SHEET);
     }
 
 

@@ -20,6 +20,7 @@ public class App {
 
         config.setWindowedMode(AppConstants.APP_WIDTH, AppConstants.APP_HEIGHT);
         config.setTitle(AppConstants.APP_TITLE);
+        config.setResizable(false);
 
         makeDefaultGates();
 

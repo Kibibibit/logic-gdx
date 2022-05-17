@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import au.com.thewindmills.logicgdx.app.actors.ComponentBodyActor;
-import au.com.thewindmills.logicgdx.app.actors.ComponentIoActor;
 import au.com.thewindmills.logicgdx.app.assets.LogicAssetManager;
 
 public class AppStage extends Stage {
@@ -29,27 +28,26 @@ public class AppStage extends Stage {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
-        if (button != Input.Buttons.LEFT) {
-            return false;
-        }
         Vector2 stageCoords = getStageCoords(screenX, screenY);
-        Actor actor = this.hit(stageCoords.x, stageCoords.y, true);
+        if (button == Input.Buttons.LEFT) {
 
-        if (actor != null) {
+            
+            Actor actor = this.hit(stageCoords.x, stageCoords.y, true);
+
+            if (actor != null) {
+                if (actor instanceof ComponentBodyActor) {
+                    touchedActor = actor;
+                    mouseOffset.set(actor.getParent().getX() - stageCoords.x, actor.getParent().getY() - stageCoords.y);
+                    return true;
+                }
+
+            }
+
+        } else if (button == Input.Buttons.MIDDLE) {
+            Actor actor = this.hit(stageCoords.x, stageCoords.y, true);
             if (actor instanceof ComponentBodyActor) {
-                touchedActor = actor;
-                mouseOffset.set(actor.getParent().getX() - stageCoords.x, actor.getParent().getY() - stageCoords.y);
-
+                ((ComponentBodyActor) actor).getParent().remove();
             }
-            if (actor instanceof ComponentIoActor) {
-                System.out.print(((ComponentIoActor) actor).getIoName());
-                System.out.print(":");
-                System.out.println(((ComponentIoActor) actor).getState());
-                
-            }
-            return true;
-
         }
 
         return false;
@@ -75,7 +73,7 @@ public class AppStage extends Stage {
             if (touchedActor instanceof ComponentBodyActor) {
                 ((ComponentBodyActor) touchedActor).drag(stageCoords.x + mouseOffset.x, stageCoords.y + mouseOffset.y);
             }
-            
+
             return true;
         }
 
