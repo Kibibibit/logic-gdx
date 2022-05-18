@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
 
+import au.com.thewindmills.logicgdx.app.AppStage;
 import au.com.thewindmills.logicgdx.app.assets.LogicAssetManager;
 import au.com.thewindmills.logicgdx.models.IoComponent;
 
@@ -18,7 +19,7 @@ public class ComponentActor extends Group {
     private int height;
     private int width;
 
-    public ComponentActor(String name, LogicAssetManager manager) {
+    public ComponentActor(String name, LogicAssetManager manager, AppStage stage) {
         super();
         this.manager = manager;
         try {
@@ -27,6 +28,8 @@ public class ComponentActor extends Group {
             e.printStackTrace();
         }
 
+        stage.getMatrix().addChild(this.component);
+        
         height = MIN_HEIGHT;
         if (component.getInputCount()*1.5f > height) {
             height = (int) Math.round(component.getInputCount()*1.5f);

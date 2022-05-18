@@ -13,8 +13,10 @@ import au.com.thewindmills.logicgdx.utils.AppConstants;
 public class LogicAssetManager {
 
     public static final int TILE_SIZE = 16;
-    public static final String SPRITE_SHEET = "sheet";
+    public static final int WIRE_TILE_SIZE = 8;
+    public static final String BODY_SHEET = "component-sheet";
     public static final String FONT_SHEET = "font-sheet";
+    public static final String WIRE_SHEET = "wire-sheet";
     public static final int FONT_WIDTH = 7;
     public static final int FONT_HEIGHT = 12;
 
@@ -26,8 +28,9 @@ public class LogicAssetManager {
 
     private AssetManager manager;
     private Set<String> imagePaths;
-    private TextureRegion[][] sheet;
+    private TextureRegion[][] bodySheet;
     private TextureRegion[][] font;
+    private TextureRegion[] wireSheet;
 
     private int fontRows;
     private int fontCols;
@@ -61,8 +64,10 @@ public class LogicAssetManager {
         }
         System.out.println("Images loaded!, creating spritesheet");
 
-        sheet = TextureRegion.split(this.getImage(SPRITE_SHEET), TILE_SIZE, TILE_SIZE);
+        bodySheet = TextureRegion.split(this.getImage(BODY_SHEET), TILE_SIZE, TILE_SIZE);
         font = TextureRegion.split(this.getImage(FONT_SHEET), FONT_WIDTH, FONT_HEIGHT);
+        wireSheet = TextureRegion.split(this.getImage(WIRE_SHEET), WIRE_TILE_SIZE, WIRE_TILE_SIZE)[0];
+
         fontRows = font.length;
         fontCols = font[0].length;
         System.out.println("Done!");
@@ -118,23 +123,33 @@ public class LogicAssetManager {
     public TextureRegion getSprite(SheetSection section) {
         switch (section) {
             case L:
-                return sheet[0][0];
+                return bodySheet[0][0];
             case R:
-                return sheet[0][1];
+                return bodySheet[0][1];
             case T:
-                return sheet[0][2];
+                return bodySheet[0][2];
             case B:
-                return sheet[1][0];
+                return bodySheet[1][0];
             case MX:
-                return sheet[1][1];
+                return bodySheet[1][1];
             case MO:
-                return sheet[1][2];
+                return bodySheet[1][2];
             case IX:
-                return sheet[2][0];
+                return bodySheet[2][0];
             case IO:
-                return sheet[2][1];
+                return bodySheet[2][1];
+            case EW:
+                return wireSheet[0];
+            case NS:
+                return wireSheet[1];
+            case WN:
+                return wireSheet[2];
+            case WX:
+                return wireSheet[3];
+            case WO:
+                return wireSheet[4];
             default:
-                return sheet[2][2];
+                return bodySheet[2][2];
             
         }   
     }
@@ -144,8 +159,9 @@ public class LogicAssetManager {
     }
 
     public void addImages() {
-        this.addImage(SPRITE_SHEET);
+        this.addImage(BODY_SHEET);
         this.addImage(FONT_SHEET);
+        this.addImage(WIRE_SHEET);
     }
 
 

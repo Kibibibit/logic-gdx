@@ -26,9 +26,7 @@ public class ConnectionMatrix {
     private Set<Long> inputs;
     private Set<Long> outputs;
 
-
     private Map<String, Boolean> matrix;
-
 
     public ConnectionMatrix() {
         children = new HashMap<>();
@@ -59,19 +57,40 @@ public class ConnectionMatrix {
         }
     }
 
+    public String setMatrix(long input, long output, boolean value, boolean update) {
+        String mapping = mapping(input, output);
+        matrix.put(mapping, value);
+        if (update) {
+            UpdateResponse updateRes;
+            if (value) {
+                updateRes = children.get(ioToChild.get(input)).update(input,
+                    children.get(ioToChild.get(output)).getOutputState(output));
+            } else {
+                updateRes = children.get(ioToChild.get(input)).update(input,false);
+            }
+            if (updateRes.updated) {
+                for (Entry<Long, Boolean> entry : updateRes.result.entrySet()) {
+                    this.update(ioToChild.get(input), entry.getKey(), entry.getValue());
+                }
+            }
+        }
+        return mapping;
+    }
+
     public void setMatrix(long input, long output, boolean value) {
-        matrix.put(mapping(input,output), value);
+        setMatrix(input, output, value, false);
+
     }
 
     private String mapping(long input, long output) {
-        return String.format("%d:%d", input,output);
+        return String.format("%d:%d", input, output);
     }
 
     public Map<Long, Boolean> update(long childId, long output, boolean state) {
 
         Map<Long, Boolean> out = new HashMap<>();
 
-        for (long input: inputs) {
+        for (long input : inputs) {
             if (matrix.get(mapping(input, output))) {
                 UpdateResponse response = children.get(ioToChild.get(input)).update(input, state);
                 if (response.updated) {
@@ -81,12 +100,10 @@ public class ConnectionMatrix {
                         update(ioToChild.get(id), id, response.result.get(id));
                     }
 
-                    
                 }
 
             }
         }
-
 
         return out;
     }
@@ -106,10 +123,9 @@ public class ConnectionMatrix {
                         e.printStackTrace();
                     }
                 }
-                
+
                 set.addInstruction(
-                    Instruction.addChild(i++, child.name)
-                );
+                        Instruction.addChild(i++, child.name));
             } else {
                 if (((ChipInOut) child).getIsInput()) {
                     indexMap.put(child.id, 0);
@@ -118,21 +134,21 @@ public class ConnectionMatrix {
                 }
             }
         }
-        
+
         for (Entry<String, Boolean> entry : matrix.entrySet()) {
-        
+
             if (entry.getValue()) {
 
                 Long inIo = Long.valueOf(entry.getKey().split(":")[0]);
                 Long outIo = Long.valueOf(entry.getKey().split(":")[1]);
-                
+
                 IoComponent input = children.get(ioToChild.get(inIo));
                 IoComponent output = children.get(ioToChild.get(outIo));
 
                 set.addInstruction(Instruction.mapping(
-                    indexMap.get(input.id), input.getIoLabel(inIo), 
-                    indexMap.get(output.id), output.getIoLabel(outIo)));
-                
+                        indexMap.get(input.id), input.getIoLabel(inIo),
+                        indexMap.get(output.id), output.getIoLabel(outIo)));
+
             }
 
         }
@@ -154,7 +170,7 @@ public class ConnectionMatrix {
             }
         }
 
-        switch(instruction.getType()) {
+        switch (instruction.getType()) {
             case ADD_CHILD:
 
                 String name = instruction.getInstructionString().split(Instruction.VALUE_SEP)[1];
@@ -162,7 +178,7 @@ public class ConnectionMatrix {
                 IoComponent child = IoComponent.fromJson(name);
 
                 this.addChild(child);
-                this.indexToChild.put(index,child.id);
+                this.indexToChild.put(index, child.id);
 
                 break;
             case MAPPING:
@@ -171,18 +187,14 @@ public class ConnectionMatrix {
                 String outString = instruction.getInstructionString().split(Instruction.IO_SEP)[1];
 
                 IoComponent input = children.get(
-                    indexToChild.get(
-                        Integer.valueOf(inString.split(Instruction.VALUE_SEP)[0])
-                    )
-                );
+                        indexToChild.get(
+                                Integer.valueOf(inString.split(Instruction.VALUE_SEP)[0])));
 
                 String inLabel = inString.split(Instruction.VALUE_SEP)[1];
 
                 IoComponent output = children.get(
-                    indexToChild.get(
-                        Integer.valueOf(outString.split(Instruction.VALUE_SEP)[0])
-                    )
-                );
+                        indexToChild.get(
+                                Integer.valueOf(outString.split(Instruction.VALUE_SEP)[0])));
 
                 String outLabel = outString.split(Instruction.VALUE_SEP)[1];
 
@@ -190,12 +202,11 @@ public class ConnectionMatrix {
 
                 break;
             default:
-                throw new IOException("Unrecognised instruction: " + instruction.getType().name() +" for ConnectionMatrix");
-            
+                throw new IOException(
+                        "Unrecognised instruction: " + instruction.getType().name() + " for ConnectionMatrix");
+
         }
 
     }
-    
 
-    
 }

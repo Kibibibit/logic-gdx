@@ -52,7 +52,7 @@ public class LogicGDX extends ApplicationAdapter {
     }
 
     public void addActor(String name) {
-        this.stage.addActor(new ComponentActor(name, this.manager).atX(AppConstants.APP_WIDTH/2).atY(AppConstants.APP_HEIGHT/2));
+        this.stage.getComponentActors().addActor(new ComponentActor(name, this.manager,this.stage).atX(AppConstants.APP_WIDTH/2).atY(AppConstants.APP_HEIGHT/2));
     }
 
     @Override

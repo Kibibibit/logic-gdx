@@ -45,7 +45,18 @@ public class ComponentIoActor extends Actor {
     public String getIoName() {
         return ":" + ioId +":"+ parent.getComponent().getIoLabel(ioId);
     }
+
+    public boolean isInput() {
+        return isInput;
+    }
     
+    public long getIoId() {
+        return ioId;
+    }
+
+    public ComponentActor getParentActor() {
+        return parent;
+    }
 
     public ComponentIoActor atX(float x) {
         this.setX(x);
