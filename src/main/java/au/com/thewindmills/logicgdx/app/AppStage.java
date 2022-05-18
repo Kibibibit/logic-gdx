@@ -81,13 +81,28 @@ public class AppStage extends Stage {
                         if (drawingActor.validEnd((ComponentIoActor) actor)) {
                             
                             drawingActor.stopDrawing((ComponentIoActor) actor);
-
+                            String mapping;
                             if (drawingActor.getStart().isInput()) {
-                                matrix.setMatrix(drawingActor.getStart().getIoId(), drawingActor.getEnd().getIoId(), true, true);
-                            } else {
-                                matrix.setMatrix(drawingActor.getEnd().getIoId(), drawingActor.getStart().getIoId(), true, true);
-                            }
 
+                                if (drawingActor.getStart().getWire() != null) {
+                                    drawingActor.getStart().getWire().remove();
+                                    matrix.setMatrix(drawingActor.getStart().getIoId(), drawingActor.getEnd().getIoId(), false, true);
+                                    drawingActor.getStart().setWire(null);
+                                }
+                                drawingActor.getStart().setWire(drawingActor);
+                                mapping = matrix.setMatrix(drawingActor.getStart().getIoId(), drawingActor.getEnd().getIoId(), true, true);
+                            } else {
+
+                                if (drawingActor.getEnd().getWire() != null) {
+                                    drawingActor.getEnd().getWire().remove();
+                                    matrix.setMatrix(drawingActor.getEnd().getIoId(), drawingActor.getStart().getIoId(), false, true);
+                                    drawingActor.getEnd().setWire(null);
+                                }
+
+                                drawingActor.getEnd().setWire(drawingActor);
+                                mapping = matrix.setMatrix(drawingActor.getEnd().getIoId(), drawingActor.getStart().getIoId(), true, true);
+                            }
+                            drawingActor.setMapping(mapping);
                             
                         } else {
                             drawingActor.remove();

@@ -13,7 +13,7 @@ public class WireActor extends Actor {
     private ComponentIoActor start;
     private ComponentIoActor end;
     private boolean startIsInput;
-
+    private String mapping;
     private boolean drawing = true;
 
     public WireActor(LogicAssetManager manager, ComponentIoActor start) {
@@ -26,6 +26,14 @@ public class WireActor extends Actor {
         this.setWidth(LogicAssetManager.WIRE_TILE_SIZE);
         this.setOrigin(LogicAssetManager.WIRE_TILE_SIZE / 2, LogicAssetManager.WIRE_TILE_SIZE / 2);
 
+    }
+
+    public void setMapping(String mapping) {
+        this.mapping = mapping;
+    }
+
+    public String getMapping() {
+        return mapping;
     }
 
     public LogicAssetManager getManager() {

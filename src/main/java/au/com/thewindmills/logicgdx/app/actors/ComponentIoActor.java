@@ -11,6 +11,7 @@ public class ComponentIoActor extends Actor {
     private boolean isInput;
     private Long ioId;
     private ComponentActor parent;
+    private WireActor wire;
 
     public ComponentIoActor(boolean isInput, Long id, ComponentActor parent) {
         super();
@@ -32,6 +33,14 @@ public class ComponentIoActor extends Actor {
             
         }
         batch.draw(parent.getManager().getSprite(sprite), this.getX(), this.getY());
+    }
+
+    public WireActor getWire() {
+        return wire;
+    }
+
+    public void setWire(WireActor wire) {
+        this.wire = wire;
     }
 
     public boolean getState() {
