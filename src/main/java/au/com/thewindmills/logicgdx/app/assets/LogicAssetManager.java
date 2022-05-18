@@ -20,7 +20,7 @@ public class LogicAssetManager {
     public static final int FONT_WIDTH = 7;
     public static final int FONT_HEIGHT = 12;
 
-    private static final String CHAR_MAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890 ";
+    private static final String CHAR_MAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'!<> ";
 
     public static final String spritePath(String name) {
         return String.format(AppConstants.TEXTURE_PATH,name);

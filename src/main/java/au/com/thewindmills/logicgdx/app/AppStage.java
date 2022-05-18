@@ -128,9 +128,15 @@ public class AppStage extends Stage {
 
         } else if (button == Input.Buttons.MIDDLE && !drawing && !dragging) {
             Actor actor = this.hit(stageCoords.x, stageCoords.y, true);
-            if (actor instanceof ComponentBodyActor) {
+            if (actor instanceof ComponentBodyActor || actor instanceof SwitchButtonActor) {
+                ComponentActor componentActor;
+                if (actor instanceof ComponentBodyActor) {
+                    componentActor = (ComponentActor) ((ComponentBodyActor) actor).getParent();
+                } else {
+                    componentActor = (ComponentActor) ((SwitchButtonActor) actor).getParent();
+                }
 
-                ComponentActor componentActor = (ComponentActor) ((ComponentBodyActor) actor).getParent();
+                
                 List<WireActor> toRemove = new ArrayList<>();
                 for (Actor wire : wireActors.getChildren()) {
                     WireActor wireActor = (WireActor) wire;

@@ -67,7 +67,7 @@ public class SwitchButtonActor extends Actor {
     protected void drawText(Batch batch) {
         batch.setColor(Color.BLACK);
 
-        parent.getManager().drawTextCentered(batch,parent.getSwitchName(), this.getX()+(this.getWidth()*0.5f), this.getY()+(this.getHeight()*0.5f));
+        parent.getManager().drawTextCentered(batch,parent.getIoName(), this.getX()+(this.getWidth()*0.5f), this.getY()+(this.getHeight()*0.5f));
 
         batch.setColor(Color.WHITE);
     }

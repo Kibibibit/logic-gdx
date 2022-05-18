@@ -35,6 +35,10 @@ public class SidebarUi extends AbstractUi {
             logicGDX.addSwitch();
         }
 
+        if (ImGui.button("LIGHT")) {
+            logicGDX.addLight();
+        }
+
         if (Gdx.files.internal("assets/data").isDirectory()) {
             for (FileHandle file : Gdx.files.internal("assets/data").list(".json")) {
                 

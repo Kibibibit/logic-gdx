@@ -27,7 +27,9 @@ public class ComponentBodyActor extends Actor {
         this.setWidth(width * LogicAssetManager.TILE_SIZE);
     }
 
-    
+    protected ComponentActor getParentActor() {
+        return parent;
+    }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -75,6 +77,14 @@ public class ComponentBodyActor extends Actor {
     public void setTilesWidth(int tilesWidth) {
         this.tilesWidth = tilesWidth;
         this.setWidth(tilesWidth * LogicAssetManager.TILE_SIZE);
+    }
+
+    public int getTilesHeight() {
+        return tilesHeight;
+    }
+
+    public int getTilesWidth() {
+        return tilesWidth;
     }
 
     protected void drawText(Batch batch) {

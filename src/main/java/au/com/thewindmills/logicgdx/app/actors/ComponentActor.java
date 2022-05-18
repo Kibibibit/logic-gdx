@@ -39,6 +39,10 @@ public class ComponentActor extends Group {
 
         width = MIN_WIDTH;
 
+        setWidth(name);
+
+        
+
         this.addActor(new ComponentBodyActor(height, width, this));
 
         int i = 0;
@@ -67,6 +71,20 @@ public class ComponentActor extends Group {
                             .atX(this.getX() + (width * LogicAssetManager.TILE_SIZE))
                             .atY(this.getY() + start + (section * i) - (halfTile * (i + 1))));
             i++;
+        }
+    }
+
+    protected void setWidth(String name) {
+
+        int longestText = 0;
+        for (String label : component.getLabels().values()) {
+            if (manager.getTextWidth(label) > longestText) {
+                longestText = manager.getTextWidth(label);
+            }
+        }
+
+        while (width < (manager.getTextWidth(name) + (2 * (longestText+LogicAssetManager.TILE_SIZE)))/LogicAssetManager.TILE_SIZE) {
+            width++;
         }
     }
 

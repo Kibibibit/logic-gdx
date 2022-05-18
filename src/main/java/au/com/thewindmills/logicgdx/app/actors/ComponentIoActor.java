@@ -1,5 +1,6 @@
 package au.com.thewindmills.logicgdx.app.actors;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
@@ -28,11 +29,31 @@ public class ComponentIoActor extends Actor {
 
 
         if (getState()) {
-            
             sprite = SheetSection.IO;
-            
         }
+
         batch.draw(parent.getManager().getSprite(sprite), this.getX(), this.getY());
+
+        batch.setColor(Color.GRAY);
+
+        String label = parent.getComponent().getIoLabel(ioId);
+        float xOffset = LogicAssetManager.TILE_SIZE*0.5f;
+        if (isInput) {
+            xOffset += LogicAssetManager.TILE_SIZE + (parent.getManager().getTextWidth(label)*0.5f);
+        } else {
+            xOffset -= LogicAssetManager.TILE_SIZE + (parent.getManager().getTextWidth(label)*0.5f);
+        }
+
+        xOffset = Math.round(xOffset);
+
+        parent.getManager().drawTextCentered(
+            batch, 
+            label, 
+            this.getX() + xOffset, 
+            this.getY() + Math.round(LogicAssetManager.TILE_SIZE*0.5f)
+        );
+
+        batch.setColor(Color.WHITE);
     }
 
     public WireActor getWire() {

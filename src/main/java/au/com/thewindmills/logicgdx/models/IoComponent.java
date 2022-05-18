@@ -170,6 +170,10 @@ public abstract class IoComponent {
 
     }
 
+    public Map<Long, String> getLabels() {
+        return new HashMap<>(ioLabels);
+    }
+
     private long newIo(String label) {
         long ioId = newComponentIoId();
         ioLabels.put(ioId, label);
