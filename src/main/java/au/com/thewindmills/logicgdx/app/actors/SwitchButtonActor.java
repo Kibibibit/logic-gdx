@@ -7,32 +7,30 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import au.com.thewindmills.logicgdx.app.assets.LogicAssetManager;
 import au.com.thewindmills.logicgdx.app.assets.SheetSection;
 
-public class ComponentBodyActor extends Actor {
+public class SwitchButtonActor extends Actor {
 
-    private ComponentActor parent;
-    private int tilesHeight;
-    private int tilesWidth;
-    private String name;
+    private SwitchComponentActor parent;
 
-    public ComponentBodyActor(int height, int width, ComponentActor parent) {
-        super();
+    private int tilesHeight = SwitchComponentActor.SWITCH_SIZE-2;
+    private int tilesWidth = SwitchComponentActor.SWITCH_SIZE-2;
+
+    public SwitchButtonActor(SwitchComponentActor parent) {
         this.parent = parent;
+        this.setPosition(LogicAssetManager.TILE_SIZE, LogicAssetManager.TILE_SIZE);
+        this.setWidth(LogicAssetManager.TILE_SIZE*tilesWidth);
+        this.setHeight(LogicAssetManager.TILE_SIZE*tilesHeight);
 
-        this.tilesHeight = height;
-        this.tilesWidth = width;
-
-        this.name = parent.getComponent().getName();
-
-        this.setHeight(height * LogicAssetManager.TILE_SIZE);
-        this.setWidth(width * LogicAssetManager.TILE_SIZE);
     }
-
-    
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
 
-        batch.draw(parent.getManager().getSprite(SheetSection.MX), this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        SheetSection fillSprite = SheetSection.MX;
+        if (parent.getState()) {
+            fillSprite = SheetSection.MO;
+        }
+
+        batch.draw(parent.getManager().getSprite(fillSprite), this.getX(), this.getY(), this.getWidth(), this.getHeight());
 
         batch.draw(
             parent.getManager().getSprite(SheetSection.L),
@@ -63,30 +61,25 @@ public class ComponentBodyActor extends Actor {
                 LogicAssetManager.TILE_SIZE * tilesWidth,
                 LogicAssetManager.TILE_SIZE);
 
-        
         drawText(batch);
-    }
-    
-    public void setTilesHeight(int tilesHeight) {
-        this.tilesHeight = tilesHeight;
-        this.setHeight(tilesHeight * LogicAssetManager.TILE_SIZE);
-    }
-
-    public void setTilesWidth(int tilesWidth) {
-        this.tilesWidth = tilesWidth;
-        this.setWidth(tilesWidth * LogicAssetManager.TILE_SIZE);
     }
 
     protected void drawText(Batch batch) {
         batch.setColor(Color.BLACK);
 
-        parent.getManager().drawTextCentered(batch, name, this.getX()+(this.getWidth()*0.5f), this.getY()+(this.getHeight()*0.5f));
+        parent.getManager().drawTextCentered(batch,parent.getSwitchName(), this.getX()+(this.getWidth()*0.5f), this.getY()+(this.getHeight()*0.5f));
 
         batch.setColor(Color.WHITE);
     }
 
     public void drag(float x, float y) {
-        this.getParent().setPosition(x, y);
+        this.parent.setPosition(x, y);
+    }
+
+
+    public void toggle() {
+        System.out.println("TOGGLING!");
+        this.parent.toggle();
     }
 
 }

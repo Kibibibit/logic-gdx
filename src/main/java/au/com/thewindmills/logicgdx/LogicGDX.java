@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import au.com.thewindmills.logicgdx.app.AppStage;
 import au.com.thewindmills.logicgdx.app.actors.ComponentActor;
+import au.com.thewindmills.logicgdx.app.actors.SwitchComponentActor;
 import au.com.thewindmills.logicgdx.app.assets.LogicAssetManager;
 import au.com.thewindmills.logicgdx.gui.ProgramUI;
 import au.com.thewindmills.logicgdx.utils.AppConstants;
@@ -53,6 +54,10 @@ public class LogicGDX extends ApplicationAdapter {
 
     public void addActor(String name) {
         this.stage.getComponentActors().addActor(new ComponentActor(name, this.manager,this.stage).atX(AppConstants.APP_WIDTH/2).atY(AppConstants.APP_HEIGHT/2));
+    }
+
+    public void addSwitch() {
+        this.stage.getComponentActors().addActor(new SwitchComponentActor(this.manager,this.stage).atX(AppConstants.APP_WIDTH/2).atY(AppConstants.APP_HEIGHT/2));
     }
 
     @Override

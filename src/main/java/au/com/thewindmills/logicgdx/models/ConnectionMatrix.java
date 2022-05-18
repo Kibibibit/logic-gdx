@@ -108,6 +108,10 @@ public class ConnectionMatrix {
         return out;
     }
 
+    public void update(long output, boolean state) {
+        update(ioToChild.get(output), output, state);
+    }
+
     public InstructionSet makeInstructionSet(InstructionSet set) {
         int i = 2;
 

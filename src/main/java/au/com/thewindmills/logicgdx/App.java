@@ -28,6 +28,25 @@ public class App {
     }
 
     private static void makeDefaultGates() {
+
+
+        TruthTable buffer = new TruthTable("BUFFER");
+
+        buffer.addOutput("O");
+        buffer.addInput("I");
+
+        buffer.setRow(new HashSet<String>(),new HashMap<String, Boolean>() {
+            {
+                put("O", false);
+            }
+        });
+        buffer.setRow(new HashSet<String>(){{add("I");}},new HashMap<String, Boolean>() {
+            {
+                put("O", true);
+            }
+        });
+
+
         TruthTable andGate = new TruthTable("AND");
 
         andGate.addInput("A");
@@ -92,6 +111,7 @@ public class App {
         });
 
         try {
+            buffer.saveJsonObject();
             andGate.saveJsonObject();
             not.saveJsonObject();
 

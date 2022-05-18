@@ -13,9 +13,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import au.com.thewindmills.logicgdx.app.actors.ComponentActor;
 import au.com.thewindmills.logicgdx.app.actors.ComponentBodyActor;
 import au.com.thewindmills.logicgdx.app.actors.ComponentIoActor;
+import au.com.thewindmills.logicgdx.app.actors.SwitchButtonActor;
 import au.com.thewindmills.logicgdx.app.actors.WireActor;
 import au.com.thewindmills.logicgdx.app.assets.LogicAssetManager;
 import au.com.thewindmills.logicgdx.models.ConnectionMatrix;
+import au.com.thewindmills.logicgdx.models.UpdateResponse;
 
 public class AppStage extends Stage {
 
@@ -69,7 +71,12 @@ public class AppStage extends Stage {
             Actor actor = this.hit(stageCoords.x, stageCoords.y, true);
 
             if (actor != null) {
-                if (actor instanceof ComponentBodyActor) {
+                if (actor instanceof ComponentBodyActor && !drawing) {
+                    touchedActor = actor;
+                    mouseOffset.set(actor.getParent().getX() - stageCoords.x, actor.getParent().getY() - stageCoords.y);
+                    return true;
+                }
+                if (actor instanceof SwitchButtonActor && !drawing) {
                     touchedActor = actor;
                     mouseOffset.set(actor.getParent().getX() - stageCoords.x, actor.getParent().getY() - stageCoords.y);
                     return true;
@@ -79,7 +86,6 @@ public class AppStage extends Stage {
                         drawing = true;
                         drawingActor = new WireActor(manager, (ComponentIoActor) actor);
                         this.wireActors.addActor(drawingActor);
-                        System.out.println("Making a wire!");
                     } else {
                         drawing = false;
                         if (drawingActor.validEnd((ComponentIoActor) actor)) {
@@ -115,6 +121,8 @@ public class AppStage extends Stage {
                     }
                     return true;
                 }
+
+                return false;
 
             }
 
@@ -153,6 +161,16 @@ public class AppStage extends Stage {
 
     }
 
+    public void update(UpdateResponse updateResponse) {
+        if (updateResponse.updated) {
+
+            for (long id : updateResponse.result.keySet()) {
+                matrix.update(id, updateResponse.result.get(id));
+            }
+
+        }
+    }
+
     public void removeWire(WireActor actor) {
         if (((WireActor) actor).getStart().isInput()) {
             matrix.setMatrix(
@@ -172,7 +190,12 @@ public class AppStage extends Stage {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if (touchedActor != null) {
+            if (touchedActor instanceof SwitchButtonActor && !dragging) {
+                ((SwitchButtonActor) touchedActor).toggle();
+            }
+
             touchedActor = null;
+            dragging = false;
             return true;
         }
         dragging = false;
@@ -187,6 +210,10 @@ public class AppStage extends Stage {
         if (touchedActor != null) {
             if (touchedActor instanceof ComponentBodyActor) {
                 ((ComponentBodyActor) touchedActor).drag(stageCoords.x + mouseOffset.x, stageCoords.y + mouseOffset.y);
+            }
+
+            if (touchedActor instanceof SwitchButtonActor) {
+                ((SwitchButtonActor) touchedActor).drag(stageCoords.x + mouseOffset.x, stageCoords.y + mouseOffset.y);
             }
 
             return true;

@@ -31,6 +31,10 @@ public class SidebarUi extends AbstractUi {
         ImGui.popStyleVar();
 
         // Place buttons here
+        if (ImGui.button("SWITCH")) {
+            logicGDX.addSwitch();
+        }
+
         if (Gdx.files.internal("assets/data").isDirectory()) {
             for (FileHandle file : Gdx.files.internal("assets/data").list(".json")) {
                 

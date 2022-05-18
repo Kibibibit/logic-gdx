@@ -16,6 +16,8 @@ public class ComponentActor extends Group {
     private IoComponent component;
     private LogicAssetManager manager;
 
+    private AppStage appStage;
+
     private int height;
     private int width;
 
@@ -29,7 +31,7 @@ public class ComponentActor extends Group {
         }
 
         stage.getMatrix().addChild(this.component);
-        
+        this.appStage = stage;
         height = MIN_HEIGHT;
         if (component.getInputCount()*1.5f > height) {
             height = (int) Math.round(component.getInputCount()*1.5f);
@@ -66,6 +68,10 @@ public class ComponentActor extends Group {
                             .atY(this.getY() + start + (section * i) - (halfTile * (i + 1))));
             i++;
         }
+    }
+
+    public AppStage getAppStage() {
+        return appStage;
     }
 
     public boolean getComponentInputState(long id) {
