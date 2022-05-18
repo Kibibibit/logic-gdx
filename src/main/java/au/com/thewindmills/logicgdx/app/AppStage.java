@@ -1,5 +1,8 @@
 package au.com.thewindmills.logicgdx.app;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -7,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import au.com.thewindmills.logicgdx.app.actors.ComponentActor;
 import au.com.thewindmills.logicgdx.app.actors.ComponentBodyActor;
 import au.com.thewindmills.logicgdx.app.actors.ComponentIoActor;
 import au.com.thewindmills.logicgdx.app.actors.WireActor;
@@ -85,8 +89,7 @@ public class AppStage extends Stage {
                             if (drawingActor.getStart().isInput()) {
 
                                 if (drawingActor.getStart().getWire() != null) {
-                                    drawingActor.getStart().getWire().remove();
-                                    matrix.setMatrix(drawingActor.getStart().getIoId(), drawingActor.getEnd().getIoId(), false, true);
+                                    removeWire(drawingActor.getStart().getWire());
                                     drawingActor.getStart().setWire(null);
                                 }
                                 drawingActor.getStart().setWire(drawingActor);
@@ -94,8 +97,7 @@ public class AppStage extends Stage {
                             } else {
 
                                 if (drawingActor.getEnd().getWire() != null) {
-                                    drawingActor.getEnd().getWire().remove();
-                                    matrix.setMatrix(drawingActor.getEnd().getIoId(), drawingActor.getStart().getIoId(), false, true);
+                                    removeWire(drawingActor.getEnd().getWire());
                                     drawingActor.getEnd().setWire(null);
                                 }
 
@@ -119,23 +121,26 @@ public class AppStage extends Stage {
         } else if (button == Input.Buttons.MIDDLE && !drawing && !dragging) {
             Actor actor = this.hit(stageCoords.x, stageCoords.y, true);
             if (actor instanceof ComponentBodyActor) {
-                ((ComponentBodyActor) actor).getParent().remove();
-            }
-            if (actor instanceof WireActor) {
 
-                if (((WireActor) actor).getStart().isInput()) {
-                    matrix.setMatrix(
-                        ((WireActor) actor).getStart().getIoId(),
-                        ((WireActor) actor).getEnd().getIoId(), false, 
-                        true);
-                } else {
-                    matrix.setMatrix(
-                        ((WireActor) actor).getEnd().getIoId(),
-                        ((WireActor) actor).getStart().getIoId(), false, 
-                        true);
+                ComponentActor componentActor = (ComponentActor) ((ComponentBodyActor) actor).getParent();
+                List<WireActor> toRemove = new ArrayList<>();
+                for (Actor wire : wireActors.getChildren()) {
+                    WireActor wireActor = (WireActor) wire;
+                    if (wireActor.getStart().getParentActor().getComponent().getId() == componentActor.getComponent().getId() ||
+                        wireActor.getEnd().getParentActor().getComponent().getId() == componentActor.getComponent().getId()) {
+                        toRemove.add(wireActor);
+                    }
                 }
 
-                actor.remove();
+                for (WireActor wire : toRemove) {
+                    removeWire(wire);
+                }
+
+                componentActor.remove();
+            }
+            if (actor instanceof WireActor) {
+                removeWire((WireActor) actor);
+                
             }
         } else if (button == Input.Buttons.RIGHT) {
             if (drawing) {
@@ -146,6 +151,22 @@ public class AppStage extends Stage {
 
         return false;
 
+    }
+
+    public void removeWire(WireActor actor) {
+        if (((WireActor) actor).getStart().isInput()) {
+            matrix.setMatrix(
+                ((WireActor) actor).getStart().getIoId(),
+                ((WireActor) actor).getEnd().getIoId(), false, 
+                true);
+        } else {
+            matrix.setMatrix(
+                ((WireActor) actor).getEnd().getIoId(),
+                ((WireActor) actor).getStart().getIoId(), false, 
+                true);
+        }
+
+        actor.remove();
     }
 
     @Override
