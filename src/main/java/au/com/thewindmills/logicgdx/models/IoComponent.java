@@ -165,6 +165,16 @@ public abstract class IoComponent {
         for (long input : inputs) {
             this.update(input, true);
             this.update(input, false);
+
+        }
+        for (long input : inputs) {
+            this.update(input, true);
+
+        }
+        for (long input : inputs) {
+            this.update(input, false);
+
+            
         }
         return this;
     }

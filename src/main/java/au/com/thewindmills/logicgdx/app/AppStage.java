@@ -1,10 +1,15 @@
 package au.com.thewindmills.logicgdx.app;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import com.badlogic.gdx.Input;
@@ -13,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
 
 import au.com.thewindmills.logicgdx.LogicGDX;
 import au.com.thewindmills.logicgdx.app.actors.ComponentActor;
@@ -28,7 +35,10 @@ import au.com.thewindmills.logicgdx.app.actors.WireActor;
 import au.com.thewindmills.logicgdx.app.assets.LogicAssetManager;
 import au.com.thewindmills.logicgdx.models.ChipComponent;
 import au.com.thewindmills.logicgdx.models.ConnectionMatrix;
+import au.com.thewindmills.logicgdx.models.IoComponent;
+import au.com.thewindmills.logicgdx.models.TruthTable;
 import au.com.thewindmills.logicgdx.models.UpdateResponse;
+import au.com.thewindmills.logicgdx.utils.AppConstants;
 
 public class AppStage extends Stage {
 
@@ -46,6 +56,8 @@ public class AppStage extends Stage {
     private ConnectionMatrix matrix;
 
     private boolean dialogOpen = false;
+
+    private boolean newGate;
 
     public AppStage(Viewport viewport, LogicAssetManager manager, LogicGDX logicGDX) {
         super(viewport);
@@ -72,6 +84,14 @@ public class AppStage extends Stage {
 
     public Group getWireActors() {
         return wireActors;
+    }
+
+    public boolean newGate() {
+        return newGate;
+    }
+
+    public void setNewGate(boolean gate) {
+        newGate = gate;
     }
 
     private Vector2 getStageCoords(int screenX, int screenY) {
@@ -339,7 +359,6 @@ public class AppStage extends Stage {
                 }
             }
 
-            
         }
 
         switches.sort(new Comparator<SwitchComponentActor>() {
@@ -366,13 +385,11 @@ public class AppStage extends Stage {
             ic.addChild(actor.getComponent());
         }
 
-
         for (Actor actor : wireActors.getChildren()) {
             WireActor wire = (WireActor) actor;
 
             ComponentActor start = wire.getStart().getParentActor();
             ComponentActor end = wire.getEnd().getParentActor();
-
 
             if (start instanceof IoParentActor || end instanceof IoParentActor) {
 
@@ -388,7 +405,7 @@ public class AppStage extends Stage {
                     }
                 } else if (start instanceof IoParentActor) {
                     IoParentActor startIo = (IoParentActor) start;
-                    
+
                     if (wire.startIsInput()) {
                         ic.setExternalMappingOut(wire.getEnd().getIoId(), ic.getIoId(startIo.getIoName()), true);
                     } else {
@@ -396,7 +413,7 @@ public class AppStage extends Stage {
                     }
                 } else if (end instanceof IoParentActor) {
                     IoParentActor endIo = (IoParentActor) end;
-                    
+
                     if (!wire.startIsInput()) {
                         ic.setExternalMappingOut(wire.getStart().getIoId(), ic.getIoId(endIo.getIoName()), true);
                     } else {
@@ -411,19 +428,100 @@ public class AppStage extends Stage {
                 } else {
                     ic.setInternalMapping(wire.getEnd().getIoId(), wire.getStart().getIoId(), true);
                 }
-                
 
             }
 
         }
-
-
         try {
+            boolean cir = ic.isCircular();
+            if (!cir) {
+                ic.setName(ic.getName() + "|TMP");
+            }
+
             ic.saveJsonObject();
+            if (!cir) {
+                makeTruthTable(name, switches, lights);
+            }
+
+            this.newGate = true;
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private void makeTruthTable(String name, List<SwitchComponentActor> switches, List<LightComponentActor> lights)
+            throws StreamReadException, DatabindException, IOException {
+
+        ChipComponent ic = (ChipComponent) IoComponent.fromJson(name + "|TMP");
+
+        File tmpFile = Paths.get(String.format(AppConstants.SAVE_PATH, name + "|TMP")).toFile();
+
+        tmpFile.delete();
+
+        Set<String> combinations = new HashSet<>();
+
+        for (long i : ic.getInputs()) {
+            String input = ic.getIoLabel(i);
+            combinations.add(input);
+
+            Set<String> newCombos = new HashSet<>();
+
+            for (String c : combinations) {
+                if (!c.contains(input)) {
+                    newCombos.add(c + ";" + input);
+                }
+            }
+
+            combinations.addAll(newCombos);
+        }
+        combinations.add("");
+
+        TruthTable tt = new TruthTable(name);
+
+        for (SwitchComponentActor actor : switches) {
+            tt.addInput(actor.getIoName());
+        }
+
+        for (LightComponentActor actor : lights) {
+            tt.addOutput(actor.getIoName());
+        }
+
+        for (String c : combinations) {
+            Map<Long, Boolean> update = new HashMap<>();
+
+            for (long i : ic.getInputs()) {
+                update = ic.update(i, false).result;
+            }
+
+            if (!c.isEmpty()) {
+                for (String i : c.split(";")) {
+                    update = ic.update(ic.getIoId(i), true).result;
+                }
+            }
+
+            Map<String, Boolean> outputStates = new HashMap<>();
+
+            for (Entry<Long, Boolean> entry : update.entrySet()) {
+                outputStates.put(ic.getIoLabel(entry.getKey()), entry.getValue());
+            }
+
+            
+            Set<String> inputs = new HashSet<>();
+            for (String c_ : c.split(";")) {
+                if (!c_.isEmpty()) {
+                    inputs.add(c_);
+                }
+            }
+            tt.setRow(inputs, outputStates);
+        }
+
+        try {
+            tt.saveJsonObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

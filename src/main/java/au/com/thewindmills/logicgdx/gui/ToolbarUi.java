@@ -77,6 +77,7 @@ public class ToolbarUi extends AbstractUi {
                 icName = null;
                 isOpen = false;
                 logicGDX.getStage().setDialogOpen(false);
+                
 
             }
 

@@ -99,6 +99,10 @@ public class ChipComponent extends IoComponent {
         }
     }
 
+    public boolean isCircular() {
+        return matrix.isCircular();
+    }
+
   
 
 

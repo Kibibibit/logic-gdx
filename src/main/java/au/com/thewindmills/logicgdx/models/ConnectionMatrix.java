@@ -160,6 +160,50 @@ public class ConnectionMatrix {
         return set;
     }
 
+    public boolean isCircular() {
+
+        for (String mapping : matrix.keySet()) {
+            
+            if (matrix.get(mapping)) {
+                if (isCircular(new HashSet<>(), mapping)) {
+                    return true;
+                }
+            }
+            
+
+        }        
+        
+
+        return false;
+    }
+
+    private boolean isCircular(Set<String> passed, String newMapping) {
+        passed.add(newMapping);
+
+        IoComponent child = children.get(ioToChild.get(Long.valueOf(newMapping.split(":")[0])));
+
+        for (long output : child.getOutputs()) {
+
+            for (String mapping : matrix.keySet()) {
+                if (mapping.endsWith(String.valueOf(output)) && matrix.get(mapping)) {
+                    if (passed.contains(mapping)) {
+                        return true;
+                    } else {
+                        if (isCircular(passed, mapping)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            
+        }
+
+
+        return false;
+    }
+
+    
+
     public void readInstruction(Instruction instruction) throws IOException {
 
         if (!indexToChild.containsKey(0) || !indexToChild.containsKey(1)) {

@@ -1,5 +1,8 @@
 package au.com.thewindmills.logicgdx.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
@@ -10,9 +13,34 @@ import imgui.flag.ImGuiWindowFlags;
 
 public class SidebarUi extends AbstractUi {
 
+
+    List<String> gates;
+
+    public SidebarUi() {
+        super();
+        gates = new ArrayList<>();
+        makeGates();
+    }
+
+    public void makeGates() {
+        gates = new ArrayList<>();
+
+        if (Gdx.files.internal("assets/data").isDirectory()) {
+            for (FileHandle file : Gdx.files.internal("assets/data").list(".json")) {
+                gates.add(file.nameWithoutExtension());
+
+            }
+        }
+    }
+
     @Override
     public void ui(LogicGDX logicGDX) {
         ImGuiViewport viewport = ImGui.getMainViewport();
+
+        if (logicGDX.getStage().newGate()) {
+            makeGates();
+            logicGDX.getStage().setNewGate(false);
+        }
 
         ImGui.setNextWindowPos(viewport.getPosX(), viewport.getPosY() + ToolbarUi.TOOLBAR_HEIGHT);
         ImGui.setNextWindowSize(100, viewport.getSizeY() - ToolbarUi.TOOLBAR_HEIGHT);
@@ -39,14 +67,12 @@ public class SidebarUi extends AbstractUi {
             logicGDX.addLight();
         }
 
-        if (Gdx.files.internal("assets/data").isDirectory()) {
-            for (FileHandle file : Gdx.files.internal("assets/data").list(".json")) {
-                
-                if (ImGui.button(file.nameWithoutExtension())) {
-                    logicGDX.addActor(file.nameWithoutExtension());
-                }
-
+        for (String gate : gates) {
+            
+            if (ImGui.button(gate)) {
+                logicGDX.addActor(gate);
             }
+
         }
 
         ImGui.end();
