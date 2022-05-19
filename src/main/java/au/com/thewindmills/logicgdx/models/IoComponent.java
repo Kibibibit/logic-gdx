@@ -134,7 +134,7 @@ public abstract class IoComponent {
             component.readInstruction(instruction);
         }
         
-        return component;
+        return component.init();
 
     }
 
@@ -143,9 +143,9 @@ public abstract class IoComponent {
     } 
     
 
+
     public UpdateResponse update(long id, boolean state) {
 
-        System.out.println("Updating " + id + "!");
         if (inputStates.get(id).equals(state)) {
             return new UpdateResponse(new HashMap<>(outputStates), false);
         }
@@ -157,17 +157,16 @@ public abstract class IoComponent {
 
         doUpdate(id, state);
 
-        for (Entry<Long, Boolean> entry : outputStates.entrySet()) {
-            System.out.println("(" +
-                    String.valueOf(entry.getKey() +
-                            ") " +
-                            ioLabels.get(entry.getKey()) +
-                            " is " +
-                            String.valueOf(entry.getValue())));
-        }
-
         return new UpdateResponse(new HashMap<>(outputStates), true);
 
+    }
+
+    protected IoComponent init() {
+        for (long input : inputs) {
+            this.update(input, true);
+            this.update(input, false);
+        }
+        return this;
     }
 
     public Map<Long, String> getLabels() {
