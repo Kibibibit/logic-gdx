@@ -25,10 +25,16 @@ public class TruthTable extends IoComponent {
     @Override
     protected long addInputImpl(String label, long ioId) {
         super.addInputImpl(label, ioId);
+        
+        Map<HashSet<Long>, HashMap<Long, Boolean>> cloneMap = new HashMap<>();
+
         for (HashSet<Long> set : table.keySet()) {
             HashSet<Long> cloneSet = new HashSet<>(set);
             cloneSet.add(ioId);
-            table.put(cloneSet, tableOutput());
+            cloneMap.put(cloneSet, tableOutput());
+        }
+        for (Entry<HashSet<Long>, HashMap<Long, Boolean>> entry : cloneMap.entrySet()) {
+            table.put(entry.getKey(), entry.getValue());
         }
 
         table.put(new HashSet<Long>() {
@@ -43,9 +49,15 @@ public class TruthTable extends IoComponent {
     @Override
     protected long addOutputImpl(String label, long ioId) {
         super.addOutputImpl(label, ioId);
+        Map<HashSet<Long>, HashMap<Long, Boolean>> cloneMap = new HashMap<>();
+
         for (HashSet<Long> set : table.keySet()) {
-            table.put(set, tableOutput());
+            cloneMap.put(set, tableOutput());
         }
+        for (Entry<HashSet<Long>, HashMap<Long, Boolean>> entry : cloneMap.entrySet()) {
+            table.put(entry.getKey(), entry.getValue());
+        }
+
 
         return ioId;
     }

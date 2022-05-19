@@ -39,9 +39,7 @@ public class ComponentActor extends Group {
 
         width = MIN_WIDTH;
 
-        setWidth(name);
-
-        
+        setWidth(name);        
 
         this.addActor(new ComponentBodyActor(height, width, this));
 
@@ -69,7 +67,7 @@ public class ComponentActor extends Group {
             this.addActor(
                     new ComponentIoActor(false, output, this)
                             .atX(this.getX() + (width * LogicAssetManager.TILE_SIZE))
-                            .atY(this.getY() + start + (section * i) - (halfTile * (i + 1))));
+                            .atY(this.getY() + start - (halfTile * (i + 1)) + (section * i)));
             i++;
         }
     }
