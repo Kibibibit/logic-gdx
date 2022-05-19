@@ -7,6 +7,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
 import au.com.thewindmills.logicgdx.LogicGDX;
+import au.com.thewindmills.logicgdx.app.assets.LogicAssetManager;
 import imgui.ImGui;
 import imgui.flag.ImGuiConfigFlags;
 import imgui.flag.ImGuiWindowFlags;
@@ -41,6 +42,7 @@ public class ProgramUI extends AbstractUi {
             if (namingEvent) {
                 logicGDX.getStage().setDialogOpen(true);
                 label = new ImString();
+                label.inputData.allowedChars = LogicAssetManager.CHAR_MAP;
             } else {
                 logicGDX.getStage().setDialogOpen(false);
                 label = null;

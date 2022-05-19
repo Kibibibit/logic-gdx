@@ -16,7 +16,7 @@ public abstract class IoParentActor extends ComponentActor {
 
     public IoParentActor(LogicAssetManager manager, AppStage stage, boolean input) {
         super("BUFFER", manager, stage);
-        ioName = input ? "S" : "L";
+        ioName = generateIoName();
         List<Actor> removeActors = new ArrayList<>();
         for (Actor actor : this.getChildren()) {
             if (actor instanceof ComponentIoActor) {
@@ -41,6 +41,28 @@ public abstract class IoParentActor extends ComponentActor {
     @Override
     protected void setWidth(String name) {
     }
+
+    protected abstract String generateIoName();
+    protected abstract void setNameIndex(int newIndex);
+    protected abstract void setNameCount(int newCount);
+
+    protected String generateIoName(int index, int count) {
+
+        String out = "";
+
+        if (index < 26) {
+            for (int i = 0; i < count; i++) {
+                out = out + LogicAssetManager.CHAR_MAP.substring(index, index+1);
+            }
+            setNameIndex(index+1);
+        } else {
+            setNameIndex(0);
+            setNameCount(count+1);
+            out = generateIoName();
+        }
+        return out;
+    }
+    
 
     protected abstract int getSize();
 

@@ -1,6 +1,7 @@
 package au.com.thewindmills.logicgdx.gui;
 
 import au.com.thewindmills.logicgdx.LogicGDX;
+import au.com.thewindmills.logicgdx.app.assets.LogicAssetManager;
 import imgui.ImGui;
 import imgui.ImGuiViewport;
 import imgui.flag.ImGuiWindowFlags;
@@ -43,6 +44,7 @@ public class ToolbarUi extends AbstractUi {
             if (!isOpen) {
                 isOpen = true;
                 icName = new ImString();
+                icName.inputData.allowedChars = LogicAssetManager.CHAR_MAP;
                 logicGDX.getStage().setDialogOpen(true);
             }
         }
@@ -60,7 +62,7 @@ public class ToolbarUi extends AbstractUi {
             ImGui.begin("Make IC", popUpFlags);
 
             ImGui.text("Create a new IC based on the current screen!");
-
+            
             ImGui.inputText("Name", icName);
 
             if (ImGui.button("Cancel")) {

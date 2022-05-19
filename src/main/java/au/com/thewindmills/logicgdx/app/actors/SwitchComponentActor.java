@@ -7,6 +7,9 @@ public class SwitchComponentActor extends IoParentActor {
 
     public static final int SWITCH_SIZE = 4;
 
+    private static int nameIndex = 0;
+    private static int nameCount = 1;
+
     public SwitchComponentActor(LogicAssetManager manager, AppStage stage) {
         super(manager, stage, true);
         this.addActor(new SwitchButtonActor(this));
@@ -28,6 +31,21 @@ public class SwitchComponentActor extends IoParentActor {
     @Override
     protected int getSize() {
         return SWITCH_SIZE;
+    }
+
+    @Override
+    protected String generateIoName() {
+        return generateIoName(nameIndex, nameCount);
+    }
+
+    @Override
+    protected void setNameIndex(int newIndex) {
+        nameIndex = newIndex;
+    }
+
+    @Override
+    protected void setNameCount(int newCount) {
+        nameCount = newCount;
     }
     
 }
