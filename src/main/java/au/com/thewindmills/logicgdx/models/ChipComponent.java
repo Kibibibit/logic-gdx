@@ -79,6 +79,10 @@ public class ChipComponent extends IoComponent {
         matrix.setMatrix(inMap.get(externalOutput), internalOutput, value);
     }
 
+    public void setExternalMapping(long externalInput, long externalOutput, boolean value) {
+        matrix.setMatrix(inMap.get(externalOutput), outMap.get(externalInput), value);
+    }
+
 
     @Override
     protected void doUpdate(long id, boolean state) {
@@ -94,7 +98,6 @@ public class ChipComponent extends IoComponent {
             outputStates.put(ioId, entry.getValue());
         }
     }
-
 
   
 

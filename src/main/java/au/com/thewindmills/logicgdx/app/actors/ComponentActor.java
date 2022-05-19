@@ -118,4 +118,17 @@ public class ComponentActor extends Group {
         return this;
     }
 
+    @Override
+    public int hashCode() {
+        return (int) this.component.getId();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof ComponentActor) {
+            return other.hashCode() == this.hashCode();
+        }
+        return false;
+    }
+
 }

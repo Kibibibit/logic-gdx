@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import au.com.thewindmills.logicgdx.app.AppStage;
 import au.com.thewindmills.logicgdx.app.actors.ComponentActor;
+import au.com.thewindmills.logicgdx.app.actors.IoParentActor;
 import au.com.thewindmills.logicgdx.app.actors.LightComponentActor;
 import au.com.thewindmills.logicgdx.app.actors.SwitchComponentActor;
 import au.com.thewindmills.logicgdx.app.assets.LogicAssetManager;
@@ -24,6 +25,8 @@ public class LogicGDX extends ApplicationAdapter {
     private Camera camera;
     private ProgramUI programUI;
     private LogicAssetManager manager;
+
+    private IoParentActor naming = null;
 
 
     @Override
@@ -44,13 +47,31 @@ public class LogicGDX extends ApplicationAdapter {
         manager.addImages();
         manager.loadImages();
 
-        stage = new AppStage(viewport, manager);
+        stage = new AppStage(viewport, manager, this);
         
         Gdx.input.setInputProcessor(stage);
     }
 
     public AppStage getStage() {
         return this.stage;
+    }
+
+
+    public boolean isNaming() {
+        return naming != null;
+    }
+
+    public void name(IoParentActor actor) {
+        naming = actor;
+    }
+
+    public void stopNaming(String name) {
+        naming.setIoName(name);
+        naming = null;
+    }
+
+    public void makeIc(String name) {
+        this.stage.makeIc(name);
     }
 
     public void addActor(String name) {

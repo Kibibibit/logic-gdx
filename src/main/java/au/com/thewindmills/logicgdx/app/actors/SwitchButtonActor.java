@@ -78,7 +78,6 @@ public class SwitchButtonActor extends Actor {
 
 
     public void toggle() {
-        System.out.println("TOGGLING!");
         this.parent.toggle();
     }
 

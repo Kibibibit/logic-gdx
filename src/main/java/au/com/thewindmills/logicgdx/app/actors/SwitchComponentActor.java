@@ -10,6 +10,7 @@ public class SwitchComponentActor extends IoParentActor {
     public SwitchComponentActor(LogicAssetManager manager, AppStage stage) {
         super(manager, stage, true);
         this.addActor(new SwitchButtonActor(this));
+        this.setName("SWITCH");
 
     }
 

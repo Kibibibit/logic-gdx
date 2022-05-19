@@ -1,1 +1,0 @@
-{"name":"BUFFER","type":"TRUTH","instructions":[{"index":0,"type":"ADD_INPUT","instructionString":"I"},{"index":1,"type":"ADD_OUTPUT","instructionString":"O"},{"index":2,"type":"SET_ROW","instructionString":",O=false"},{"index":3,"type":"SET_ROW","instructionString":"I,O=true"}]}

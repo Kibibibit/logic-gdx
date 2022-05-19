@@ -2,13 +2,12 @@ package au.com.thewindmills.logicgdx.models;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.exc.StreamReadException;
@@ -36,8 +35,9 @@ public abstract class IoComponent {
     private static long componentIdNext = 88000000;
     private static long componentIoIdNext = 11000000;
 
-    protected Set<Long> inputs;
-    protected Set<Long> outputs;
+    protected List<Long> inputs;
+    protected List<Long> outputs;
+
 
     protected Map<Long, String> ioLabels;
 
@@ -47,8 +47,8 @@ public abstract class IoComponent {
     public IoComponent(String name) {
         this.name = name;
         id = newComponentId();
-        inputs = new HashSet<>();
-        outputs = new HashSet<>();
+        inputs = new ArrayList<>();
+        outputs = new ArrayList<>();
         ioLabels = new HashMap<>();
         inputStates = new HashMap<>();
         outputStates = new HashMap<>();
@@ -175,6 +175,9 @@ public abstract class IoComponent {
     }
 
     private long newIo(String label) {
+        if (ioLabels.values().contains(label)) {
+            System.err.println("DUPE LABEL!");
+        }
         long ioId = newComponentIoId();
         ioLabels.put(ioId, label);
         return ioId;
@@ -270,12 +273,12 @@ public abstract class IoComponent {
         return id;
     }
 
-    public final Set<Long> getInputs() {
-        return new HashSet<>(inputs);
+    public final List<Long> getInputs() {
+        return new ArrayList<>(inputs);
     }
 
-    public final Set<Long> getOutputs() {
-        return new HashSet<>(outputs);
+    public final List<Long>getOutputs() {
+        return new ArrayList<>(outputs);
     }
 
     public final int getInputCount() {

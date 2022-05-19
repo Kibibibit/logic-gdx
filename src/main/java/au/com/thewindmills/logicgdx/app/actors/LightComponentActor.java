@@ -9,6 +9,7 @@ public class LightComponentActor extends IoParentActor{
 
     public LightComponentActor(LogicAssetManager manager, AppStage stage) {
         super(manager, stage, false);
+        this.setName("LIGHT");
     }
 
     @Override

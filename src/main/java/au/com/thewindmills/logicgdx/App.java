@@ -49,8 +49,9 @@ public class App {
 
         TruthTable andGate = new TruthTable("AND");
 
-        andGate.addInput("A");
         andGate.addInput("B");
+        andGate.addInput("A");
+        
         andGate.addOutput("O");
 
         andGate.setRow(new HashSet<String>(), new HashMap<String, Boolean>() {

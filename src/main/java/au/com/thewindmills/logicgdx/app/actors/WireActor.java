@@ -40,6 +40,10 @@ public class WireActor extends Actor {
         return manager;
     }
 
+    public boolean startIsInput() {
+        return startIsInput;
+    }
+
     public boolean getState() {
         return start.getState();
     }

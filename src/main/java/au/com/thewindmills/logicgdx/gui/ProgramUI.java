@@ -9,8 +9,10 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import au.com.thewindmills.logicgdx.LogicGDX;
 import imgui.ImGui;
 import imgui.flag.ImGuiConfigFlags;
+import imgui.flag.ImGuiWindowFlags;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
+import imgui.type.ImString;
 
 public class ProgramUI extends AbstractUi {
 
@@ -19,6 +21,10 @@ public class ProgramUI extends AbstractUi {
     private long windowHandle;
     private ToolbarUi toolbarUi;
     private SidebarUi sidebarUi;
+
+    private ImString label;
+
+    private boolean namingEvent = false;
 
     public ProgramUI() {
         toolbarUi = new ToolbarUi();
@@ -29,6 +35,45 @@ public class ProgramUI extends AbstractUi {
     public void ui(LogicGDX logicGDX) {
         toolbarUi.ui(logicGDX);
         sidebarUi.ui(logicGDX);
+
+        if (logicGDX.isNaming() != namingEvent) {
+            namingEvent = logicGDX.isNaming();
+            if (namingEvent) {
+                label = new ImString();
+            } else {
+                label = null;
+            }
+        }
+
+        if (logicGDX.isNaming()) {
+            int popUpFlags = 0
+                | ImGuiWindowFlags.NoDocking
+                | ImGuiWindowFlags.NoScrollbar
+                | ImGuiWindowFlags.NoSavedSettings
+                | ImGuiWindowFlags.NoResize
+                | ImGuiWindowFlags.NoCollapse;
+            ImGui.begin("Rename Element", popUpFlags);
+            
+
+
+                ImGui.text("Rename this element!");
+
+            ImGui.inputText("Name", label);
+
+            if (ImGui.button("Cancel")) {
+                logicGDX.stopNaming(null);
+            }
+
+            ImGui.sameLine();
+            if (ImGui.button("Rename")) {
+                logicGDX.stopNaming(label.get());
+
+            }
+
+            ImGui.end();
+        }
+
+
     }
 
     public void init() {
