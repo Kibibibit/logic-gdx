@@ -43,6 +43,7 @@ public class ToolbarUi extends AbstractUi {
             if (!isOpen) {
                 isOpen = true;
                 icName = new ImString();
+                logicGDX.getStage().setDialogOpen(true);
             }
         }
 
@@ -65,6 +66,7 @@ public class ToolbarUi extends AbstractUi {
             if (ImGui.button("Cancel")) {
                 isOpen = false;
                 icName = null;
+                logicGDX.getStage().setDialogOpen(false);
             }
 
             ImGui.sameLine();
@@ -72,6 +74,7 @@ public class ToolbarUi extends AbstractUi {
                 logicGDX.makeIc(icName.get());
                 icName = null;
                 isOpen = false;
+                logicGDX.getStage().setDialogOpen(false);
 
             }
 

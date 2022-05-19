@@ -56,7 +56,6 @@ public class LogicGDX extends ApplicationAdapter {
         return this.stage;
     }
 
-
     public boolean isNaming() {
         return naming != null;
     }
@@ -66,7 +65,10 @@ public class LogicGDX extends ApplicationAdapter {
     }
 
     public void stopNaming(String name) {
-        naming.setIoName(name);
+        if (name != null) {
+            naming.setIoName(name);
+        }
+        
         naming = null;
     }
 

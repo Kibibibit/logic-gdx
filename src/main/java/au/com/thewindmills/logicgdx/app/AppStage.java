@@ -32,18 +32,20 @@ import au.com.thewindmills.logicgdx.models.UpdateResponse;
 
 public class AppStage extends Stage {
 
-    LogicAssetManager manager;
-    Actor touchedActor = null;
-    WireActor drawingActor = null;
-    boolean dragging = false;
-    boolean drawing = false;
-    Vector2 mouseOffset = new Vector2();
-    LogicGDX logicGDX;
+    private LogicAssetManager manager;
+    private Actor touchedActor = null;
+    private WireActor drawingActor = null;
+    private boolean dragging = false;
+    private boolean drawing = false;
+    private Vector2 mouseOffset = new Vector2();
+    private LogicGDX logicGDX;
 
-    Group componentActors;
-    Group wireActors;
+    private Group componentActors;
+    private Group wireActors;
 
-    ConnectionMatrix matrix;
+    private ConnectionMatrix matrix;
+
+    private boolean dialogOpen = false;
 
     public AppStage(Viewport viewport, LogicAssetManager manager, LogicGDX logicGDX) {
         super(viewport);
@@ -76,8 +78,21 @@ public class AppStage extends Stage {
         return this.screenToStageCoordinates(new Vector2(screenX, screenY));
     }
 
+    public boolean dialogOpen() {
+        return dialogOpen;
+    }
+
+    public void setDialogOpen(boolean open) {
+        this.dialogOpen = open;
+    }
+
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
+        if (dialogOpen) {
+            return false;
+        }
+
         Vector2 stageCoords = getStageCoords(screenX, screenY);
         if (button == Input.Buttons.LEFT) {
 

@@ -39,8 +39,10 @@ public class ProgramUI extends AbstractUi {
         if (logicGDX.isNaming() != namingEvent) {
             namingEvent = logicGDX.isNaming();
             if (namingEvent) {
+                logicGDX.getStage().setDialogOpen(true);
                 label = new ImString();
             } else {
+                logicGDX.getStage().setDialogOpen(false);
                 label = null;
             }
         }
